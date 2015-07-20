@@ -10,6 +10,8 @@
   </thead>
 
   <tbody>
+  
+  <h4>Public Notes (currently notes are ALL public by default)</h4>
     <% @notes.each do |note| %>
       <tr>
         <td><%= note.content %></td>
@@ -20,7 +22,11 @@
     <% end %>
   </tbody>
 </table>
+    <h4>Private Notes, visible only to user</h4>
 
 <br>
-
-<%= link_to 'New Note', new_note_path %>
+<% if current_user%>
+  <%= link_to 'New Note', new_note_path %>
+<% else %>
+    <p>Log in to create notes...</p>
+<%end %>
