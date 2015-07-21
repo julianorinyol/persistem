@@ -8,7 +8,10 @@ class NotesController < ApplicationController
   # GET /notes
   # GET /notes.json
   def index
-    @notes = Note.all
+    @notes = Note.where(public: true)
+    if current_user
+      @my_notes = Note.where(user_id: current_user.id)
+    end
   end
 
   # GET /notes/1

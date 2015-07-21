@@ -12,6 +12,7 @@
   <tbody>
   
   <h4>Public Notes (currently notes are ALL public by default)</h4>
+    <tr><td>Content</td><td></td><td></td></tr>
     <% @notes.each do |note| %>
       <tr>
         <td><%= note.content %></td>
@@ -22,7 +23,31 @@
     <% end %>
   </tbody>
 </table>
-    <h4>Private Notes, visible only to user</h4>
+<table>
+  <thead>
+    <tr>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+  
+         <h4>User's Notes - private and public</h4>
+     <tr><td>Content</td><td></td><td></td></tr>
+    <% if @my_notes %>
+    <% @my_notes.each do |note| %>
+      <tr>
+        <td><%= note.content %></td>
+        <td><%= link_to 'Show', note %></td>
+        <td><%= link_to 'Edit', edit_note_path(note) %></td>
+        <td><%= link_to 'Destroy', note, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+    <% end %>
+  </tbody>
+</table>
+ 
+
 
 <br>
 <% if current_user%>
