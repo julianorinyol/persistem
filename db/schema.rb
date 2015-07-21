@@ -11,7 +11,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150721010101) do
+ActiveRecord::Schema.define(version: 20150721014245) do
+
+  create_table "answers", force: :cascade do |t|
+    t.integer "note_id"
+    t.integer "subject_id"
+    t.integer "user_id"
+    t.integer "question_id"
+    t.string  "text"
+  end
+
+  create_table "meta_tags", force: :cascade do |t|
+    t.integer "note_id"
+    t.integer "user_id"
+    t.string  "subject"
+    t.string  "text_qualifier"
+    t.integer "number_quantifier"
+    t.boolean "boolean_qualifier"
+  end
 
   create_table "notes", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -19,6 +36,16 @@ ActiveRecord::Schema.define(version: 20150721010101) do
     t.string   "content"
     t.integer  "user_id"
     t.boolean  "public"
+    t.integer  "subject_id"
+    t.string   "title"
+  end
+
+  create_table "questions", force: :cascade do |t|
+    t.integer "note_id"
+    t.string  "text"
+    t.integer "subject_id"
+    t.integer "user_id"
+    t.integer "answer_id"
   end
 
   create_table "subjects", force: :cascade do |t|
