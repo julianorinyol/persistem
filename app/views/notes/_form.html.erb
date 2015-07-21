@@ -12,6 +12,8 @@
   <% end %>
 
   <%= f.text_field :content %>
+<%= check_box 'note', 'public', {}, 'true', 'false' %>
+  <%= label_tag(:public, "Share with Everyone") %>
   <div class="actions">
     <%= f.submit %>
   </div>
