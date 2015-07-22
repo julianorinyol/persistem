@@ -16,8 +16,6 @@
       <tr data-link="<%= edit_note_path(note) %>">
         <td><%= note.title %></td>
         <td><%= note.content %></td>
-        <td><%= link_to 'Edit', edit_note_path(note) %></td>
-        <td><%= link_to 'Destroy', note, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
@@ -35,11 +33,9 @@
      <tr><td>Title</td><td>Content</td><td> </td><td> </td><td> </td></tr>
     <% if @my_notes %>
     <% @my_notes.each do |note| %>
-      <tr>
+      <tr data-link="<%= edit_note_path(note) %>">
         <td><%= note.title %></td>
         <td><%= note.content %></td>
-        <td><%= link_to 'Edit', edit_note_path(note) %></td>
-        <td><%= link_to 'Destroy', note, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
     <% end %>

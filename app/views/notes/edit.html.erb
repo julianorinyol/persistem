@@ -1,8 +1,7 @@
-<div class='container'>
-  <h1>Editing Note</h1>
+<%= render 'sidebar' %>
 
+<div class='container'>
   <%= render 'form' %>
 
-  <%= link_to 'Show', @note %> |
-  <%= link_to 'Back', notes_path %>
+  <%= link_to 'Delete Note', @note, method: :delete, data: { confirm: 'Are you sure?' } %>
 </div>
