@@ -11,7 +11,8 @@
     </div>
   <% end %>
 
-  <%= f.text_field :content %>
+  <%= f.text_area :title %>
+  <%= f.text_area :content %>
 <%= check_box 'note', 'public', {}, 'true', 'false' %>
   <%= label_tag(:public, "Share with Everyone") %>
   <div class="actions">
