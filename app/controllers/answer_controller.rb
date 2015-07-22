@@ -84,7 +84,7 @@ class AnswerController < ApplicationController
 end
 
 =begin
-  create_table "answers", force: :cascade do |t|
+  create_table "answers", force: :cascade do |t|  
     t.integer "note_id"
     t.integer "subject_id"
     t.integer "user_id"

@@ -8,6 +8,8 @@ Rails.application.routes.draw do
   get 'users/create'
 
   resources :notes
+  resources :questions
+  resources :answers
 
   resources :users, only: [:new, :create]
   resources :sessions, only: [:new, :create, :destroy]

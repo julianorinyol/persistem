@@ -1,5 +1,30 @@
 <p id="notice"><%= notice %></p>
 <%= render 'sidebar' %>
-<div class'col-md-7'>
+
+<div class'container'>
   <%= render 'form' %>
 </div>
+
+
+<script>
+
+$.ajax({
+  type: "POST",
+  url: '/questions/create' + <%= @note.id %>//,
+  // data: data,
+  // success: success,
+  // dataType: dataType
+});
+
+</script>
+
+
+<!-- 
+$.ajax({
+  url: '/games/' + currentGame + '/place',
+  method: 'POST',
+  error: function(phase, message){
+    console.log(phase);
+    console.log('ajax post failed', message);
+    $('.game-square').removeClass('active');
+  }  -->

@@ -2,10 +2,29 @@
 
 <div class='container'>
   <%= render 'form' %>
-
   <%= link_to 'Delete Note', @note, method: :delete, data: { confirm: 'Are you sure?' } %>
+  <p>Add Question</p>
 </div>
 
-<div class='container col-md-7' id='new-note-container'>
-  <%= link_to 'New Note', notes_path, :id=>'new-note-button' %>
-</div>
+
+<%= form_for(@question) do |f| %>
+  <% if @question.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@question.errors.count, "error") %> prohibited this question from being saved:</h2>
+
+      <ul>
+      <% @question.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= f.text_area :text, :class =>'question-inputs col-md-7', :placeholder => 'Type question here...'  %>
+
+
+ <div class="actions">
+    <%= f.submit %>
+  </div>
+
+  <% end %>

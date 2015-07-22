@@ -13,6 +13,7 @@ class NotesController < ApplicationController
       @my_notes = Note.where(user_id: current_user.id)
     end
     @note = Note.new
+    @question = Question.new
   end
 
   # GET /notes/1
@@ -31,6 +32,7 @@ class NotesController < ApplicationController
     if current_user
       @my_notes = Note.where(user_id: current_user.id)
     end
+    @question = Question.new
   end
 
   # # POST /notes

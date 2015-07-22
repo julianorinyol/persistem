@@ -24,7 +24,7 @@
   <h4>Public Notes</h4>
     <tr><td>Title</td><td>Content</td><td></td><td></td><td> </td></tr>
     <% @notes.each do |note| %>
-      <tr data-link="<%= edit_note_path(note) %>">
+      <tr data-link="<%= edit_note_path(note, @question) %>">
         <td><%= note.title %></td>
         <td><%= note.content %></td>
       </tr>
