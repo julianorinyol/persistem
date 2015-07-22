@@ -12,6 +12,7 @@ class NotesController < ApplicationController
     if current_user
       @my_notes = Note.where(user_id: current_user.id)
     end
+    @note = Note.new
   end
 
   # GET /notes/1
@@ -37,6 +38,7 @@ class NotesController < ApplicationController
       if @note.save
         format.html { redirect_to @note, notice: 'Note was successfully created.' }
         format.json { render :show, status: :created, location: @note }
+        # format.html { notice: 'Note was successfully created'}
       else
         format.html { render :new }
         format.json { render json: @note.errors, status: :unprocessable_entity }

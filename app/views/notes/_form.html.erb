@@ -10,12 +10,21 @@
       </ul>
     </div>
   <% end %>
-
-  <%= f.text_area :title %>
-  <%= f.text_area :content %>
-<%= check_box 'note', 'public', {}, 'true', 'false' %>
-  <%= label_tag(:public, "Share with Everyone") %>
-  <div class="actions">
+   <div class="actions">
     <%= f.submit %>
   </div>
+<p>title</p>
+  <%= f.text_area :title, :class =>'note-inputs col-md-7'  %>
+  <p>content</p>
+  <%= f.text_area :content, :class =>'note-inputs col-md-7' %>
+  <br>
+<%= check_box 'note', 'public', {}, 'true', 'false' %>
+  <%= label_tag(:public, "Share with Everyone") %>
+ 
+
 <% end %>
+<p>aasdfsdafdsbfkjshfksdhf</p>
+<% if @note.title %>
+  <p>delete that shit</p>
+
+<%  end%>

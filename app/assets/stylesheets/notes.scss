@@ -1,3 +1,22 @@
 // Place all the styles related to the notes controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+#note_content {
+   height: 200px;
+}
+
+#note_title {
+  height: 25px;
+}
+
+.note-inputs{
+  // background: purple;
+}
+
+div.actions input {
+  float:right;
+  background: green;
+  color:white;
+}
