@@ -5,3 +5,7 @@
 
   <%= link_to 'Delete Note', @note, method: :delete, data: { confirm: 'Are you sure?' } %>
 </div>
+
+<div class='container col-md-7' id='new-note-container'>
+  <%= link_to 'New Note', notes_path, :id=>'new-note-button' %>
+</div>

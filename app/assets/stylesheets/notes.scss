@@ -5,6 +5,7 @@
 
 #note_content {
    height: 200px;
+   margin: 20px 0 0 0;
 }
 
 #note_title {
@@ -22,4 +23,8 @@ div.actions input {
   float:right;
   background: green;
   color:white;
+  margin: 20px 0;
+}
+
+#new-note-button {
 }

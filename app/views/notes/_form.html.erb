@@ -10,13 +10,19 @@
       </ul>
     </div>
   <% end %>
-   <div class="actions">
+
+   
+  
+  <div class="actions">
+  <% if @note.content  %>
+    <%= link_to 'New Note', notes_path, :id=>'new-note-button' %>
+    <% end %>
     <%= f.submit %>
   </div>
-<p>title</p>
-  <%= f.text_area :title, :class =>'note-inputs col-md-7'  %>
-  <p>content</p>
-  <%= f.text_area :content, :class =>'note-inputs col-md-7' %>
+  <%= f.text_area :title, :class =>'note-inputs col-md-7', :placeholder => 'Enter title here...'  %>
+  <br>
+  <br>
+  <%= f.text_area :content, :class =>'note-inputs col-md-7', :placeholder => 'Type note here...'  %>
   <br>
 <%= check_box 'note', 'public', {}, 'true', 'false' %>
   <%= label_tag(:public, "Share with Everyone") %>

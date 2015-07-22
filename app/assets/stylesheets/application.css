@@ -13,12 +13,4 @@
  *= require_tree .
  *= require_self
  */
-/* From the starter template  bootstrap*/
-body {
-  padding-top: 50px;
-}
-.starter-template {
-  padding: 40px 15px;
-  text-align: center;
-}
-/* From the starter template  bootstrap*/
+
