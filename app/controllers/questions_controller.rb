@@ -1,5 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :set_question, only: [:show, :edit, :update, :destroy]
+  # respond_to :js
   # GET /questions
   # GET /questions.json
   def index
@@ -27,22 +28,27 @@ class QuestionsController < ApplicationController
       @my_questions = Question.where(user_id: current_user.id)
     end
   end
-
   # # POST /questions
   # # POST /questions.json
   def create
     @question = Question.new(question_params)
-    @question.user = current_user
-    respond_to do |format|
-      if @question.save
-        # format.html { redirect_to @question, notice: 'Question was successfully created.' }
-        format.json { render :show, status: :created, location: @question }
-        # format.html { notice: 'Question was successfully created'}
-      else
-        # format.html { render :new }
-        format.json { render json: @question.errors, status: :unprocessable_entity }
-      end
+
+    if current_user
+      @question.user = current_user
     end
+    
+    # respond_to do |format|
+    #   if @question.save
+    #     # format.html { redirect_to @question, notice: 'Question was successfully created.' }
+    #     format.json { render :show, status: :created, location: @question }
+    #     # format.html { notice: 'Question was successfully created'}
+    #   else
+    #     # format.html { render :new }
+    #     format.json { render json: @question.errors, status: :unprocessable_entity }
+    #   end
+    # end
+
+    render json: @question
   end
     
   # PATCH/PUT /questions/1
