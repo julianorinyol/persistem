@@ -38,6 +38,7 @@ class NotesController < ApplicationController
       @my_notes = Note.where(user_id: current_user.id)
     end
     @question = Question.new
+    @questions = Question.where(note_id: params[:id].to_i )
   end
 
   # # POST /notes

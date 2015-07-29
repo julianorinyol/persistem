@@ -1,1 +1,16 @@
 <h3>here will go a list of questions</h3>
+
+<% binding.pry %>
+<div id='question-display-area'>
+<% if @questions %>
+  <table>
+    <thead></thead>
+    <tbody>
+      <% @questions.each do |question| %>
+        <tr><td><%= question.text %></td></tr>
+
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+</div>
