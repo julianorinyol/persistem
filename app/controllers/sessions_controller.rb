@@ -17,6 +17,7 @@
 
   def destroy
     session[:user_id] = nil
+    session[:authtoken] = nil
     redirect_to notes_path, notice: "Adios!"
   end
 end
