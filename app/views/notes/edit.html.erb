@@ -4,7 +4,10 @@
   <%= render 'form' %>
   <%= link_to 'Delete Note', @note, method: :delete, data: { confirm: 'Are you sure?' } %>
   <%= link_to 'Add a question', new_question_path, remote: true %>
+  <%= render 'questionlist' %>
 </div>
+
+
 
 <%= form_for(@question) do |f| %>
   <% if @question.errors.any? %>
@@ -20,8 +23,8 @@
   <% end %>
 
   <%= f.text_area :text, :class =>'question-inputs col-md-7', :placeholder => 'Type question here...'  %>
-  <%= hidden_field_tag(:note_id, @note.id) %>
-
+  <%= f.hidden_field :note_id, :value => @note.id %>
+<p><%= @note.id %></p>
  <div class="actions">
     <%= f.submit :id =>'create-question-button' %>
   </div>

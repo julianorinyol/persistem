@@ -39,7 +39,7 @@ class QuestionsController < ApplicationController
     
     respond_to do |format|
       if @question.save
-        format.html { redirect_to notes_path, notice: 'Question was successfully created.' }
+        format.html { redirect_to :back, notice: 'Question was successfully created.' }
         format.json { render :show, status: :created, location: @question }
         # format.html { notice: 'Question was successfully created'}
       else
