@@ -1,3 +1,11 @@
+require 'csv'
+require 'pry'
+require 'oauth'
+require 'oauth/consumer'
+
+# Load Thrift & Evernote Ruby libraries
+require "evernote_oauth"
+
  class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
