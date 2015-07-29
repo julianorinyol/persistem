@@ -1,7 +1,6 @@
 require 'csv'
 require 'pry'
-require 'oauth'
-require 'oauth/consumer'
+
 
 # Load Thrift & Evernote Ruby libraries
 require "evernote_oauth"
