@@ -7,12 +7,15 @@ Rails.application.routes.draw do
 
   get 'users/create'
 
+  get '/auth/:provider/callback' => 'login#callback'
+  
   resources :notes
   resources :questions
   resources :answers
 
   resources :users, only: [:new, :create]
   resources :sessions, only: [:new, :create, :destroy]
+
   
   root 'notes#index'
 

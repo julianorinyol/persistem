@@ -31,6 +31,7 @@ gem 'oauth'
 
 # Load Thrift & Evernote Ruby libraries
 gem "evernote_oauth"
+gem 'omniauth-evernote'
 
 # Use Unicorn as the app server
 # gem 'unicorn'
