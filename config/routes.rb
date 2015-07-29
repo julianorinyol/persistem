@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   get 'users/create'
 
   get '/auth/:provider/callback' => 'login#callback'
-  
+
   resources :notes
   resources :questions
   resources :answers
