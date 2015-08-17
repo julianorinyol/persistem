@@ -358,7 +358,13 @@ created_note = note_store.createNote(note)
 
 note_store.getNoteContent(created_note.guid)
   end
+=begin
 
+
+
+
+
+=end
   def getNoteSearchText
     client = EvernoteOAuth::Client.new(token: authtoken)
     note_store = client.note_store

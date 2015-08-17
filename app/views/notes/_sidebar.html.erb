@@ -75,15 +75,16 @@
     <thead>  <tr><td>note title</td> <td>note book id</td></tr></thead>
     <tbody>
        <% @first_10_notes.notes.each do |n| %>
-          <tr><td><%= n.title %></td> <td><%= n.notebookGuid %></td></tr>
+          <tr><td contenteditable='true'><%= n.title %></td> <td><%= n.notebookGuid %></td></tr>
       <% end %>
     </tbody>
   </table>
 <% end %>
-
 <br>
 <br>
 <br>
+<p>below is a samlple of a notes content...</p>
+<p> <%= @evernote_notes_contents[0] %></p>
 
  <%= link_to 'Download CSV list of your notes', notes_path(format: :csv) %>
 <% if !session[:authtoken] %>

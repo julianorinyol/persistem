@@ -22,6 +22,12 @@ class NotesController < ApplicationController
       note_filter = Evernote::EDAM::NoteStore::NoteFilter.new
       @first_10_notes =  note_store.findNotes(note_filter, 0, 10)
       getAllNotesForAllNotebooks()
+
+        @evernote_notes_contents = []
+      @first_10_notes.notes.each_with_index do |note, n|
+        @xxx=5
+        @evernote_notes_contents << note_store.getNoteContent(note.guid)
+      end
     end
     respond_to do |format|
       format.html
