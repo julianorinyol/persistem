@@ -12,6 +12,23 @@ class NotesController < ApplicationController
     end
     @note = Note.new
     @question = Question.new
+      @testy = 'note working'
+    if session[:authtoken]
+      token = session[:authtoken]
+      @testy = 'working'
+      client = EvernoteOAuth::Client.new(token: token)
+      note_store = client.note_store
+      @notebooks = note_store.listNotebooks
+      note_filter = Evernote::EDAM::NoteStore::NoteFilter.new
+      @first_10_notes =  note_store.findNotes(note_filter, 0, 10)
+      getAllNotesForAllNotebooks()
+
+        @evernote_notes_contents = []
+      @first_10_notes.notes.each_with_index do |note, n|
+        @xxx=5
+        @evernote_notes_contents << note_store.getNoteContent(note.guid)
+      end
+    end
     respond_to do |format|
       format.html
       format.csv do
@@ -20,6 +37,24 @@ class NotesController < ApplicationController
       end
     end
   end
+
+  def getAllNotesForAllNotebooks
+    token = session[:authtoken]
+    client = EvernoteOAuth::Client.new(token: token)
+    note_store = client.note_store
+    @notebooks = note_store.listNotebooks
+
+    @arr_of_arrs_of_notes = []
+
+    @notebooks.each do |notebook|
+
+      note_filter = Evernote::EDAM::NoteStore::NoteFilter.new
+      note_filter.notebookGuid = notebook.guid
+      @arr_of_arrs_of_notes << note_store.findNotes(note_filter, 0, 10)
+    end
+
+  end
+
 
   # GET /notes/1
   # GET /notes/1.json
