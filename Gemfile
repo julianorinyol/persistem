@@ -29,6 +29,7 @@ gem 'bcrypt', '~> 3.1.7'
 
 gem 'oauth'
 
+gem 'pg'
 # Load Thrift & Evernote Ruby libraries
 gem "evernote_oauth"
 gem 'omniauth-evernote'
