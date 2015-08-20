@@ -1,4 +1,5 @@
 class Question < ActiveRecord::Base
-  belongs_to :note
+  has_one :note
   has_many :answers
+  belongs_to :user
 end

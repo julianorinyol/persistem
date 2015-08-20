@@ -1,0 +1,28 @@
+<h3>here will go a list of questions</h3>
+
+<div id='question-display-area'>
+<% if @questions %>
+  <table class='table'>
+    <thead><tr><td>Question</td><td></td></tr></thead>
+    <tbody>
+      <% @questions.each do |question| %>
+        <tr <tr data-link="<%= edit_question_path(question) %>">><td><%= question.text %></td><td>Submit Answer</td></tr>
+
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+</div>
+
+
+<script>
+$("tr[data-link]").click(function() {
+  window.location = $(this).data("link")
+})
+$("tr[data-link]").on('mouseenter', function() {
+  $(this).css({"background":"purple", 'color':'white'});
+})
+$("tr[data-link]").on('mouseleave', function() {
+  $(this).css({"background":"white",'color':'black'});
+})
+</script>

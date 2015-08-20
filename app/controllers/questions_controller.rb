@@ -37,18 +37,18 @@ class QuestionsController < ApplicationController
       @question.user = current_user
     end
     
-    # respond_to do |format|
-    #   if @question.save
-    #     # format.html { redirect_to @question, notice: 'Question was successfully created.' }
-    #     format.json { render :show, status: :created, location: @question }
-    #     # format.html { notice: 'Question was successfully created'}
-    #   else
-    #     # format.html { render :new }
-    #     format.json { render json: @question.errors, status: :unprocessable_entity }
-    #   end
-    # end
+    respond_to do |format|
+      if @question.save
+        format.html { redirect_to :back, notice: 'Question was successfully created.' }
+        format.json { render :show, status: :created, location: @question }
+        # format.html { notice: 'Question was successfully created'}
+      else
+        # format.html { render :new }
+        format.json { render json: @question.errors, status: :unprocessable_entity }
+      end
+    end
 
-    render json: @question
+    # render json: @question
   end
     
   # PATCH/PUT /questions/1
@@ -56,7 +56,7 @@ class QuestionsController < ApplicationController
   def update
     respond_to do |format|
       if @question.update(question_params)
-        # format.html { redirect_to @question, notice: 'Question was successfully updated.' }
+        format.html { redirect_to :back, notice: 'Question was successfully updated.' }
         format.json { render :show, status: :ok, location: @question }
       else
         # format.html { render :edit }

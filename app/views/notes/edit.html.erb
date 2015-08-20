@@ -1,13 +1,15 @@
 <%= render 'sidebar' %>
 
-<div class='container'>
+<div class='container col-md-7'>
   <%= render 'form' %>
   <%= link_to 'Delete Note', @note, method: :delete, data: { confirm: 'Are you sure?' } %>
-  <%= link_to 'Add a question', new_question_path, remote: true %>
+  <%= link_to 'Add a question', new_question_path %>
+  <%= render 'questionlist' %>
 </div>
 
 
-<%= form_for( @question, remote: true ,:html => {:'data-type' => 'json'})do |f| %>
+
+<%= form_for(@question) do |f| %>
   <% if @question.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@question.errors.count, "error") %> prohibited this question from being saved:</h2>
@@ -21,8 +23,8 @@
   <% end %>
 
   <%= f.text_area :text, :class =>'question-inputs col-md-7', :placeholder => 'Type question here...'  %>
-
-
+  <%= f.hidden_field :note_id, :value => @note.id %>
+<p><%= @note.id %></p>
  <div class="actions">
     <%= f.submit :id =>'create-question-button' %>
   </div>
@@ -36,22 +38,22 @@
   //   console.log("cat");
   // })
 
-  $('form#new_question').on('submit',function(e){
-    // e.preventDefault();
-    console.log('clicked submit');
-    //returning False, prevents the default
-    $.ajax({
-      method: "POST",
-      url: '/questions/',
-      data: {'note_id' : "<%= @note.id %>",
-            'text': $('#question_text').val(),
-            'user_id' : '<%= @note.user_id %>',
-             "authenticity_token": "<%= form_authenticity_token %>"   },
-      success: console.log('success'),
-      dataType: 'application/json'
-    });
-    return false;
-  })
+  // $('form#new_question').on('submit',function(e){
+  //   // e.preventDefault();
+  //   console.log('clicked submit');
+  //   //returning False, prevents the default
+  //   $.ajax({
+  //     method: "POST",
+  //     url: '/questions/',
+  //     data: {'note_id' : "<%= @note.id %>",
+  //           'text': $('#question_text').val(),
+  //           'user_id' : '<%= @note.user_id %>',
+  //            "authenticity_token": "<%= form_authenticity_token %>"   },
+  //     success: console.log('success'),
+  //     dataType: 'application/json'
+  //   });
+  //   return false;
+  // })
   </script>
 
 <!--       params.require(:question).permit(:note_id, :text, :subject_id, :user_id) -->

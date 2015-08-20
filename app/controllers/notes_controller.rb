@@ -1,5 +1,3 @@
-require 'pry'
-
 class NotesController < ApplicationController
   before_action :set_note, only: [:show, :edit, :update, :destroy]
   
@@ -14,6 +12,13 @@ class NotesController < ApplicationController
     end
     @note = Note.new
     @question = Question.new
+    respond_to do |format|
+      format.html
+      format.csv do
+        headers['Content-Disposition'] = "attachment; filename=\"your-notes\" "
+        headers['Content-Type'] ||= 'text/csv'
+      end
+    end
   end
 
   # GET /notes/1
@@ -33,6 +38,7 @@ class NotesController < ApplicationController
       @my_notes = Note.where(user_id: current_user.id)
     end
     @question = Question.new
+    @questions = Question.where(note_id: params[:id].to_i )
   end
 
   # # POST /notes

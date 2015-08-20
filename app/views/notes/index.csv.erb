@@ -1,0 +1,5 @@
+<%- headers = ['Content', 'Title'] -%>
+<%= CSV.generate_line headers %>
+<%- @my_notes.each do |note| -%>
+  <%= CSV.generate_line([note.content, note.title]) %>
+<%- end -%>
