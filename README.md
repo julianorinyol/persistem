@@ -1,39 +1,12 @@
-
-
-
-
 Work Log:
 
+Aug 17th: Regrouping myself
+-I worked on Persistem for one hour,  reaquainting myself, with what's going on. 
 
-
-
-
-****************************************************************************
-This README would normally document whatever steps are necessar# README #
-y to get your application up and running.
-
-### What is this repository for? ###
-
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
-
-### How do I get set up? ###
-
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
-
-### Contribution guidelines ###
-
-* Writing tests
-* Code review
-* Other guidelines
-
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
+Next steps
+-I need to be working in a separte view with the evernotes.  
+-I would create a separate view/ routes  for evernote notes, so that you can merge all the branches, and work on all the functionality without haveing to checkout branchs.. 
+-have the evernotes   be displayed in the same boxes the normal ones are now..
+-figure out how to parse the ENML, and display it,  and to update a note and submit it...
+-Create a syntax for questions where they are  embedded at the bottom of every note, so that you can create them in evernote....??? not sure..... 
+-by the end of next session. Display and edit an evernote..
