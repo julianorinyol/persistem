@@ -13,6 +13,22 @@ class NotesController < ApplicationController
     @note = Note.new
     @question = Question.new
       @testy = 'note working'
+
+
+    
+    end
+
+
+    respond_to do |format|
+      format.html
+      format.csv do
+        headers['Content-Disposition'] = "attachment; filename=\"your-notes\" "
+        headers['Content-Type'] ||= 'text/csv'
+      end
+    end
+  end
+
+  def blablabla
     if session[:authtoken]
       token = session[:authtoken]
       @testy = 'working'
@@ -27,16 +43,9 @@ class NotesController < ApplicationController
       @first_10_notes.notes.each_with_index do |note, n|
         @xxx=5
         @evernote_notes_contents << note_store.getNoteContent(note.guid)
-      end
-    end
-    respond_to do |format|
-      format.html
-      format.csv do
-        headers['Content-Disposition'] = "attachment; filename=\"your-notes\" "
-        headers['Content-Type'] ||= 'text/csv'
-      end
-    end
+      end 
   end
+
 
   def getAllNotesForAllNotebooks
     token = session[:authtoken]

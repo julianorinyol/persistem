@@ -3,4 +3,17 @@ class Note < ActiveRecord::Base
   belongs_to :user
   has_many :subjects
   has_many :questions
+
+
+
+
+
+  def getNotes
+
+  end
+
+  def getNotebooks
+  
+  end
+
 end

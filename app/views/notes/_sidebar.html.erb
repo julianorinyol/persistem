@@ -3,7 +3,6 @@
 
 <div id'top-row'>
   <h2>persistem</h2>
-
   <small>
     <% if current_user %>
     Signed in as <%= current_user.email %> (<%= link_to "Log out", session_path("current"), method: :delete %>)
@@ -12,46 +11,6 @@
     <% end %>
   </small>
 </div>
-<table class='table'>
-  <thead>
-    <tr>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-  
-  <h4>Public Notes</h4>
-    <tr><td>Title</td><td>Content</td><td></td><td></td><td> </td></tr>
-    <% @notes.each do |note| %>
-      <tr data-link="<%= edit_note_path(note, @question) %>">
-        <td><%= note.title %></td>
-        <td><%= note.content %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-<table class = 'table'>
-  <thead>
-    <tr>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-  
-         <h4>Your Notes</h4>
-     <tr><td>Title</td><td>Content</td><td> </td><td> </td><td> </td></tr>
-    <% if @my_notes %>
-    <% @my_notes.each do |note| %>
-      <tr data-link="<%= edit_note_path(note) %>">
-        <td><%= note.title %></td>
-        <td><%= note.content %></td>
-      </tr>
-    <% end %>
-    <% end %>
-  </tbody>
-</table>
 
  <h3>Evernote Notes</h3>
    <%if @notebooks%>
@@ -60,7 +19,7 @@
       <% @notebooks.each_with_index do |notebook, i| %>
          <p>notebook name: <%= notebook.name %></p>
         
-        <table>
+        <table class ='table'>
           <thead>  <tr> <td>note title</td>> </tr>  </thead>
           <tbody>
              <% @arr_of_arrs_of_notes[i].notes.each do |n| %>
@@ -90,10 +49,13 @@
  <% end %><!--END IF (@notebooks)  -->
 
  <%= link_to 'Download CSV list of your notes', notes_path(format: :csv) %>
-<% if !session[:authtoken] %>
+<% if !session[:authtoken] && @current_user %>
  <%= link_to 'Login via Evernote', '/auth/evernote' %>
-<% else %>
+<% end %>
+<% if @current_user && session[:authtoken] %>
   <p>You have authenticated with Evernote.</p>
+<% else %>
+  <p>Login to your persistem account to authenticate with Evernote.</p>
 <% end %>
 <br>
 </div>
