@@ -10,43 +10,48 @@
     <%= link_to "Log In", new_session_path %> | <%= link_to "Sign Up", new_user_path %>
     <% end %>
   </small>
-</div>
+</div>  
 
- <h3>Evernote Notes</h3>
-   <%if @notebooks%>
-       
-       <h3>notebooks</h3>
-      <% @notebooks.each_with_index do |notebook, i| %>
-         <p>notebook name: <%= notebook.name %></p>
-        
-        <table class ='table'>
-          <thead>  <tr> <td>note title</td>> </tr>  </thead>
-          <tbody>
-             <% @arr_of_arrs_of_notes[i].notes.each do |n| %>
-                <tr><td> <%= n.title %></td></tr>
-            <% end %>
-          </tbody>
-        </table>
-        <br>
- 
+<table class='table'>
+  <thead>
+    <tr>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
 
-      <h3>Notes</h3>
-      <table>
-        <thead>  <tr><td>note title</td> <td>note book id</td></tr></thead>
-        <tbody>
-           <% @first_10_notes.notes.each do |n| %>
-              <tr><td contenteditable='true'><%= n.title %></td> <td><%= n.notebookGuid %></td></tr>
-          <% end %>
-        </tbody>
-      </table>
+  <tbody>
+  
+  <h4>Public Notes</h4>
+    <tr><td>Title</td><td>Content</td><td></td><td></td><td> </td></tr>
+    <% @notes.each do |note| %>
+      <tr data-link="<%= edit_note_path(note, @question) %>">
+        <td><%= note.title %></td>
+        <td><%= note.content %></td>
+      </tr>
     <% end %>
-    <br>
-    <br>
-    <br>
-    <p>below is a samlple of a notes content...</p>
-    <p> <%= @evernote_notes_contents[0] %></p>
+  </tbody>
+</table>
+<table class = 'table'>
+  <thead>
+    <tr>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
 
- <% end %><!--END IF (@notebooks)  -->
+  <tbody>
+  
+         <h4>Your Notes</h4>
+     <tr><td>Title</td><td>Content</td><td> </td><td> </td><td> </td></tr>
+    <% if @my_notes %>
+    <% @my_notes.each do |note| %>
+      <tr data-link="<%= edit_note_path(note) %>">
+        <td><%= note.title %></td>
+        <td><%= note.content %></td>
+      </tr>
+    <% end %>
+    <% end %>
+  </tbody>
+</table>
 
  <%= link_to 'Download CSV list of your notes', notes_path(format: :csv) %>
 <% if !session[:authtoken] && @current_user %>

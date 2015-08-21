@@ -5,15 +5,10 @@ class Note < ActiveRecord::Base
   has_many :questions
 
 
+  def isAlreadyInDb?
 
-
-
-  def getNotes
 
   end
 
-  def getNotebooks
-  
-  end
 
 end
