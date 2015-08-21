@@ -20,7 +20,13 @@ class Note < ActiveRecord::Base
   end  
 
   def get_content note_store, note
-    self.content = note_store.getNoteContent(note.guid)
+    xml_content = note_store.getNoteContent(note.guid)
+    self.content = Note::parseENML(xml_content)
     self.save
+  end
+
+  def self.parseENML xml_content
+    xml_doc  = Nokogiri::XML(xml_content)
+    xml_doc.css("en-note").to_s
   end
 end

@@ -34,6 +34,8 @@ gem 'pg'
 gem "evernote_oauth"
 gem 'omniauth-evernote'
 
+gem 'nokogiri'
+
 # Use Unicorn as the app server
 # gem 'unicorn'
 

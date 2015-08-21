@@ -176,6 +176,7 @@ DEPENDENCIES
   evernote_oauth
   jbuilder (~> 2.0)
   jquery-rails
+  nokogiri
   oauth
   omniauth-evernote
   pg
