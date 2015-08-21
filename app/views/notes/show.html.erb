@@ -2,7 +2,7 @@
   <p id="notice"><%= notice %></p>
 
   <%= render  'sidebar' %>
-  <%= @note.content %>
+  <%= @note.content.html_safe %>
   <%= link_to 'Edit', edit_note_path(@note) %> |
   <%= link_to 'Back', notes_path %>
 </div>
