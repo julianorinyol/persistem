@@ -2,7 +2,12 @@
   <p id="notice"><%= notice %></p>
 
   <%= render  'sidebar' %>
-  <%= @note.content.html_safe %>
+  <div id='note-title'>
+    <h2><%= @note.title %></h2>
+  </div>
+  <div class='col-md-6' id='note-display-area'>
+    <%= @note.content.html_safe %>
+  </div>
   <%= link_to 'Edit', edit_note_path(@note) %> |
   <%= link_to 'Back', notes_path %>
 </div>
@@ -19,3 +24,15 @@ $("tr[data-link]").on('mouseleave', function() {
 })
 
 </script>
+
+
+<style>
+  li ul li{
+    position: relative;
+    left: 24px;
+  }
+  #note-display-area {
+    height: 500px;
+    overflow: scroll;
+  }
+</style>

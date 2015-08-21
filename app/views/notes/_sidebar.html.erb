@@ -22,11 +22,10 @@
   <tbody>
   
   <h4>Public Notes</h4>
-    <tr><td>Title</td><td>Content</td><td></td><td></td><td> </td></tr>
+    <tr><td>Title</td></tr>
     <% @notes.each do |note| %>
       <tr data-link="<%= edit_note_path(note, @question) %>">
         <td><%= note.title %></td>
-        <td><%= note.content %></td>
       </tr>
     <% end %>
   </tbody>
@@ -41,12 +40,11 @@
   <tbody>
   
          <h4>Your Notes</h4>
-     <tr><td>Title</td><td>Content</td><td> </td><td> </td><td> </td></tr>
+     <tr><td>Title</td></tr>
     <% if @my_notes %>
     <% @my_notes.each do |note| %>
       <tr data-link="<%= note_path(note) %>">
         <td><%= note.title %></td>
-        <td><%= note.content %></td>
       </tr>
     <% end %>
     <% end %>
