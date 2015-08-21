@@ -51,16 +51,20 @@ class NotesController < ApplicationController
 
   def getNotesFromEvernote
     # get all the notes from evernote. 10 at a time.
-     token = session[:authtoken]
+      token = session[:authtoken]
       client = EvernoteOAuth::Client.new(token: token)
       note_store = client.note_store
       @notebooks = note_store.listNotebooks
       note_filter = Evernote::EDAM::NoteStore::NoteFilter.new
       @first_10_notes =  note_store.findNotes(note_filter, 0, 10)
 
+
       @first_10_notes.notes.each do |note|
         this_note = Note.new
         this_note.guid =  note.guid
+        if this_note.is_already_in_db?
+          next
+        end
         this_note.title = note.title
         this_note.user_id = @current_user.id
         this_note.public = false;
@@ -110,10 +114,19 @@ class NotesController < ApplicationController
 
   # # GET /notes/1/edit
   def edit
+    token = session[:authtoken]
+    client = EvernoteOAuth::Client.new(token: token)
+    
+    note_store = client.note_store
+
     @notes = Note.where(public: true)
     if current_user
       @my_notes = Note.where(user_id: current_user.id)
     end
+    if !@note.content
+      @note.get_content(note_store, @note)
+    end
+
     @question = Question.new
     @questions = Question.where(note_id: params[:id].to_i )
   end

@@ -16,7 +16,9 @@
   <div class="actions">
   <% if @note.content  %>
     <%= link_to 'New Note', notes_path, :id=>'new-note-button' %>
-    <% end %>
+  <% else %>
+  
+  <% end %>
     <%= f.submit %>
   </div>
   <%= f.text_area :title, :class =>'note-inputs col-md-7', :placeholder => 'Enter title here...'  %>
