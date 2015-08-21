@@ -27,6 +27,6 @@ class Note < ActiveRecord::Base
 
   def self.parseENML xml_content
     xml_doc  = Nokogiri::XML(xml_content)
-    xml_doc.css("en-note").to_s
+    xml_doc.css("en-note").children.to_s
   end
 end
