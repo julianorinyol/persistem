@@ -105,6 +105,21 @@ class NotesController < ApplicationController
   # GET /notes/1
   # GET /notes/1.json
   def show
+     token = session[:authtoken]
+    client = EvernoteOAuth::Client.new(token: token)
+    
+    note_store = client.note_store
+
+    @notes = Note.where(public: true)
+    if current_user
+      @my_notes = Note.where(user_id: current_user.id)
+    end
+    if !@note.content
+      @note.get_content(note_store, @note)
+    end
+
+    @question = Question.new
+    @questions = Question.where(note_id: params[:id].to_i )
   end
 
   # # GET /notes/new

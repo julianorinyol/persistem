@@ -44,7 +44,7 @@
      <tr><td>Title</td><td>Content</td><td> </td><td> </td><td> </td></tr>
     <% if @my_notes %>
     <% @my_notes.each do |note| %>
-      <tr data-link="<%= edit_note_path(note) %>">
+      <tr data-link="<%= note_path(note) %>">
         <td><%= note.title %></td>
         <td><%= note.content %></td>
       </tr>
