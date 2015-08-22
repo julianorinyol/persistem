@@ -11,10 +11,13 @@
       session[:authtoken] = current_user.evernote_auth
       session[:dry_run] = true
       redirect_to notes_path, notice: "Welcome back, #{user.firstname}!"
+    elsif current_user
+      redirect_to notes_path, notice: "Welcome back, #{current_user.firstname}!"      
     else
       flash.now[:alert] = "Log in failed..."
       render :new
     end
+    
   end
 
   def destroy
@@ -22,4 +25,6 @@
     session[:authtoken] = nil
     redirect_to notes_path, notice: "Adios!"
   end
+
+
 end

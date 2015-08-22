@@ -1,0 +1,35 @@
+<%= form_for(@answer) do |f| %>
+  <% if @answer.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@answer.errors.count, "error") %> prohibited this answer from being saved:</h2>
+
+      <ul>
+      <% @answer.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= f.text_area :text, :class =>'answer-inputs col-md-7', :placeholder => 'Type answer here...'  %>
+  <%= f.hidden_field :note_id, :value => @note.id %>
+  <%= f.hidden_field :user_id, :value => @current_user.id %>
+  <%= f.hidden_field :question_id, :value => @question.id %>
+
+<p><%= @note.id %></p>
+ <div class="actions">
+    <%= f.submit :id =>'create-answer-button' %>
+  </div>
+
+  <% end %>
+
+
+
+  <!-- 
+  create_table "answers", force: :cascade do |t|
+    t.integer "note_id"
+    t.integer "subject_id"
+    t.integer "user_id"
+    t.integer "question_id"
+    t.string  "text"
+  end -->

@@ -18,7 +18,8 @@ Rails.application.routes.draw do
   resources :sessions, only: [:new, :create, :destroy]
 
   
-  root 'notes#index'
+  # root 'notes#index'
+  root 'sessions#create'
 
   # The priority is based upon order of creation: first created -> highest priority.
 

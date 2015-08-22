@@ -33,16 +33,20 @@ class AnswersController < ApplicationController
   def create
     @answer = Answer.new(answer_params)
     @answer.user = current_user
-    respond_to do |format|
-      if @answer.save
+    @answer.save
+    redirect_to :back
+
+
+    # respond_to do |format|
+      # if @answer.save
         # format.html { redirect_to @answer, notice: 'Answer was successfully created.' }
-        format.json { render :show, status: :created, location: @answer }
+        # format.json { render :show, status: :created, location: @answer }
         # format.html { notice: 'Answer was successfully created'}
-      else
+      # else
         # format.html { render :new }
-        format.json { render json: @answer.errors, status: :unprocessable_entity }
-      end
-    end
+        # format.json { render json: @answer.errors, status: :unprocessable_entity }
+      # end
+    # end
   end
     
   # PATCH/PUT /answers/1

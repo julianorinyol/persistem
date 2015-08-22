@@ -6,6 +6,13 @@ class NotesController < ApplicationController
   # GET /notes
   # GET /notes.json
   def index
+    # binding.pry
+    # if(!current_user)
+    #   redirect_to 'sessions', action: :create
+    #   return
+    # end
+
+
     @notes = Note.where(public: true)
     if current_user
       @my_notes = Note.where(user_id: current_user.id)

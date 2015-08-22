@@ -1,1 +1,12 @@
-<p>this is questions/edit.html.erb</p>
+<div class='col-md-8'>
+  <%= render 'notes/question_entry_form' %>
+  <%= render 'answer_list' %>
+  <%= render 'answer_entry_form' %>
+</div>
+<!--   create_table "questions", force: :cascade do |t|
+    t.integer "note_id"
+    t.string  "text"
+    t.integer "subject_id"
+    t.integer "user_id"
+    t.integer "answer_id"
+  end -->

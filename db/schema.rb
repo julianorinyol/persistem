@@ -11,17 +11,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150821052034) do
+ActiveRecord::Schema.define(version: 20150822194313) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "answers", force: :cascade do |t|
-    t.integer "note_id"
-    t.integer "subject_id"
-    t.integer "user_id"
-    t.integer "question_id"
-    t.string  "text"
+    t.integer  "note_id"
+    t.integer  "subject_id"
+    t.integer  "user_id"
+    t.integer  "question_id"
+    t.string   "text"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "meta_tags", force: :cascade do |t|
@@ -45,11 +47,13 @@ ActiveRecord::Schema.define(version: 20150821052034) do
   end
 
   create_table "questions", force: :cascade do |t|
-    t.integer "note_id"
-    t.string  "text"
-    t.integer "subject_id"
-    t.integer "user_id"
-    t.integer "answer_id"
+    t.integer  "note_id"
+    t.string   "text"
+    t.integer  "subject_id"
+    t.integer  "user_id"
+    t.integer  "answer_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "subjects", force: :cascade do |t|

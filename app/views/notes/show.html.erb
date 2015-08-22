@@ -8,6 +8,10 @@
   <div class='col-md-6' id='note-display-area'>
     <%= @note.content.html_safe %>
   </div>
+   <div class='col-md-6'>
+    <%= render 'questionlist' %>
+    <%= render 'question_entry_form' %>
+  </div>
   <%= link_to 'Edit', edit_note_path(@note) %> |
   <%= link_to 'Back', notes_path %>
 </div>
@@ -29,10 +33,10 @@ $("tr[data-link]").on('mouseleave', function() {
 <style>
   li ul li{
     position: relative;
-    left: 24px;
+    left: -15px;
   }
   #note-display-area {
-    height: 500px;
+    max-height: 500px;
     overflow: scroll;
   }
 </style>

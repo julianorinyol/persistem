@@ -1,0 +1,30 @@
+<h3>Previously Submitted Answers</h3>
+<div id='answer-display-area'>
+<% if @answer %>
+  <table class='table'>
+    <thead><tr><td><b>Answer</b></td><td><b>Date Submitted</b></td></tr></thead>
+    <tbody>
+      <% @answers.each do |answer| %>
+        <tr data-link="<%= edit_answer_path(answer) %>" > 
+          <td><%= answer.text %></td>
+          <td><%= answer.created_at %></td>
+        </tr>
+
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+</div>
+
+
+<script>
+// $("tr[data-link]").click(function() {
+//   window.location = $(this).data("link")
+// })
+$("tr[data-link]").on('mouseenter', function() {
+  $(this).css({"background":"purple", 'color':'white'});
+})
+$("tr[data-link]").on('mouseleave', function() {
+  $(this).css({"background":"white",'color':'black'});
+})
+</script>
