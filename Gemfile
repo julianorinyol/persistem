@@ -28,6 +28,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'bcrypt', '~> 3.1.7'
 
 gem 'oauth'
+ruby '2.2.0'
 
 gem 'pg'
 # Load Thrift & Evernote Ruby libraries
@@ -35,6 +36,8 @@ gem "evernote_oauth"
 gem 'omniauth-evernote'
 
 gem 'nokogiri'
+
+gem 'rails_12factor', group: :production
 
 # Use Unicorn as the app server
 # gem 'unicorn'
