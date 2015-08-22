@@ -1,12 +1,9 @@
 class NotesController < ApplicationController
   before_action :set_note, only: [:show, :edit, :update, :destroy]
   
-  # require 'pry'
-
   # GET /notes
   # GET /notes.json
   def index
-    # binding.pry
     # if(!current_user)
     #   redirect_to 'sessions', action: :create
     #   return

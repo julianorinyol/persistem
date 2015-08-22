@@ -1,5 +1,4 @@
 require 'csv'
-require 'pry'
 
 
 # Load Thrift & Evernote Ruby libraries
