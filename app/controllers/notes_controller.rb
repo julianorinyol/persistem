@@ -14,7 +14,7 @@ class NotesController < ApplicationController
     if current_user
       @my_notes = Note.where(user_id: current_user.id)
 
-      if @my_notes.length < 4
+      if @my_notes.length < 4 && current_user.evernote_auth
         getNotesFromEvernote
       end
       @my_notes = Note.where(user_id: current_user.id)
