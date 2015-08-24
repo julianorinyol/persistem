@@ -51,7 +51,7 @@ class AnswersController < ApplicationController
 
   def createViaAjax
     @answer = Answer.new(answer_params)
-    @answer.user = current_user
+    @answer.user_id = current_user.id
     # @answer.save
     # render :nothing => true
 
@@ -96,7 +96,7 @@ class AnswersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def answer_params
       params[:answer]
-      params.permit(:answer, :note_id, :question_id, :text, :subject_id, :user_id)
+      params.permit(:answer, :note_id, :question_id, :text, :subject_id, :user_id, :quiz_id)
     end
 
 end
