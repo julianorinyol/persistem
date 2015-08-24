@@ -8,6 +8,7 @@ class QuizController < ApplicationController
   end
 
   def show
+    @answers = @quiz.get_previous_answers
   end
   
   def create

@@ -50,16 +50,22 @@ class AnswersController < ApplicationController
   end
 
   def createViaAjax
-    @answer = Answer.new(answer_params)
-    @answer.user_id = current_user.id
-    # @answer.save
-    # render :nothing => true
+    if Answer.where(quiz_id: params[:quiz_id], question_id: params[:question_id]).empty?
+      @answer = Answer.new(answer_params)
+      # @answer.save
+      # render :nothing => true
 
-    if @answer.save
-      render json: 'answer was saved'
+      if @answer.save
+        render json: 'answer was saved'
+      else
+        render json: @answer.errors, status: :unprocessable_entity
+      end
     else
-      render json: @answer.errors, status: :unprocessable_entity
+      @answer = Answer.where(quiz_id: params[:quiz_id], question_id: params[:question_id]).first
+      @answer.text = answer_params[:text]
+      @answer.save
     end
+
   end
 
     
