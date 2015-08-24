@@ -7,15 +7,6 @@
 
 <script>
 
-
-$.ajax({
-  type: "POST",
-  url: '/questions/create' + "<%= @note.id %>"//, 
-  // data: data,
-  // success: success,
-  // dataType: dataType
-});
-
 $("tr[data-link]").click(function() {
   window.location = $(this).data("link")
 })
