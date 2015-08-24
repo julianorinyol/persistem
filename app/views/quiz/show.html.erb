@@ -1,1 +1,35 @@
 <h5>quiz show</h5>
+<% @quiz.questions.each do |question| %>
+  <!-- question text -->
+<p id="question<%= question.id %>"data-questionid="<%= question.id %>"> <%= question.text %></p>
+<!-- Answer entry area -->
+<textarea class='quiz-answer-submit-text' data-questionid="<%= question.id %>" content-editable='true'></textarea>
+<% end %>
+
+<script>
+
+// on blur of any response area....   submit the answer via ajax
+
+$('.quiz-answer-submit-text').on('blur', function(){
+  console.log('blurred');
+   var data = {
+          'question_id': $(this).data('questionid'),
+          'text': $(this).val(),
+          'csrf': $("meta[name ='csrf-token']").attr('content')
+    };
+
+  $.ajax({
+      url: '/answers/createAsync',
+      method: 'POST',
+      data: data ,
+      dataType: 'json',
+      success: function(hash) {
+        console.log('ajax POST successful...');
+      },
+      error: function(phase, message){
+        console.log('ajax post failed', message);
+      }
+    });
+})
+
+</script>

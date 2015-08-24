@@ -8,7 +8,6 @@ class QuizController < ApplicationController
   end
 
   def show
-  
   end
   
   def create
@@ -24,6 +23,6 @@ class QuizController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def quiz_params
       params[:question]
-      params.requirquize(:quiz).permit(:note_id, :text, :subject_id, :user_id)
+      params.require(:quiz).(:quiz).permit(:note_id, :text, :subject_id, :user_id)
     end
 end

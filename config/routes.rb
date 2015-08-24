@@ -9,6 +9,8 @@ Rails.application.routes.draw do
 
   get '/auth/:provider/callback' => 'login#callback'
 
+  post 'answers/createAsync' => 'answers#createViaAjax'
+
 
   resources :notes
   resources :questions

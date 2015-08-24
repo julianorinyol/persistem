@@ -18,16 +18,21 @@ if(User.all.length > 0)
   if(user)
     notes.each do |note|
       while note.questions.length < 5
-        note.questions << Question.create(text: 'seed question' << note.questions.length.to_s, user_id: user.id, note_id: note.id )
-        puts 'seeded question' << note.questions.length.to_s
+        text = 'seed question' << note.questions.length.to_s << ' for note: ' << note.id.to_s
+
+        note.questions << Question.create(text: text, user_id: user.id)
+        puts 'seeded question ' << note.questions.length.to_s << ' for note: ' << note.id.to_s
       end
     end
     questions = Question.all
     
     questions.each do |question|
       while question.answers.length < 5 
-        question.answers << Answer.create(text: 'seed answer' << question.answers.length.to_s, user_id: user.id )
-        puts 'seeded answer' << question.answers.length.to_s
+
+        text = 'seed answer' << question.answers.length.to_s << ' for question: ' << question.id.to_s << ' note: ' << question.note_id.to_s
+
+        question.answers << Answer.create(text: text, user_id: user.id )
+        puts 'seeded answer' << question.answers.length.to_s << ' for question: ' << question.id.to_s
       end  #while
     end #questions.each
   end #if user

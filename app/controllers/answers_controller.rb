@@ -48,6 +48,20 @@ class AnswersController < ApplicationController
       # end
     # end
   end
+
+  def createViaAjax
+    @answer = Answer.new(answer_params)
+    @answer.user = current_user
+    # @answer.save
+    # render :nothing => true
+
+    if @answer.save
+      render json: 'answer was saved'
+    else
+      render json: @answer.errors, status: :unprocessable_entity
+    end
+  end
+
     
   # PATCH/PUT /answers/1
   # PATCH/PUT /answers/1.json
@@ -82,7 +96,7 @@ class AnswersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def answer_params
       params[:answer]
-      params.require(:answer).permit(:note_id, :question_id, :text, :subject_id, :user_id)
+      params.permit(:answer, :note_id, :question_id, :text, :subject_id, :user_id)
     end
 
 end
