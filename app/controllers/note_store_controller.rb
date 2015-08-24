@@ -1,4 +1,4 @@
-class NoteStoreController < EvernoteController
+class NoteStoreController < ApplicationController
 
   private
   def authenticateToSharedNote
