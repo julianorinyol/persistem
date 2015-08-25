@@ -11,7 +11,7 @@
     <% end %>
     <%= link_to 'Generate Quiz', new_quiz_path %>
     <%= link_to 'View Past Quizzes', quiz_index_path %>
-    <%= link_to 'Sync With Evernote', notes_sync_evernote_path, remote: true %>
+    <a id='sync-button'>Sync With Evernote</a>
 
 
   </small>
@@ -31,3 +31,46 @@
 <% end %>
 <br>
 </div>
+
+<script>
+function displayNotes(notes){
+  $('#private-notes-list tbody').html('');
+  for(var i = 0; i < notes.length; i++) {
+    note = notes[i];
+    var trInnards = "<tr class='clickable-tr' data-link='/notes/" + note.id + "'><td>" + note.title +  "</td></tr>"
+    tr = $(trInnards);
+    tr.appendTo($('#private-notes-list tbody'));
+  }
+}
+
+$('#sync-button').on('click', function(){
+  console.log('clicked');   
+  $.ajax({
+        url: '/notes/sync/evernote',
+        method: 'GET',
+        dataType: 'json',
+        success: function(hash) {
+          // newNotes = hash.notes;
+          console.log('ajax success!');
+          displayNotes(hash);
+          setUpBindings();
+        },
+        error: function(phase, message){
+          console.log('ajax post failed', message);
+          console.log('ajax post failed');
+        }
+      });
+
+});
+function setUpBindings(){
+    $("tr[data-link].clickable-tr").click(function() {
+      window.location = $(this).data("link")
+    })
+    $("tr[data-link]").on('mouseenter', function() {
+      $(this).css({"background":"purple", 'color':'white'});
+    })
+    $("tr[data-link]").on('mouseleave', function() {
+      $(this).css({"background":"white",'color':'black'});
+    })
+}
+</script>
