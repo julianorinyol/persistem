@@ -1,17 +1,9 @@
-<h5>quiz show</h5>
+  <%= render '/notes/sidebar' %>
 <% @quiz.questions.each do |question| %>
   <!-- question text -->
 <p id="question<%= question.id %>"data-questionid="<%= question.id %>"> <%= question.text %></p>
 <!-- Answer entry area -->
-<textarea class='quiz-answer-submit-text' data-questionid="<%= question.id %>" content-editable='true'>
-  <% if(question.answers) %>
-    <% question.answers.each do |answer|%>
-      <% if(answer.quiz_id == @quiz.id) %>
-        <%=answer.text%>
-      <% end %>
-    <% end %>
-  <% end %>
-</textarea>
+<textarea class='quiz-answer-submit-text' data-questionid="<%= question.id %>" content-editable='true'><% if(question.answers) %><% question.answers.each do |answer|%><% if(answer.quiz_id == @quiz.id) %><%=answer.text%><% end %><% end %><% end %></textarea>
 <% end %>
 
 <script>
@@ -21,11 +13,13 @@
 $('.quiz-answer-submit-text').on('blur', function(){
   console.log('blurred');
    var data = {
+          'answer' : {
+            'text': $(this).val(),
+            // 'csrf': $("meta[name ='csrf-token']").attr('content'),
+            'user_id': "<%= current_user.id %>",
           'question_id': $(this).data('questionid'),
-          'text': $(this).val(),
-          'csrf': $("meta[name ='csrf-token']").attr('content'),
-          'quiz_id': "<%= @quiz.id %>",
-          'user_id': "<%= current_user.id %>"
+          'quiz_id': "<%= @quiz.id %>"
+          }
     };
 
   $.ajax({

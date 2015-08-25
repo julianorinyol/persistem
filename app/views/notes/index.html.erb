@@ -4,28 +4,3 @@
 <div class'container'>
 
 </div>
-
-<script>
-
-$("tr[data-link]").click(function() {
-  window.location = $(this).data("link")
-})
-$("tr[data-link]").on('mouseenter', function() {
-  $(this).css({"background":"purple", 'color':'white'});
-})
-$("tr[data-link]").on('mouseleave', function() {
-  $(this).css({"background":"white",'color':'black'});
-})
-
-
-</script>
-
-<!-- 
-$.ajax({
-  url: '/games/' + currentGame + '/place',
-  method: 'POST',
-  error: function(phase, message){
-    console.log(phase);
-    console.log('ajax post failed', message);
-    $('.game-square').removeClass('active');
-  }  -->

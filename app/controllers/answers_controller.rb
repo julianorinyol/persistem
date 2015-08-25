@@ -50,21 +50,22 @@ class AnswersController < ApplicationController
   end
 
   def createViaAjax
-    if Answer.where(quiz_id: params[:quiz_id], question_id: params[:question_id]).empty?
+    binding.pry
+    if Answer.where(quiz_id: answer_params[:quiz_id], question_id: answer_params[:question_id]).empty?
       @answer = Answer.new(answer_params)
       # @answer.save
-      # render :nothing => true
 
       if @answer.save
-        render json: 'answer was saved'
+        # render json: 'answer was saved'
       else
-        render json: @answer.errors, status: :unprocessable_entity
+        # render json: @answer.errors, status: :unprocessable_entity
       end
     else
-      @answer = Answer.where(quiz_id: params[:quiz_id], question_id: params[:question_id]).first
+      @answer = Answer.where(quiz_id: answer_params[:quiz_id], question_id: answer_params[:question_id]).first
       @answer.text = answer_params[:text]
       @answer.save
     end
+      render :nothing => true
 
   end
 
@@ -102,7 +103,9 @@ class AnswersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def answer_params
       params[:answer]
-      params.permit(:answer, :note_id, :question_id, :text, :subject_id, :user_id, :quiz_id)
+      params.require(:answer).permit(:note_id, :question_id, :text, :subject_id, :user_id, :quiz_id)
+      
+      # params.permit(:answer, :note_id, :question_id, :text, :subject_id, :user_id, :quiz_id)
     end
 
 end

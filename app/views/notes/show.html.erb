@@ -16,20 +16,6 @@
   <%= link_to 'Back', notes_path %>
 </div>
 
-<script>  
-$("tr[data-link]").click(function() {
-  window.location = $(this).data("link")
-})
-$("tr[data-link]").on('mouseenter', function() {
-  $(this).css({"background":"purple", 'color':'white'});
-})
-$("tr[data-link]").on('mouseleave', function() {
-  $(this).css({"background":"white",'color':'black'});
-})
-
-</script>
-
-
 <style>
   li ul li{
     position: relative;
