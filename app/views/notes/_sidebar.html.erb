@@ -17,44 +17,8 @@
   </small>
 </div>  
 
-<table class='table'>
-  <thead>
-    <tr>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+<%= render 'noteslist' %>
 
-  <tbody>
-  
-  <h4>Public Notes</h4>
-    <tr><td>Title</td></tr>
-    <% @notes.each do |note| %>
-      <tr class='clickable-tr' data-link="<%= edit_note_path(note, @question) %>">
-        <td><%= note.title %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-<table class = 'table'>
-  <thead>
-    <tr>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-  
-         <h4>Your Notes</h4>
-     <tr><td>Title</td></tr>
-    <% if @my_notes %>
-    <% @my_notes.each do |note| %>
-      <tr class='clickable-tr' data-link="<%= note_path(note) %>">
-        <td><%= note.title %></td>
-      </tr>
-    <% end %>
-    <% end %>
-  </tbody>
-</table>
 
  <%= link_to 'Download CSV list of your notes', notes_path(format: :csv) %>
 <% if !session[:authtoken] && @current_user %>

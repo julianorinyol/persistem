@@ -36,7 +36,6 @@ class NotesController < ApplicationController
   end
 
   def sync
-    @notes = []
     # @notebooks = getAllNotebooksForUser
     # binding.pry
     # @notebooks.each do |notebook|
@@ -48,11 +47,14 @@ class NotesController < ApplicationController
       client = EvernoteOAuth::Client.new(token: token)
       note_store = client.note_store
       note_filter = Evernote::EDAM::NoteStore::NoteFilter.new
-      @notes = note_store.findNotes(token, note_filter, 0, 1000)
-      binding.pry
+      evernotes = note_store.findNotes(token, note_filter, 0, 1000)
+      addNotesToDb(evernotes.notes)
 
+      @my_notes = Note.where(user_id: current_user.id)
+      render json: @my_notes
     # respond_to do |format|
     #   format.json
+    #   format.html
     # end
   end
 
@@ -93,34 +95,21 @@ class NotesController < ApplicationController
       @first_10_notes =  note_store.findNotes(note_filter, 0, 10)
 
       addNotesToDb(@first_10_notes.notes)
-     
-      # @first_10_notes.notes.each do |note|
-      #   this_note = Note.new
-      #   this_note.guid =  note.guid
-      #   if this_note.is_already_in_db?
-      #     next
-      #   end
-      #   this_note.title = note.title
-      #   this_note.user_id = @current_user.id
-      #   this_note.public = false;
-      #   this_note.save
-      # end
-    # save their title and guid in the db
-    # if the title is clicked on, go get the content ***different function... and save it to the db.
   end
 
   def addNotesToDb notes
     notes.each do |note|
-        this_note = Note.new
-        this_note.guid =  note.guid
-        if this_note.is_already_in_db?
-          next
+      # if the Note doesn't exist in db, create it.   
+      if !Note.where(guid: note.guid).exists?
+        Note.create(guid: note.guid, title: note.title, user_id: current_user.id, public: false)
+      else
+        # if it is already in db,   update the title, if needed.
+        this_note = Note.where(guid: note.guid).first
+        if this_note.title != note.title
+          this_note.update(title: note.title)
         end
-        this_note.title = note.title
-        this_note.user_id = @current_user.id
-        this_note.public = false;
-        this_note.save
       end
+    end
   end
 
   def updateNotesFromEvernote
