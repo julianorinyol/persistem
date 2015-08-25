@@ -1,15 +1,35 @@
-  <%= render '/notes/sidebar' %>
-<% @quiz.questions.each do |question| %>
-  <!-- question text -->
-<p id="question<%= question.id %>"data-questionid="<%= question.id %>"> <%= question.text %></p>
-<!-- Answer entry area -->
-<textarea class='quiz-answer-submit-text' data-questionid="<%= question.id %>" content-editable='true'><% if(question.answers) %><% question.answers.each do |answer|%><% if(answer.quiz_id == @quiz.id) %><%=answer.text%><% end %><% end %><% end %></textarea>
-<% end %>
+<%= render '/notes/sidebar' %>
+
+<div id='quiz-show-container' class='container col-md-7'>
+
+  <% @quiz.questions.each do |question| %>
+
+    <!-- question text -->
+  <p id="question<%= question.id %>"data-questionid="<%= question.id %>"> <%= question.text %></p>
+  <!-- Answer entry area -->
+  <textarea class='quiz-answer-submit-text' data-questionid="<%= question.id %>" content-editable='true'><% if(question.answers) %><% question.answers.each do |answer|%><% if(answer.quiz_id == @quiz.id) %><%=answer.text%><% end %><% end %><% end %></textarea>
+  <% end %>
+</div>
+
+<style>
+  .quiz-answer-submit-text {
+    width: 50%;
+    margin:auto;
+  }
+
+  #quiz-show-container {
+    margin: auto;
+    text-align: center;
+    margin-top: 50px;
+  }
+</style>
+
+
+
+
 
 <script>
-
 // on blur of any response area....   submit the answer via ajax
-
 $('.quiz-answer-submit-text').on('blur', function(){
   console.log('blurred');
    var data = {

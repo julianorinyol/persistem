@@ -1,0 +1,21 @@
+<%= render '/notes/sidebar' %>
+<div class='col-md-5'>
+  <h4>Previous Quizzes</h4>
+  <table class='table'>
+    <thead>
+      <tr>
+        <th colspan="1">id</th>
+        <th>created_at</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @quizzes.each do |quiz| %>
+        <tr class='clickable-tr' data-link="<%= quiz_path(quiz.id) %>">
+          <td><%= quiz.id %></td>
+          <td><%= quiz.created_at %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div

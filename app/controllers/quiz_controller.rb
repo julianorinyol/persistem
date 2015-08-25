@@ -1,8 +1,22 @@
 class QuizController < ApplicationController
   before_action :set_quiz, only: [:show, :edit, :update, :destroy]
- 
+  
+  def index
+    @quizzes = Quiz.where(user_id: current_user.id)
+
+     @notes = Note.where(public: true)
+    if current_user
+      @my_notes = Note.where(user_id: current_user.id)
+
+      if @my_notes.length < 4 && current_user.evernote_auth
+        getNotesFromEvernote
+      end
+      @my_notes = Note.where(user_id: current_user.id)
+    end 
+  end
+
   def new
-    @quiz = Quiz.create
+    @quiz = Quiz.create(user_id: current_user.id)
     @quiz.get_questions(7)
     redirect_to quiz_path(id: @quiz.id)
   end

@@ -50,7 +50,6 @@ class AnswersController < ApplicationController
   end
 
   def createViaAjax
-    binding.pry
     if Answer.where(quiz_id: answer_params[:quiz_id], question_id: answer_params[:question_id]).empty?
       @answer = Answer.new(answer_params)
       # @answer.save

@@ -35,6 +35,36 @@ class NotesController < ApplicationController
     end
   end
 
+  def sync
+    @notes = []
+    # @notebooks = getAllNotebooksForUser
+    # binding.pry
+    # @notebooks.each do |notebook|
+    #   getAllNotesForNoteBook(notebook)
+    # end
+
+
+      token = session[:authtoken]
+      client = EvernoteOAuth::Client.new(token: token)
+      note_store = client.note_store
+      note_filter = Evernote::EDAM::NoteStore::NoteFilter.new
+      @notes = note_store.findNotes(token, note_filter, 0, 1000)
+      binding.pry
+
+    # respond_to do |format|
+    #   format.json
+    # end
+  end
+
+  def getAllNotesForNotebook(notebook)
+      token = session[:authtoken]
+      client = EvernoteOAuth::Client.new(token: token)
+      note_store = client.note_store
+      note_filter = Evernote::EDAM::NoteStore::NoteFilter.new
+      note_store.findNotes(note_filter)
+
+  end
+
   # def updateNotesFromEvernote
   #   if session[:authtoken]
   #     token = session[:authtoken]
@@ -62,8 +92,25 @@ class NotesController < ApplicationController
       note_filter = Evernote::EDAM::NoteStore::NoteFilter.new
       @first_10_notes =  note_store.findNotes(note_filter, 0, 10)
 
+      addNotesToDb(@first_10_notes.notes)
+     
+      # @first_10_notes.notes.each do |note|
+      #   this_note = Note.new
+      #   this_note.guid =  note.guid
+      #   if this_note.is_already_in_db?
+      #     next
+      #   end
+      #   this_note.title = note.title
+      #   this_note.user_id = @current_user.id
+      #   this_note.public = false;
+      #   this_note.save
+      # end
+    # save their title and guid in the db
+    # if the title is clicked on, go get the content ***different function... and save it to the db.
+  end
 
-      @first_10_notes.notes.each do |note|
+  def addNotesToDb notes
+    notes.each do |note|
         this_note = Note.new
         this_note.guid =  note.guid
         if this_note.is_already_in_db?
@@ -74,15 +121,13 @@ class NotesController < ApplicationController
         this_note.public = false;
         this_note.save
       end
-    # save their title and guid in the db
-    # if the title is clicked on, go get the content ***different function... and save it to the db.
   end
 
   def updateNotesFromEvernote
   end
 
   def getAllNotebooksForUser
-      token = session[@current_user.evernote_auth]
+      token = session[:authtoken]
       client = EvernoteOAuth::Client.new(token: token)
       note_store = client.note_store
       @notebooks = note_store.listNotebooks

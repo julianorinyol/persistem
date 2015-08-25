@@ -13,9 +13,11 @@ Rails.application.routes.draw do
 
 
   resources :notes
+  get 'notes/sync/evernote'=> 'notes#sync'
+
   resources :questions
   resources :answers
-  resources :quiz, only: [:new, :show, :create]
+  resources :quiz, only: [:new, :show, :create, :index]
   resources :users, only: [:new, :create]
   resources :sessions, only: [:new, :create, :destroy]
 
