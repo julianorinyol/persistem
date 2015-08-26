@@ -1,5 +1,6 @@
 class QuizController < ApplicationController
   before_action :set_quiz, only: [:show, :edit, :update, :destroy]
+   before_filter :restrict_access
   
   def index
     @quizzes = Quiz.where(user_id: current_user.id)

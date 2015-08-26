@@ -41,7 +41,12 @@ $('.quiz-answer-submit-text').on('blur', function(){
           'quiz_id': "<%= @quiz.id %>"
           }
     };
-
+    $.ajaxSetup({
+      beforeSend: function(req) {
+        req.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'));
+      }
+    });
+     
   $.ajax({
       url: '/answers/createAsync',
       method: 'POST',

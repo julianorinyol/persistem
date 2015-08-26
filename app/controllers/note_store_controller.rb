@@ -1,4 +1,5 @@
 class NoteStoreController < ApplicationController
+   before_filter :restrict_access
 
   private
   def authenticateToSharedNote
