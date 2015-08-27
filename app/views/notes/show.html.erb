@@ -1,5 +1,4 @@
 <div class='container'>
-  <p id="notice"><%= notice %></p>
 
   <%= render  'sidebar' %>
   <div id='note-title'>
@@ -10,6 +9,7 @@
   </div>
    <div class='col-md-6'>
     <%= render 'question_entry_form' %>
+  <p id="notice"><%= notice %></p>
     <%= render 'questionlist' %>
   </div>
   <%= link_to 'Edit', edit_note_path(@note) %> |

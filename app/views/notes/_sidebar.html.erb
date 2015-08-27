@@ -53,7 +53,9 @@ function displayNotes(notes, notebooks) {
   for(var i = 0; i < notes.length; i++) {
     note = notes[i];
     notebook = getNotebookFromNote(note, notebooks);
-    var trInnards = "<tr class='clickable-tr' data-link='/notes/" + note.id + "'><td>" + note.title +  "</td><td>"+ notebook.title +"</td></tr>"
+    var dataLink = "data-link='/notes/" + note.id + "'";
+    var trInnards = generateRow("clickable-tr", null, dataLink, [note.title, notebook.title] );
+
     tr = $(trInnards);
     tr.appendTo($('#private-notes-list tbody'));
   }
@@ -61,7 +63,7 @@ function displayNotes(notes, notebooks) {
 function displayNotebooks(notes, notebooks) {
   for(var i = 0; i < notebooks.length; i++) {
     notebook = notebooks[i];
-    var trInnards = "<tr class='bla-class' id='bla"+i+"' data-link=''><td>" + notebook.title +  "</td><td>"+ getNumberOfNotesInNotebook(notes, notebook) +"</td></tr>"
+    var trInnards = generateRow('bla-class', 'bla'+i, "data-link=''",[notebook.title, getNumberOfNotesInNotebook(notes,notebook)]);
     tr = $(trInnards);
     tr.appendTo($('#private-notes-list tbody'));
 
@@ -70,7 +72,6 @@ function displayNotebooks(notes, notebooks) {
       displayNotesForNotebook(myNotes, notebooks[id]);
     })
   }
-  
 
   $(".bla-class").on('mouseenter', function() {
     $(this).css({"background":"purple", 'color':'white'});
@@ -79,12 +80,13 @@ function displayNotebooks(notes, notebooks) {
     $(this).css({"background":"white",'color':'black'});
   })
 } 
+
 function displayNotesForNotebook(notes, notebook){
   $('#private-notes-list tbody').html('');
   notebooksNotes = getNotesForNotebook(notes, notebook);
   for(var i = 0; i < notebooksNotes.length; i++) {
     note = notebooksNotes[i];
-    var trInnards = "<tr class='clickable-tr' data-link='/notes/" + note.id + "'><td>" + note.title +  "</td><td>"+ notebook.title +"</td></tr>"
+    var trInnards = generateRow('clickable-tr', null, "data-link='/notes/" + note.id +"'", [note.title, notebook.title] );
     tr = $(trInnards);
     tr.appendTo($('#private-notes-list tbody'));
   }
@@ -94,8 +96,19 @@ function displayNotesForNotebook(notes, notebook){
  function generateRow(klass, id, otherAttrAndValue, contentArray) {
     // otherAttrAndValue   -->  a string like "data-link='cheese/yum'"
     var innards = buildInnards(contentArray);
-    var tr ="<tr class='"+ klass + "' id='"+id+"'"+ otherAttrAndValue +">" + innards + "</tr>"
-      return tr;
+    var tr ="<tr ";
+    
+    if(klass) {
+      tr+= "class='"+ klass + "' ";
+    }
+    if(id){
+      tr+= "' id='"+id+"'";
+    }
+    if(otherAttrAndValue){
+      tr +=  otherAttrAndValue +">";
+    }
+    tr +=  innards + "</tr>";
+    return tr;
   }
 
   function buildInnards(contentArray) {
