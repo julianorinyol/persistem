@@ -37,8 +37,8 @@ ActiveRecord::Schema.define(version: 20150827000203) do
   end
 
   create_table "notebooks", force: :cascade do |t|
-    t.integer "guid"
-    t.string  "title"
+    t.string "guid"
+    t.string "title"
   end
 
   create_table "notes", force: :cascade do |t|
@@ -50,7 +50,7 @@ ActiveRecord::Schema.define(version: 20150827000203) do
     t.integer  "subject_id"
     t.string   "title"
     t.string   "guid"
-    t.integer  "notebook_guid"
+    t.string   "notebook_guid"
   end
 
   create_table "questions", force: :cascade do |t|

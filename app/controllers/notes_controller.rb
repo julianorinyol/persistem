@@ -17,6 +17,7 @@ class NotesController < ApplicationController
 
       if @my_notes.length < 4 && current_user.evernote_auth
         getNotesFromEvernote
+        getAllNotebooksForUser
       end
       @my_notes = Note.where(user_id: current_user.id)
 
@@ -38,7 +39,6 @@ class NotesController < ApplicationController
 
   def sync
     # @notebooks = getAllNotebooksForUser
-    # binding.pry
     # @notebooks.each do |notebook|
     #   getAllNotesForNoteBook(notebook)
     # end
@@ -48,6 +48,7 @@ class NotesController < ApplicationController
       note_filter = Evernote::EDAM::NoteStore::NoteFilter.new
       evernotes = note_store.findNotes(token, note_filter, 0, 1000)
       addNotesToDb(evernotes.notes)
+      getAllNotebooksForUser  
       @my_notes = Note.where(user_id: current_user.id)
       render json: @my_notes
     # respond_to do |format|
@@ -64,24 +65,6 @@ class NotesController < ApplicationController
       note_store.findNotes(note_filter)
 
   end
-
-  # def updateNotesFromEvernote
-  #   if session[:authtoken]
-  #     token = session[:authtoken]
-  #     client = EvernoteOAuth::Client.new(token: token)
-  #     note_store = client.note_store
-  #     @notebooks = note_store.listNotebooks
-  #     note_filter = Evernote::EDAM::NoteStore::NoteFilter.new
-  #     @first_10_notes =  note_store.findNotes(note_filter, 0, 10)
-  #     getAllNotesForAllNotebooks()
-
-  #     @evernote_notes_contents = []
-
-  #     @first_10_notes.notes.each_with_index do |note, n|
-  #       @evernote_notes_contents << note_store.getNoteContent(note.guid)
-  #     end
-  #   end
-  # end
 
   def getNotesFromEvernote
     # get all the notes from evernote. 10 at a time.
@@ -118,6 +101,22 @@ class NotesController < ApplicationController
       client = EvernoteOAuth::Client.new(token: token)
       note_store = client.note_store
       @notebooks = note_store.listNotebooks
+      addNotebooksToDb @notebooks
+  end
+
+  def addNotebooksToDb notebooks
+    notebooks.each do |notebook|
+      # if the Note doesn't exist in db, create it.   
+      if !Notebook.where(guid: notebook.guid).exists?
+        Notebook.create(guid: notebook.guid, title: notebook.name, user_id: current_user.id)
+      else
+        # if it is already in db,   update the title, if needed.
+        this_notebook = Notebook.where(guid: notebook.guid).first
+        if this_notebook.title != notebook.name
+          this_notebook.update(title: notebook.name)
+        end
+      end
+    end
   end
 
   # def getAllNotesForAllNotebooks

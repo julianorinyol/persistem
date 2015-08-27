@@ -1,6 +1,3 @@
 class Notebook < ActiveRecord::Base
-
-  def enterNotesIntoDb
-
-  end
+  belongs_to :user
 end
