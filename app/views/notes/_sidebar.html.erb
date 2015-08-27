@@ -2,7 +2,7 @@
 <div class='container col-md-5'>
 
 <div id'top-row'>
-  <h2>persistem</h2>
+  <a href="/notes"><h2>persistem</h2></a>
   <small>
     <% if current_user %>
     Signed in as <%= current_user.email %> (<%= link_to "Log out", session_path("current"), method: :delete %>)

@@ -13,6 +13,7 @@ class QuizController < ApplicationController
         getNotesFromEvernote
       end
       @my_notes = Note.where(user_id: current_user.id)
+      @my_notebooks = Notebook.where(user_id: current_user.id)
     end 
   end
 
@@ -33,6 +34,7 @@ class QuizController < ApplicationController
         getNotesFromEvernote
       end
       @my_notes = Note.where(user_id: current_user.id)
+      @my_notebooks = Notebook.where(user_id: current_user.id)
 
     end
     
