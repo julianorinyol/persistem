@@ -18,11 +18,13 @@
 </div>  
 
 <ul id='notelist-tabs'class='nav nav-pills'><!---->
-  <li role='presentation' class="active"><a>Your Notes</a></li>
-  <li role='presentation'><a>Notebooks</a></li>
+  <li role='presentation' class="active"><a id='note-list-tab'>Your Notes</a></li>
+  <li role='presentation'><a id='notebook-list-tab'>Notebooks</a></li>
 </ul>
 
-<%= render 'noteslist' %>
+<div id='table-container'>
+  <%= render 'noteslist' %>
+</div>
 
  <%= link_to 'Download CSV list of your notes', notes_path(format: :csv) %>
 <% if !session[:authtoken] && @current_user %>
@@ -36,8 +38,16 @@
 <br>
 </div>
 
+
+
+<!-- ********************************************************************************************* -->
+
+
 <script>
-function displayNotes(notes, notebooks){
+var notebooks = <%= raw @my_notebooks.to_json %>;
+var myNotes = <%= raw @my_notes.to_json %>;
+
+function displayNotes(notes, notebooks) {
   $('#private-notes-list tbody').html('');
   for(var i = 0; i < notes.length; i++) {
     note = notes[i];
@@ -47,6 +57,67 @@ function displayNotes(notes, notebooks){
     tr.appendTo($('#private-notes-list tbody'));
   }
 }
+function displayNotebooks(notes, notebooks) {
+  for(var i = 0; i < notebooks.length; i++) {
+    notebook = notebooks[i];
+    var trInnards = "<tr class='bla-class' id='bla"+i+"' data-link=''><td>" + notebook.title +  "</td><td>"+ '# of notes in book' +"</td></tr>"
+    tr = $(trInnards);
+    tr.appendTo($('#private-notes-list tbody'));
+
+    $("#bla" + i).on('click',function(){
+      var id = $(this).attr('id')[3]; 
+      displayNotesForNotebook(myNotes, notebooks[id]);
+    })
+  }
+  
+
+  $(".bla-class").on('mouseenter', function() {
+    $(this).css({"background":"purple", 'color':'white'});
+  })
+  $(".bla-class").on('mouseleave', function() {
+    $(this).css({"background":"white",'color':'black'});
+  })
+} 
+function displayNotesForNotebook(notes, notebook){
+  $('#private-notes-list tbody').html('');
+  notebooksNotes = getNotesForNotebook(notes, notebook);
+  for(var i = 0; i < notebooksNotes.length; i++) {
+    note = notebooksNotes[i];
+    var trInnards = "<tr class='clickable-tr' data-link='/notes/" + note.id + "'><td>" + note.title +  "</td><td>"+ notebook.title +"</td></tr>"
+    tr = $(trInnards);
+    tr.appendTo($('#private-notes-list tbody'));
+  }
+}
+
+function getNotesForNotebook(notes, notebook) {
+  notebooksNotes =[];
+  for(var i = 0; i < notes.length; i++) {
+    var note = notes[i];
+    if( note.notebook_guid == notebook.guid ){
+      notebooksNotes.push(note);
+    }
+  }
+  return notebooksNotes;
+}
+
+$('#notebook-list-tab, #note-list-tab').on('click', function(){
+  console.log('clicked');
+  $('#notelist-tabs li').removeClass();
+  $(this).parent().addClass('active');
+  $('#private-notes-list tbody').html('');
+})
+
+$('#notebook-list-tab').on('click', function(){
+   displayNotebooks(myNotes, notebooks);
+   setUpBindings();
+})
+$('#note-list-tab').on('click', function(){
+   displayNotes(myNotes, notebooks);
+   setUpBindings();
+})
+
+
+
 
 $('#sync-button').on('click', function(){
   console.log('clicked');   
@@ -55,6 +126,7 @@ $('#sync-button').on('click', function(){
     method: 'GET',
     dataType: 'json',
     success: function(res) {
+      notebooks = res;
       callForNotes(res);
     },
     error: function(err, message) {
