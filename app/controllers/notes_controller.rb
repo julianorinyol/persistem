@@ -1,6 +1,9 @@
 class NotesController < ApplicationController
   before_action :set_note, only: [:show, :edit, :update, :destroy]
   before_filter :restrict_access
+  before_action :set_my_notes, only: [:index, :show]
+  before_action :set_my_notebooks, only: [:index, :show]
+
 
   # GET /notes
   # GET /notes.json
@@ -9,7 +12,6 @@ class NotesController < ApplicationController
     #   redirect_to 'sessions', action: :create
     #   return
     # end
-
 
     @notes = Note.where(public: true)
     if current_user
@@ -24,8 +26,6 @@ class NotesController < ApplicationController
     end
     @note = Note.new
     @question = Question.new
-   
-
 
     respond_to do |format|
       format.html
@@ -37,10 +37,6 @@ class NotesController < ApplicationController
   end
 
   def sync
-    # @notebooks = getAllNotebooksForUser
-    # @notebooks.each do |notebook|
-    #   getAllNotesForNoteBook(notebook)
-    # end
       token = session[:authtoken]
       client = EvernoteOAuth::Client.new(token: token)
       note_store = client.note_store
@@ -148,6 +144,7 @@ class NotesController < ApplicationController
     @notes = Note.where(public: true)
     if current_user
       @my_notes = Note.where(user_id: current_user.id)
+      @my_notebooks = Notebook.where(user_id: current_user.id)
     end
     if !@note.content
       @note.get_content(note_store, @note)

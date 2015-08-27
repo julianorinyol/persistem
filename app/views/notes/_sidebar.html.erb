@@ -33,11 +33,12 @@
 </div>
 
 <script>
-function displayNotes(notes){
+function displayNotes(notes, notebooks){
   $('#private-notes-list tbody').html('');
   for(var i = 0; i < notes.length; i++) {
     note = notes[i];
-    var trInnards = "<tr class='clickable-tr' data-link='/notes/" + note.id + "'><td>" + note.title +  "</td><td>"+ note.notebook_guid +"</td></tr>"
+    notebook = getNotebookFromNote(note, notebooks);
+    var trInnards = "<tr class='clickable-tr' data-link='/notes/" + note.id + "'><td>" + note.title +  "</td><td>"+ notebook.title +"</td></tr>"
     tr = $(trInnards);
     tr.appendTo($('#private-notes-list tbody'));
   }
@@ -46,13 +47,35 @@ function displayNotes(notes){
 $('#sync-button').on('click', function(){
   console.log('clicked');   
   $.ajax({
+    url: '/notebooks/list',
+    method: 'GET',
+    dataType: 'json',
+    success: function(res) {
+      callForNotes(res);
+    },
+    error: function(err, message) {
+      console.log('notebook get ajax failed' + message);
+    }
+  });
+});
+
+function getNotebookFromNote(note, notebooks) {
+  for(var i = 0; i < notebooks.length; i++) {
+    notebook = notebooks[i];
+    if(notebook.guid == note.notebook_guid) {
+      return notebook;
+    }
+  }
+}
+
+function callForNotes(notebooks){
+  $.ajax({
         url: '/notes/sync/evernote',
         method: 'GET',
         dataType: 'json',
-        success: function(hash) {
-          // newNotes = hash.notes;
+        success: function(notes) {
           console.log('ajax success!');
-          displayNotes(hash);
+          displayNotes(notes, notebooks);
           setUpBindings();
         },
         error: function(phase, message){
@@ -60,8 +83,7 @@ $('#sync-button').on('click', function(){
           console.log('ajax post failed');
         }
       });
-
-});
+}
 function setUpBindings(){
     $("tr[data-link].clickable-tr").click(function() {
       window.location = $(this).data("link")

@@ -18,6 +18,15 @@ require "evernote_oauth"
     end
   end
 
+  def set_my_notes
+    if current_user
+    end
+  end
+
+  def set_my_notebooks
+
+  end
+
   def current_user
     @current_user ||= User.find(session[:user_id]) if session[:user_id]
   end
