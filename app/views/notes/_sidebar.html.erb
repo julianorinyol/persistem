@@ -17,8 +17,11 @@
   </small>
 </div>  
 
+<ul id='notelist-tabs'>
+  <li>Your Notes</li>
+  <li>Notebooks</li>
+</ul>
 <%= render 'noteslist' %>
-
 
  <%= link_to 'Download CSV list of your notes', notes_path(format: :csv) %>
 <% if !session[:authtoken] && @current_user %>

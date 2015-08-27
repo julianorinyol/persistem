@@ -10,7 +10,16 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
- *= require_tree .
+ * this is the original ..................... require_tree .
+ *= require reset.css
+ *= require bootstrap.min.css
+ *= require notes.scss
+ *= require question.scss
+ *= require quiz.scss
+ *= require scaffolds.scss
+ *= require sessions.scss
+ *= require users.scss
  *= require_self
+
  */
 
