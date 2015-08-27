@@ -37,7 +37,7 @@ function displayNotes(notes){
   $('#private-notes-list tbody').html('');
   for(var i = 0; i < notes.length; i++) {
     note = notes[i];
-    var trInnards = "<tr class='clickable-tr' data-link='/notes/" + note.id + "'><td>" + note.title +  "</td></tr>"
+    var trInnards = "<tr class='clickable-tr' data-link='/notes/" + note.id + "'><td>" + note.title +  "</td><td>"+ note.notebook_guid +"</td></tr>"
     tr = $(trInnards);
     tr.appendTo($('#private-notes-list tbody'));
   }

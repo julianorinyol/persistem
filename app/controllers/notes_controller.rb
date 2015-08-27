@@ -16,8 +16,8 @@ class NotesController < ApplicationController
       @my_notes = Note.where(user_id: current_user.id)
 
       if @my_notes.length < 4 && current_user.evernote_auth
-        getNotesFromEvernote
         getAllNotebooksForUser
+        getNotesFromEvernote
       end
       @my_notes = Note.where(user_id: current_user.id)
       @my_notebooks = Notebook.where(user_id: current_user.id)
@@ -46,8 +46,8 @@ class NotesController < ApplicationController
       note_store = client.note_store
       note_filter = Evernote::EDAM::NoteStore::NoteFilter.new
       evernotes = note_store.findNotes(token, note_filter, 0, 1000)
-      addNotesToDb(evernotes.notes)
       getAllNotebooksForUser  
+      addNotesToDb(evernotes.notes)
       @my_notes = Note.where(user_id: current_user.id)
       render json: @my_notes
     # respond_to do |format|
@@ -81,7 +81,8 @@ class NotesController < ApplicationController
     notes.each do |note|
       # if the Note doesn't exist in db, create it.   
       if !Note.where(guid: note.guid).exists?
-        Note.create(guid: note.guid, title: note.title, user_id: current_user.id, public: false, notebook_guid: note.notebookGuid)
+        nbook = Notebook.where(guid: note.notebookGuid).first
+        Note.create(guid: note.guid, title: note.title, user_id: current_user.id, public: false, notebook_guid: note.notebookGuid, notebook_id:nbook.id)
       else
         # if it is already in db,   update the title, if needed.
         this_note = Note.where(guid: note.guid).first

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150827000203) do
+ActiveRecord::Schema.define(version: 20150827024831) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -52,6 +52,7 @@ ActiveRecord::Schema.define(version: 20150827000203) do
     t.string   "title"
     t.string   "guid"
     t.string   "notebook_guid"
+    t.integer  "notebook_id"
   end
 
   create_table "questions", force: :cascade do |t|

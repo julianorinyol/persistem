@@ -3,6 +3,7 @@ class Note < ActiveRecord::Base
   belongs_to :user
   has_many :subjects
   has_many :questions
+  belongs_to :notebook
 
 
   def is_already_in_db?

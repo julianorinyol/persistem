@@ -5,5 +5,6 @@ module NotesHelper
         return notebook.title
       end
     end
+    nil
   end
 end
