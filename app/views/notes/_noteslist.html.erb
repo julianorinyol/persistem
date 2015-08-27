@@ -2,17 +2,17 @@
 <table id='private-notes-list'class = 'table'>
   <thead>
     <tr>
-      <th colspan="3"></th>
+        <th>Title</th><th>Notebook</th>
     </tr>
   </thead>
 
   <tbody>
   
-     <tr><td>Title</td><td>Notebook</td></tr>
     <% if @my_notes %>
     <% @my_notes.each do |note| %>
       <tr class='clickable-tr' data-link="<%= note_path(note) %>">
         <td><%= note.title %></td>
+        <td><%=  getNotebookName(@my_notebooks, note.notebook_guid)%></td>
       </tr>
     <% end %>
     <% end %>

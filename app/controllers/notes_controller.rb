@@ -20,11 +20,10 @@ class NotesController < ApplicationController
         getAllNotebooksForUser
       end
       @my_notes = Note.where(user_id: current_user.id)
-
+      @my_notebooks = Notebook.where(user_id: current_user.id)
     end
     @note = Note.new
     @question = Question.new
-
    
 
 
