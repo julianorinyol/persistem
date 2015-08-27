@@ -9,7 +9,8 @@
 
     if @user.save
       session[:user_id] = @user.id
-      redirect_to notes_path, notice: "Welcome aboard, #{@user.firstname}!"
+      # redirect_to 'notes_path', notice: "Welcome aboard, #{@user.firstname}!"
+      redirect_to '/auth/evernote/'
     else
       render :new
     end

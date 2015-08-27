@@ -19,7 +19,15 @@ require "evernote_oauth"
   end
 
   def set_my_notes
-    if current_user
+      if current_user
+        @my_notes = Note.where(user_id: current_user.id)
+
+      if @my_notes.length < 4 && current_user.evernote_auth
+        getAllNotebooksForUser
+        getNotesFromEvernote
+      end
+      @my_notes = Note.where(user_id: current_user.id)
+      @my_notebooks = Notebook.where(user_id: current_user.id)
     end
   end
 
