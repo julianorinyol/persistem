@@ -60,7 +60,7 @@ function displayNotes(notes, notebooks) {
 function displayNotebooks(notes, notebooks) {
   for(var i = 0; i < notebooks.length; i++) {
     notebook = notebooks[i];
-    var trInnards = "<tr class='bla-class' id='bla"+i+"' data-link=''><td>" + notebook.title +  "</td><td>"+ '# of notes in book' +"</td></tr>"
+    var trInnards = "<tr class='bla-class' id='bla"+i+"' data-link=''><td>" + notebook.title +  "</td><td>"+ getNumberOfNotesInNotebook(notes, notebook) +"</td></tr>"
     tr = $(trInnards);
     tr.appendTo($('#private-notes-list tbody'));
 
@@ -87,6 +87,7 @@ function displayNotesForNotebook(notes, notebook){
     tr = $(trInnards);
     tr.appendTo($('#private-notes-list tbody'));
   }
+  setUpBindings();
 }
 
 function getNotesForNotebook(notes, notebook) {
@@ -98,6 +99,10 @@ function getNotesForNotebook(notes, notebook) {
     }
   }
   return notebooksNotes;
+}
+
+function getNumberOfNotesInNotebook(notes, notebook) {
+  return getNotesForNotebook(notes, notebook).length;
 }
 
 $('#notebook-list-tab, #note-list-tab').on('click', function(){

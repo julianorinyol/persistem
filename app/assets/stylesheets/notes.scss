@@ -40,3 +40,15 @@ div.actions input {
 
 #notebook-list-tab {}
 #note-list-tab {}
+
+#table-container {
+  height: 487px;
+  overflow: scroll;
+}
+
+#table-headers {
+  // position: absolute;
+}
+#note-display-area {
+  min-height: 300px;
+}

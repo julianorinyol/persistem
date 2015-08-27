@@ -1,13 +1,10 @@
-<h3>questions</h3>
-
 <div id='question-display-area'>
-<% if @questions %>
+<% if !@questions.empty? %>
   <table class='table'>
-    <thead><tr><td>Question</td><td></td></tr></thead>
+    <thead><tr><td>Questions</td><td></td></tr></thead>
     <tbody>
       <% @questions.each do |question| %>
-        <tr class='clickable-tr' data-link="<%= edit_question_path(question) %>"><td><%= question.text %></td><td>Edit Question or Submit Answer</td></tr>
-
+        <tr class='clickable-tr' data-link="<%= edit_question_path(question) %>"><td><%= question.text %></td></tr>
       <% end %>
     </tbody>
   </table>

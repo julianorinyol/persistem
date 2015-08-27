@@ -11,11 +11,10 @@
     </div>
   <% end %>
 
-  <%= f.text_area :text, :class =>'question-inputs col-md-7', :placeholder => 'Type question here...'  %>
+  <%= f.text_area :text, :class =>'question-inputs', :placeholder => 'Add a question....' %>
   <%= f.hidden_field :note_id, :value => @note.id %>
   <%= f.hidden_field :user_id, :value => @current_user.id %>
 
-<p><%= @note.id %></p>
  <div class="actions">
     <%= f.submit :id =>'create-question-button' %>
   </div>
