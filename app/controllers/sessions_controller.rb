@@ -14,7 +14,6 @@
     elsif current_user
       redirect_to notes_path, notice: "Welcome back, #{current_user.firstname}!"      
     else
-      flash.now[:alert] = "Log in failed..."
       render :new
     end
     
