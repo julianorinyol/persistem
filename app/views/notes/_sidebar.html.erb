@@ -100,9 +100,20 @@ function displayNotesForNotebook(notes, notebook){
   setUpBindings();
 }
 
-function display(array) {
+//display takes  optional extra args... which create element attributes.  ex. ['class', 'testClass'] ---becomes---> class='testClass'
+// function display(objArray, rowContentArr) {
+//    $('#private-notes-list tbody').html('');
+//    var trInnards;
+//    for(var i = 2; i < objArray.length; i++) {
+//     //using optional extra args...
+//     trInnards = generateRow(rowContentArr, arguments[i]);
+//     tr = $(trInnards);
+//     tr.appendTo($('#private-notes-list tbody'));
+//    }
+//    setUpBindings();
+// }
 
-}
+
 function displayQuizzes(quizzes) {
    $('#private-notes-list tbody').html('');
   for(var i = 0; i < quizzes.length; i++) {
@@ -127,28 +138,11 @@ function getQuizzes() {
   })
 ;}
 
- // function generateRow(klass, id, otherAttrAndValue, contentArray) {
- //    // otherAttrAndValue   -->  a string like "data-link='cheese/yum'"
- //    var innards = buildInnards(contentArray);
- //    var tr ="<tr ";
-    
- //    if(klass) {
- //      tr+= "class='"+ klass + "' ";
- //    }
- //    if(id){
- //      tr+= "' id='"+id+"'";
- //    }
- //    if(otherAttrAndValue){
- //      tr +=  otherAttrAndValue +">";
- //    }
- //    tr +=  innards + "</tr>";
- //    return tr;
- //  }
  function generateRow(contentArray) {
    //takes an array of objects {attr: 'class' val: 'my-class'}
    var tr ="<tr";
    var innards = buildInnards(contentArray);
-
+   //using optional extra args...
    for(var i = 1; i < arguments.length; i++) {
     argument = arguments[i];
     tr += " " + argument[0] + "='" + argument[1] + "'";
