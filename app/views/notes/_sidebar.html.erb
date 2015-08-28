@@ -122,6 +122,8 @@ function displayQuizzes(quizzes) {
     tr = $(trInnards);
     tr.appendTo($('#private-notes-list tbody'));
   }
+  setTableHeaders('Date Created', '% Finished');
+  setUpBindings();
 }
 
 function getQuizzes() {
@@ -173,6 +175,14 @@ function getNotesForNotebook(notes, notebook) {
   return notebooksNotes;
 }
 
+function setCorrectTabActive(){
+  if(window.location.href.indexOf('quiz') > 0) {
+    getQuizzes();
+  } else {
+    displayNotes(myNotes, notebooks);
+  }
+}
+
 function getNumberOfNotesInNotebook(notes, notebook) {
   return getNotesForNotebook(notes, notebook).length;
 }
@@ -196,7 +206,6 @@ $('#note-list-tab').on('click', function(){
 })
 $('#quiz-tab').on('click', function(){
    getQuizzes();
-   setTableHeaders('Date Created', '% Finished');
    setUpBindings();
 })
 
@@ -285,13 +294,13 @@ function setUpBindings(){
     $("tr[data-link].clickable-tr").click(function() {
       window.location = $(this).data("link")
     })
-    $("tr[data-link]").on('mouseenter', function() {
+    $(".clickable-tr").on('mouseenter', function() {
       $(this).css({"background":"purple", 'color':'white'});
     })
-    $("tr[data-link]").on('mouseleave', function() {
+    $(".clickable-tr").on('mouseleave', function() {
       $(this).css({"background":"white",'color':'black'});
     })
 }
 
-displayNotes(myNotes, notebooks);
+setCorrectTabActive();
 </script>
