@@ -35,10 +35,15 @@ class QuizController < ApplicationController
       end
       @my_notes = Note.where(user_id: current_user.id)
       @my_notebooks = Notebook.where(user_id: current_user.id)
-
     end
-    
   end
+
+  def sync 
+    @quizzes = Quiz.where(user_id: current_user.id)
+    render json: @quizzes
+
+  end
+
   
   def create
 

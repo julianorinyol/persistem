@@ -20,6 +20,8 @@ Rails.application.routes.draw do
   resources :questions
   resources :answers
   resources :quiz, only: [:new, :show, :create, :index]
+  get 'quizzes/sync/'=> 'quiz#sync'
+
   resources :users, only: [:new, :create]
   resources :sessions, only: [:new, :create, :destroy]
 

@@ -20,11 +20,20 @@
 <ul id='notelist-tabs'class='nav nav-pills'><!---->
   <li role='presentation' class="active"><a id='note-list-tab'>Your Notes</a></li>
   <li role='presentation'><a id='notebook-list-tab'>Notebooks</a></li>
-  <li role='presentation'><a id=''>Quizzes</a></li>
+  <li role='presentation'><a id='quiz-tab'>Quizzes</a></li>
 </ul>
 
 <div id='table-container'>
-  <%= render 'noteslist' %>
+  <table id='private-notes-list'class = 'table'>
+  <thead>
+    <tr id='table-headers'>
+        <th><strong id='table-header1'>Title</strong></th><th><strong id='table-header2'>Notebook</strong></th>
+    </tr>
+  </thead>
+
+  <tbody>
+  </tbody>
+</table>
 </div>
 
  <%= link_to 'Download CSV list of your notes', notes_path(format: :csv) %>
@@ -91,6 +100,33 @@ function displayNotesForNotebook(notes, notebook){
   setUpBindings();
 }
 
+function display(array) {
+
+}
+function displayQuizzes(quizzes) {
+   $('#private-notes-list tbody').html('');
+  for(var i = 0; i < quizzes.length; i++) {
+    quiz = quizzes[i];
+    var trInnards = generateRow([timeSince(convertDate(quiz.created_at)) + ' ago', '% answered'], ["class", "clickable-tr"], ["data-link",'/quiz/' + quiz.id] );
+    tr = $(trInnards);
+    tr.appendTo($('#private-notes-list tbody'));
+  }
+}
+
+function getQuizzes() {
+  $.ajax({
+    url: '/quizzes/sync',
+    method: 'GET',
+    dataType: 'json',
+    success: function(res) {
+      displayQuizzes(res);
+    },
+    error: function(err, message) {
+      console.log('notebook get ajax failed' + message);
+    }
+  })
+;}
+
  // function generateRow(klass, id, otherAttrAndValue, contentArray) {
  //    // otherAttrAndValue   -->  a string like "data-link='cheese/yum'"
  //    var innards = buildInnards(contentArray);
@@ -147,7 +183,7 @@ function getNumberOfNotesInNotebook(notes, notebook) {
   return getNotesForNotebook(notes, notebook).length;
 }
 
-$('#notebook-list-tab, #note-list-tab').on('click', function(){
+$('#notebook-list-tab, #note-list-tab, #quiz-tab').on('click', function(){
   console.log('clicked');
   $('#notelist-tabs li').removeClass();
   $(this).parent().addClass('active');
@@ -155,15 +191,59 @@ $('#notebook-list-tab, #note-list-tab').on('click', function(){
 })
 
 $('#notebook-list-tab').on('click', function(){
-   displayNotebooks(myNotes, notebooks);
+   displayNotebooks(myNotes, notebooks);   
    setUpBindings();
+   setTableHeaders('Notebooks', 'Number of Notes');
 })
 $('#note-list-tab').on('click', function(){
    displayNotes(myNotes, notebooks);
+   setTableHeaders('Title', 'Notebook');
+   setUpBindings();
+})
+$('#quiz-tab').on('click', function(){
+   getQuizzes();
+   setTableHeaders('Date Created', '% Finished');
    setUpBindings();
 })
 
+function setTableHeaders() {
+  for(var i = 0; i < arguments.length; i++) {
+    var arg = arguments[i];
+     $('#table-header' + (i + 1)).text(arg);
+  }
+}
 
+function convertDate(unixDateString) {
+  return new Date(unixDateString);
+}
+
+function timeSince(date) {
+
+    var seconds = Math.floor((new Date() - date) / 1000);
+
+    var interval = Math.floor(seconds / 31536000);
+
+    if (interval > 1) {
+        return interval + " years";
+    }
+    interval = Math.floor(seconds / 2592000);
+    if (interval > 1) {
+        return interval + " months";
+    }
+    interval = Math.floor(seconds / 86400);
+    if (interval > 1) {
+        return interval + " days";
+    }
+    interval = Math.floor(seconds / 3600);
+    if (interval > 1) {
+        return interval + " hours";
+    }
+    interval = Math.floor(seconds / 60);
+    if (interval > 1) {
+        return interval + " minutes";
+    }
+    return Math.floor(seconds) + " seconds";
+}
 
 
 $('#sync-button').on('click', function(){
@@ -218,4 +298,6 @@ function setUpBindings(){
       $(this).css({"background":"white",'color':'black'});
     })
 }
+
+displayNotes(myNotes, notebooks);
 </script>
