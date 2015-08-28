@@ -1,21 +1,24 @@
 <div class='container'>
 
   <%= render  'sidebar' %>
-  <div id='note-title'>
-    <h2><%= @note.title %></h2>
-  </div>
-  <div class='col-md-6' id='note-display-area'>
-    <%= @note.content.html_safe %>
-  </div>
-   <div class='col-md-6'>
-    <%= render 'question_entry_form' %>
-  <p id="notice"><%= notice %></p>
-    <%= render 'questionlist' %>
-  </div>
-  <%= link_to 'Edit', edit_note_path(@note) %> |
-  <%= link_to 'Back', notes_path %>
-</div>
 
+
+  <div class='right-side-container'>
+    <div id='note-title'>
+      <h2><%= @note.title %></h2>
+    </div>
+    <div class='col-md-6' id='note-display-area'>
+      <%= @note.content.html_safe %>
+    </div>
+     <div class='col-md-6'>
+      <%= render 'question_entry_form' %>
+    <p id="notice"><%= notice %></p>
+      <%= render 'questionlist' %>
+    </div>
+    <%= link_to 'Edit', edit_note_path(@note) %> |
+    <%= link_to 'Back', notes_path %>
+  </div>
+</div>
 
 
 <style>
