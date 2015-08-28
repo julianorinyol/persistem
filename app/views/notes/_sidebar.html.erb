@@ -53,9 +53,7 @@ function displayNotes(notes, notebooks) {
   for(var i = 0; i < notes.length; i++) {
     note = notes[i];
     notebook = getNotebookFromNote(note, notebooks);
-    var dataLink = "data-link='/notes/" + note.id + "'";
-    var trInnards = generateRow("clickable-tr", null, dataLink, [note.title, notebook.title] );
-
+    var trInnards = generateRow([note.title, notebook.title], ["class", "clickable-tr"], ["data-link",'/notes/' + note.id] );
     tr = $(trInnards);
     tr.appendTo($('#private-notes-list tbody'));
   }
@@ -63,7 +61,7 @@ function displayNotes(notes, notebooks) {
 function displayNotebooks(notes, notebooks) {
   for(var i = 0; i < notebooks.length; i++) {
     notebook = notebooks[i];
-    var trInnards = generateRow('bla-class', 'bla'+i, "data-link=''",[notebook.title, getNumberOfNotesInNotebook(notes,notebook)]);
+    var trInnards = generateRow([notebook.title, getNumberOfNotesInNotebook(notes,notebook)], ['class', 'bla-class'], ['id','bla'+i], ["data-link", "''"]);
     tr = $(trInnards);
     tr.appendTo($('#private-notes-list tbody'));
 
@@ -86,31 +84,44 @@ function displayNotesForNotebook(notes, notebook){
   notebooksNotes = getNotesForNotebook(notes, notebook);
   for(var i = 0; i < notebooksNotes.length; i++) {
     note = notebooksNotes[i];
-    var trInnards = generateRow('clickable-tr', null, "data-link='/notes/" + note.id +"'", [note.title, notebook.title] );
+    var trInnards = generateRow([note.title, notebook.title], ['class', 'clickable-tr'], ['data-link','/notes/' + note.id]);
     tr = $(trInnards);
     tr.appendTo($('#private-notes-list tbody'));
   }
   setUpBindings();
 }
 
- function generateRow(klass, id, otherAttrAndValue, contentArray) {
-    // otherAttrAndValue   -->  a string like "data-link='cheese/yum'"
-    var innards = buildInnards(contentArray);
-    var tr ="<tr ";
+ // function generateRow(klass, id, otherAttrAndValue, contentArray) {
+ //    // otherAttrAndValue   -->  a string like "data-link='cheese/yum'"
+ //    var innards = buildInnards(contentArray);
+ //    var tr ="<tr ";
     
-    if(klass) {
-      tr+= "class='"+ klass + "' ";
-    }
-    if(id){
-      tr+= "' id='"+id+"'";
-    }
-    if(otherAttrAndValue){
-      tr +=  otherAttrAndValue +">";
-    }
-    tr +=  innards + "</tr>";
-    return tr;
-  }
+ //    if(klass) {
+ //      tr+= "class='"+ klass + "' ";
+ //    }
+ //    if(id){
+ //      tr+= "' id='"+id+"'";
+ //    }
+ //    if(otherAttrAndValue){
+ //      tr +=  otherAttrAndValue +">";
+ //    }
+ //    tr +=  innards + "</tr>";
+ //    return tr;
+ //  }
+ function generateRow(contentArray) {
+   //takes an array of objects {attr: 'class' val: 'my-class'}
+   var tr ="<tr";
+   var innards = buildInnards(contentArray);
 
+   for(var i = 1; i < arguments.length; i++) {
+    argument = arguments[i];
+    tr += " " + argument[0] + "='" + argument[1] + "'";
+   }
+
+   tr += ">" + innards + "</tr>";
+   return tr;
+ 
+ }
   function buildInnards(contentArray) {
     var content;
     var output = ""
