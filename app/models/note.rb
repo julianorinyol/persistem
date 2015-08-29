@@ -5,6 +5,9 @@ class Note < ActiveRecord::Base
   has_many :questions
   belongs_to :notebook
 
+  # scope :popular, -> do where("created_at BETWEEN ? AND ?", Time.zone.now.beginning_of_day, Time.zone.now.end_of_day) end
+   # scope :popular, -> do where(self.) end
+
 
   def is_already_in_db?
     return ( Note.where(guid: guid).empty? ? false : true)
@@ -20,4 +23,16 @@ class Note < ActiveRecord::Base
     xml_doc  = Nokogiri::XML(xml_content)
     xml_doc.css("en-note").children.to_s
   end
+  # def self.popular
+  #   notes = Note.includes(:questions)
+
+  #   counts = Hash.new 0
+
+  #   notes.each do |note|
+      
+  #     counts[note] = note
+  #     counts[count] = note.questions.size
+  #   end
+
+  # end
 end

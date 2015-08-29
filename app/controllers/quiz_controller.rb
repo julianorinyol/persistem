@@ -23,6 +23,21 @@ class QuizController < ApplicationController
     redirect_to quiz_path(id: @quiz.id)
   end
 
+
+  def new_least_answered
+    @quiz = Quiz.create(user_id: current_user.id)
+    @quiz.get_questions_with_least_answers 7
+    redirect_to quiz_path(id: @quiz.id)
+  end
+
+  def new_custom
+    binding.pry
+    @quiz = Quiz.create(user_id: current_user.id)
+
+      @quiz.custom 7, params[:quiz]
+      redirect_to quiz_path(id: @quiz.id)
+  end
+
   def show
     @answers = @quiz.get_previous_answers
 
@@ -41,7 +56,6 @@ class QuizController < ApplicationController
   def sync 
     @quizzes = Quiz.where(user_id: current_user.id)
     render json: @quizzes
-
   end
 
   
@@ -58,6 +72,6 @@ class QuizController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def quiz_params
       params[:question]
-      params.require(:quiz).(:quiz).permit(:note_id, :text, :subject_id, :user_id)
+      params.require(:quiz).(:quiz).permit(:note_id, :text, :subject_id, :user_id, :time_ago, :popular, :notebooks)
     end
 end

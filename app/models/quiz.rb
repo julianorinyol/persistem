@@ -2,9 +2,14 @@ class Quiz < ActiveRecord::Base
   has_and_belongs_to_many :questions
   belongs_to :user
 
+
   def get_questions num
     self.questions << Question.order("RANDOM()").take(num)
     # Thing.order("RANDOM()").first
+  end
+
+  def add_questions_with_least_answers num
+    self.questions << get_questions_with_least_answers(num)
   end
 
   def get_questions_with_least_answers num
@@ -16,8 +21,6 @@ class Quiz < ActiveRecord::Base
 
     used_question_ids = Answer.pluck(:question_id)
     
-
-
     ids.each do |id|
       if used_question_ids.grep(id).size < 1 
         least_used_ids << id
@@ -44,7 +47,21 @@ class Quiz < ActiveRecord::Base
         end
       end
     end
-    return Question.find(least_used_ids)
+    self.questions << Question.find(least_used_ids)
+  end
+
+  def custom num_questions, params
+    #variables
+      #time_ago
+      # popular
+      #notebooks
+    query_condition = []
+    if params[:time_ago]
+      query_condition << params[:time_ago]
+    end
+
+# how to use .send  with an array of functions to chain together???
+    # Question.send
   end
 
   def shuffle_hash hashy
@@ -61,4 +78,13 @@ class Quiz < ActiveRecord::Base
     end
     return @answers
   end
+
+
+  def test_set_times
+    questions = Question.all
+    questions.each do |q|
+      q.update(created_at: (Time.now - rand(1..100).days) )
+    end
+  end
+
 end
