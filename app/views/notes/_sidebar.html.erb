@@ -341,8 +341,9 @@ $('#generate-quiz-btn').on('click', function() {
       <p>Select Notebooks...</p> \
       \
       \
-      <select id='notebook-select-dropdown'> \
+      <select id='notebook-select-dropdown' name='quiz[notebooks]'> \
       </select> \
+      <input id='notebook-string' type='hidden' name='quiz[notebooks]'> \
       <div class='actions'> \
         <input type='submit' name='commit' value='Create Quiz' id='create-quiz-button'> \
       </div> \
@@ -358,12 +359,25 @@ $('#generate-quiz-btn').on('click', function() {
     //     <option>1</option> \
     //     <option>1</option> \
     //     ");
-    var options = "";
+    var options = "<option value=''>All Notebooks</option>";
     for(var i = 0; i < notebooks.length; i++) {
       var notebook = notebooks[i];
       options += "<option value='" + notebook.id + "''>" + notebook.title +"</option>"
     }
     $('#notebook-select-dropdown').html(options);
+    $('#notebook-select-dropdown').on('change', function(){
+       var value = $(this).val();
+       var notebookName = $("#notebook-select-dropdown option[value='"+ value + "']").text();
+       $('#included-notebooks-list > p').append('<p>' + notebookName + '</p>');
+       var submitValue = "";
+       if($('#notebook-string').val()) {
+         submitValue = $('#notebook-string').val(); 
+         submitValue += ", " + value;
+       } else {
+        submitValue = value;
+       }
+       $('#notebook-string').val(submitValue);
+    })
 })
   // $('#generate_quiz_btn').on('click',function(){
   //   console.log('gen quizzzz');
