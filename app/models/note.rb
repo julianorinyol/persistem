@@ -23,16 +23,18 @@ class Note < ActiveRecord::Base
     xml_doc  = Nokogiri::XML(xml_content)
     xml_doc.css("en-note").children.to_s
   end
-  # def self.popular
-  #   notes = Note.includes(:questions)
 
-  #   counts = Hash.new 0
+  def self.popular 
+    notes = Note.includes(:questions)
 
-  #   notes.each do |note|
-      
-  #     counts[note] = note
-  #     counts[count] = note.questions.size
-  #   end
+    counts = Hash.new 0
 
-  # end
+    notes.each do |n|
+      counts[n.id] = { note: n, amount: n.questions.size }
+    end
+    mapped = counts.values.sort_by do |obj| obj['amount'] end
+    arr = []
+    mapped.each do |custom_obj| arr << custom_obj[:note] end
+    return arr
+  end
 end

@@ -55,13 +55,48 @@ class Quiz < ActiveRecord::Base
       #time_ago
       # popular
       #notebooks
-    query_condition = []
+
+    # first 2 are exclusive queries, and then popular is an order_by
+
     if params[:time_ago]
-      query_condition << params[:time_ago]
+      questions = Question.send(params[:time_ago]).includes(:note)
+    else  
+      questions = Question.joins(:note)
+    end
+    
+    # notebooks is an array of strings
+    if params[:notebooks]
+      # Cant get the godamn query to work:
+        #  it works like Question.joins(:note).where('notebook_id = (1,2)')
+      # Question.joins(:note).where('notebook_id = ?', params[:notebooks])
+      results = filter_out_questions_not_in_notebook_array(questions, params[:notebooks])
+    end
+# q = Quiz.create(user_id: 1)
+# params = {notebooks: [1,2]}
+#  q.custom(7, params)
+
+
+
+    if params[:popular] && params[:popular] == 'popular'
+      results = results.sort_by_popularity 
     end
 
 # how to use .send  with an array of functions to chain together???
     # Question.send
+
+    return results
+    binding.pry
+  end
+
+# pass in a joined obj..    questions = Question.joins(:note)
+  def filter_out_questions_not_in_notebook_array questions, notebook_ids
+    results = []
+    questions.each do |q|
+      if notebook_ids.index(q.note.notebook_id)  
+        results << q
+      end
+    end
+    return results
   end
 
   def shuffle_hash hashy
