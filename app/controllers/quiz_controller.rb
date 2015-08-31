@@ -31,7 +31,6 @@ class QuizController < ApplicationController
   end
 
   def new_custom
-    binding.pry
     @quiz = Quiz.create(user_id: current_user.id)
 
       @quiz.custom 7, params[:quiz]

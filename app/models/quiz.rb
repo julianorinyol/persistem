@@ -51,11 +51,6 @@ class Quiz < ActiveRecord::Base
   end
 
   def custom num_questions, params
-    #variables
-      #time_ago
-      # popular
-      #notebooks
-
     # first 2 are exclusive queries, and then popular is an order_by
 
     if params[:time_ago]
@@ -65,27 +60,31 @@ class Quiz < ActiveRecord::Base
     end
     
     # notebooks is an array of strings
-    if params[:notebooks]
+    if params[:notebooks] && params[:notebooks].length > 0 
       # Cant get the godamn query to work:
         #  it works like Question.joins(:note).where('notebook_id = (1,2)')
       # Question.joins(:note).where('notebook_id = ?', params[:notebooks])
-      results = filter_out_questions_not_in_notebook_array(questions, params[:notebooks])
+      notebook_ids_ints = [];
+      params[:notebooks].split(',').each do |id|
+        notebook_ids_ints << id.to_i
+      end
+      results = filter_out_questions_not_in_notebook_array(questions, notebook_ids_ints)
+    else 
+      results = questions
     end
-# q = Quiz.create(user_id: 1)
-# params = {notebooks: [1,2]}
-#  q.custom(7, params)
-
-
-
+    
     if params[:popular] && params[:popular] == 'popular'
-      results = results.sort_by_popularity 
+      results = Question.sort_by_popularity(results)
     end
 
-# how to use .send  with an array of functions to chain together???
-    # Question.send
+    correct_num = []
 
-    return results
-    binding.pry
+    results.each do|r|
+      if correct_num.size < num_questions
+        correct_num << r
+      end
+    end
+    self.questions << correct_num
   end
 
 # pass in a joined obj..    questions = Question.joins(:note)
