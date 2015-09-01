@@ -282,7 +282,8 @@ function callForNotes(notebooks){
         dataType: 'json',
         success: function(notes) {
           console.log('ajax success!');
-          displayNotes(notes, notebooks);
+          myNotes = notes;
+          displayNotes(myNotes, notebooks);
           setUpBindings();
         },
         error: function(phase, message){
