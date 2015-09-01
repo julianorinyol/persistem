@@ -302,10 +302,134 @@ function setUpBindings(){
       $(this).css({"background":"white",'color':'black'});
     })
 }
+// <form class="new_question" id="new_question" action="/questions" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="✓"><input type="hidden" name="authenticity_token" value="26TAEakEbH3+N7+3rnEY/54PsVKeXqFibj6icyxyc9I7VMZWpoobqagSZJIADIFYwHC/wVaO94pP9CvKfJ5QIw==">
+
+//   <textarea class="question-inputs" placeholder="Add a question...." name="question[text]" id="question_text"></textarea>
+//   <input value="4" type="hidden" name="question[note_id]" id="question_note_id">
+//   <input value="1" type="hidden" name="question[user_id]" id="question_user_id">
+
+//  <div class="actions">
+//     <input type="submit" name="commit" value="Create Question" id="create-question-button">
+//   </div>
+
+// </form>
+
 
 $('#generate-quiz-btn').on('click', function() {
-  $('.right-side-container').html("<p>random questions</p>\n<p>from which time range</p>\n<p>from which notebooks?</p>");
+   $('.right-side-container').html(
+    "<h3>Quiz Generate</h3> \
+    <p><a id='generate_quiz_btn' class='btn btn-primary' href='/quiz/generate/new_least_answered'>random questions</a></p> \
+    <p><a id='' class='btn btn-primary' href='/quiz/generate/new_least_answered'>Least Answered Questions</a></p> \
+    <br><br>\
+    <h3>Custom Quiz</h3> \
+    \
+    <form class='new_quiz' id='new_quiz' action='/quiz/generate/custom' accept-charset='UTF-8' method='post'> \
+      <input name='utf8' type='hidden' value='✓'> \
+      <input type='hidden' name='authenticity_token' value='" + $('meta[name="csrf-token"]').attr('content') + "'> \
+      <p>Select date range...</p> \
+    \
+      <input value='today' type='checkbox' name='quiz[time_ago]'><span>Day</span> \
+      <input value='this_week' type='checkbox' name='quiz[time_ago]'><span>Week</span> \
+      <input value='this_month' type='checkbox' name='quiz[time_ago]'><span>Month</span> \
+      <input value='this_year' type='checkbox' name='quiz[time_ago]'><span>Year</span> \
+      <a id='uncheck'>Uncheck All</a>  \
+      <p>Popularity</p> \
+      \
+      <div> \
+        <input type='checkbox' name='quiz[popular]' value='popular'><span>Popular</span> \
+        <input type='checkbox' name='quiz[popular]' checked='true' value='unpopular'><span>Least Answered (default)</span> \
+      </div> \
+       \
+      <p>Select Notebooks...</p> \
+      \
+      \
+      <select id='notebook-select-dropdown' name='quiz[notebooks]'> \
+      </select> \
+      <input id='notebook-string' type='hidden' name='quiz[notebooks]'> \
+      <div class='actions'> \
+        <input type='submit' name='commit' value='Create Quiz' id='create-quiz-button'> \
+      </div> \
+    </form> \
+    \
+    <div id='included-notebooks-list'> \
+      <p>Included Notebooks</p> \
+    </div> \
+    ");
+    // $('#notebook-select-dropdown').html(" \
+    //   <option value='" + "''>1</option> \
+    //     <option>1</option> \
+    //     <option>1</option> \
+    //     <option>1</option> \
+    //     ");
+    displayNotebookOptions();
+    createQuizInputEventBindings();
+    
 })
+  function displayNotebookOptions() {
+     var options = "<option value=''>All Notebooks</option>";
+    for(var i = 0; i < notebooks.length; i++) {
+      var notebook = notebooks[i];
+      options += "<option value='" + notebook.id + "''>" + notebook.title +"</option>"
+    }
+    $('#notebook-select-dropdown').html(options);
+  }
+
+    function createQuizInputEventBindings() {
+      $('#notebook-select-dropdown').on('change', function(){
+        var value = $(this).val();
+          if(value == '') {
+          $('#notebook-string').val('');
+          $('#included-notebooks-list > p').html('');
+      }
+
+
+    var submitValue = "";
+    if($('#notebook-string').val()) {
+      if($('#notebook-string').val().indexOf(value) == -1 ) {
+        submitValue = $('#notebook-string').val(); 
+        submitValue += ", " + value;
+        $('#notebook-string').val(submitValue);
+        var notebookName = $("#notebook-select-dropdown option[value='"+ value + "']").text();
+        $('#included-notebooks-list > p').append('<p>' + notebookName + '</p>');
+      }
+    } else {
+      submitValue = value;
+      $('#notebook-string').val(submitValue);
+      var notebookName = $("#notebook-select-dropdown option[value='"+ value + "']").text();
+      $('#included-notebooks-list > p').append('<p>' + notebookName + '</p>'); 
+      }
+    })
+
+
+    $('#new_quiz input[name="quiz[popular]"], #new_quiz input[name="quiz[time_ago]"] ').on('click', function() {
+      $(this).siblings().attr('checked', false);
+      console.log('yo');
+      // $(this).attr('checked', true);
+    })
+    $('#uncheck').on('click', function(){
+      $('#new_quiz > input[name="quiz[time_ago]"]').attr('checked', false);
+    })
+  }
+  // $('#generate_quiz_btn').on('click',function(){
+  //   console.log('gen quizzzz');
+  //   getLeastAnsweredQuiz();
+  // })
+
+
+// function getLeastAnsweredQuiz() {
+//     $.ajax({
+//       url: '/quiz/generate/new_least_answered/',
+//       method: 'GET',
+//       dataType: 'json',
+//       success: function(res) {
+//         debugger;
+//       },
+//       error: function(err, message) {
+//         console.log('notebook get ajax failed', err, message);
+//       }
+//   });
+// }
+
 
 setCorrectTabActive();
 </script>

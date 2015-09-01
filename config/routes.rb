@@ -19,6 +19,10 @@ Rails.application.routes.draw do
 
   resources :questions
   resources :answers
+
+  get '/quiz/generate/new_least_answered' => 'quiz#new_least_answered'
+  post 'quiz/generate/custom' => 'quiz#new_custom'
+
   resources :quiz, only: [:new, :show, :create, :index]
   get 'quizzes/sync/'=> 'quiz#sync'
 

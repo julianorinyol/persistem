@@ -5,6 +5,9 @@ class Note < ActiveRecord::Base
   has_many :questions
   belongs_to :notebook
 
+  # scope :popular, -> do where("created_at BETWEEN ? AND ?", Time.zone.now.beginning_of_day, Time.zone.now.end_of_day) end
+   # scope :popular, -> do where(self.) end
+
 
   def is_already_in_db?
     return ( Note.where(guid: guid).empty? ? false : true)
@@ -19,5 +22,19 @@ class Note < ActiveRecord::Base
   def self.parseENML xml_content
     xml_doc  = Nokogiri::XML(xml_content)
     xml_doc.css("en-note").children.to_s
+  end
+
+  def self.popular 
+    notes = Note.includes(:questions)
+
+    counts = Hash.new 0
+
+    notes.each do |n|
+      counts[n.id] = { note: n, amount: n.questions.size }
+    end
+    mapped = counts.values.sort_by do |obj| obj['amount'] end
+    arr = []
+    mapped.each do |custom_obj| arr << custom_obj[:note] end
+    return arr
   end
 end
