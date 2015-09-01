@@ -12,7 +12,7 @@ class NotesController < ApplicationController
     if current_user
       @my_notes = Note.where(user_id: current_user.id)
 
-      if @my_notes.length < 4 && current_user.evernote_auth
+      if @my_notes.length < 1 && current_user.evernote_auth
         getAllNotebooksForUser
         getNotesFromEvernote
       end
@@ -21,6 +21,7 @@ class NotesController < ApplicationController
     end
     @note = Note.new
     @question = Question.new
+    @synced = current_user.synced
 
     respond_to do |format|
       format.html
@@ -31,21 +32,40 @@ class NotesController < ApplicationController
     end
   end
 
-  def sync
+  def initial_sync
       token = session[:authtoken]
       client = EvernoteOAuth::Client.new(token: token)
       note_store = client.note_store
       note_filter = Evernote::EDAM::NoteStore::NoteFilter.new
+      totalNoteNum = countAllNotes
+      
       evernotes = note_store.findNotes(token, note_filter, 0, 1000)
       getAllNotebooksForUser  
       addNotesToDb(evernotes.notes)
+
       @my_notes = Note.where(user_id: current_user.id)
+
+      while @my_notes.size < totalNoteNum
+        evernotes = note_store.findNotes(token, note_filter, @my_notes.size, 1000)
+        addNotesToDb(evernotes.notes)
+        @my_notes = Note.where(user_id: current_user.id)
+      end
       render json: @my_notes
     # respond_to do |format|
     #   format.json
     #   format.html
     # end
   end
+
+  # def findNotesMetadata
+  #   client = EvernoteOAuth::Client.new(token: authtoken)
+  #   note_store = client.note_store
+
+  #   note_filter = Evernote::EDAM::NoteStore::NoteFilter.new
+  #   notes_metadata_result_spec = Evernote::EDAM::NoteStore::NotesMetadataResultSpec.new
+  #   note_store.findNotesMetadata(note_filter, 0, 100, notes_metadata_result_spec)
+  # end
+
 
   def countAllNotes 
     token = session[:authtoken]
@@ -56,6 +76,16 @@ class NotesController < ApplicationController
     notebookCountsHash = note_store.findNoteCounts(note_filter, false)
     valuesArr = notebookCountsHash.notebookCounts.values
     valuesArr.inject(:+) #this sums the array
+  end
+
+  def countAllNotebooks
+    token = session[:authtoken]
+    client = EvernoteOAuth::Client.new(token: token)
+    note_store = client.note_store
+
+    note_filter = Evernote::EDAM::NoteStore::NoteFilter.new
+    notebookCountsHash = note_store.findNoteCounts(note_filter, false)
+    notebookCountsHash.notebookCounts.values.size
   end
 
   def getAllNotesForNotebook(notebook)
@@ -95,13 +125,11 @@ class NotesController < ApplicationController
     end
   end
 
-  def updateNotesFromEvernote
-  end
-
   def getAllNotebooksForUser
       token = session[:authtoken]
       client = EvernoteOAuth::Client.new(token: token)
       note_store = client.note_store
+      # totalCount = countAllNotebooks
       @notebooks = note_store.listNotebooks
       addNotebooksToDb @notebooks
       return @notebooks

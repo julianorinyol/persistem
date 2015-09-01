@@ -13,7 +13,7 @@ Rails.application.routes.draw do
 
 
   resources :notes
-  get 'notes/sync/evernote'=> 'notes#sync'
+  get 'notes/sync/evernote'=> 'notes#initial_sync'
   get 'notebooks/list' => 'notebook#list_all'
 
 

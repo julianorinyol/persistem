@@ -1,4 +1,5 @@
 
+
 <div class='container col-md-5'>
 
 <div id'top-row'>
@@ -56,6 +57,7 @@
 <script>
 var notebooks = <%= raw @my_notebooks.to_json %>;
 var myNotes = <%= raw @my_notes.to_json %>;
+var hasBeenInitialSynced = <%= raw @synced %>
 
 function displayNotes(notes, notebooks) {
   $('#private-notes-list tbody').html('');
@@ -252,6 +254,10 @@ function timeSince(date) {
 
 $('#sync-button').on('click', function(){
   console.log('clicked');   
+  initialSync();
+});
+
+function initialSync() {
   $.ajax({
     url: '/notebooks/list',
     method: 'GET',
@@ -263,8 +269,8 @@ $('#sync-button').on('click', function(){
     error: function(err, message) {
       console.log('notebook get ajax failed' + message);
     }
-  });
-});
+  }); 
+}
 
 function getNotebookFromNote(note, notebooks) {
   for(var i = 0; i < notebooks.length; i++) {
@@ -431,6 +437,9 @@ $('#generate-quiz-btn').on('click', function() {
 //   });
 // }
 
+if(!hasBeenInitialSynced) {
+  initialSync();
+}
 
 setCorrectTabActive();
 </script>

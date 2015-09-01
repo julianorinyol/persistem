@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150901190413) do
+ActiveRecord::Schema.define(version: 20150901231542) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -86,12 +86,13 @@ ActiveRecord::Schema.define(version: 20150901190413) do
   create_table "users", force: :cascade do |t|
     t.string   "email"
     t.string   "password_digest"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
     t.string   "firstname"
     t.string   "lastname"
     t.string   "evernote_auth"
     t.integer  "last_usn"
+    t.boolean  "synced",          default: false
   end
 
   add_foreign_key "notes", "users"
