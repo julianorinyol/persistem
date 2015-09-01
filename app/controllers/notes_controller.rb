@@ -8,11 +8,6 @@ class NotesController < ApplicationController
   # GET /notes
   # GET /notes.json
   def index
-    # if(!current_user)
-    #   redirect_to 'sessions', action: :create
-    #   return
-    # end
-
     @notes = Note.where(public: true)
     if current_user
       @my_notes = Note.where(user_id: current_user.id)
@@ -52,6 +47,17 @@ class NotesController < ApplicationController
     # end
   end
 
+  def countAllNotes 
+    token = session[:authtoken]
+    client = EvernoteOAuth::Client.new(token: token)
+    note_store = client.note_store
+
+    note_filter = Evernote::EDAM::NoteStore::NoteFilter.new
+    notebookCountsHash = note_store.findNoteCounts(note_filter, false)
+    valuesArr = notebookCountsHash.notebookCounts.values
+    valuesArr.inject(:+) #this sums the array
+  end
+
   def getAllNotesForNotebook(notebook)
       token = session[:authtoken]
       client = EvernoteOAuth::Client.new(token: token)
@@ -66,7 +72,7 @@ class NotesController < ApplicationController
       token = session[:authtoken]
       client = EvernoteOAuth::Client.new(token: token)
       note_store = client.note_store
-      @notebooks = note_store.listNotebooks
+      # @notebooks = note_store.listNotebooks
       note_filter = Evernote::EDAM::NoteStore::NoteFilter.new
       @first_10_notes =  note_store.findNotes(note_filter, 0, 10)
 
@@ -78,7 +84,7 @@ class NotesController < ApplicationController
       # if the Note doesn't exist in db, create it.   
       if !Note.where(guid: note.guid).exists?
         nbook = Notebook.where(guid: note.notebookGuid).first
-        Note.create(guid: note.guid, title: note.title, user_id: current_user.id, public: false, notebook_guid: note.notebookGuid, notebook_id:nbook.id)
+        Note.create(guid: note.guid, title: note.title, user_id: current_user.id, public: false, notebook_guid: note.notebookGuid, notebook_id:nbook.id, update_sequence_number: note.updateSequenceNum )
       else
         # if it is already in db,   update the title, if needed.
         this_note = Note.where(guid: note.guid).first
@@ -98,18 +104,19 @@ class NotesController < ApplicationController
       note_store = client.note_store
       @notebooks = note_store.listNotebooks
       addNotebooksToDb @notebooks
+      return @notebooks
   end
 
   def addNotebooksToDb notebooks
     notebooks.each do |notebook|
       # if the Note doesn't exist in db, create it.   
       if !Notebook.where(guid: notebook.guid).exists?
-        Notebook.create(guid: notebook.guid, title: notebook.name, user_id: current_user.id)
+        Notebook.create(guid: notebook.guid, title: notebook.name, user_id: current_user.id, update_sequence_number: notebook.updateSequenceNum)
       else
         # if it is already in db,   update the title, if needed.
         this_notebook = Notebook.where(guid: notebook.guid).first
         if this_notebook.title != notebook.name
-          this_notebook.update(title: notebook.name)
+          this_notebook.update(title: notebook.name, update_sequence_number: notebook.updateSequenceNum)
         end
       end
     end
