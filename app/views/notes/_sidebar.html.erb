@@ -332,11 +332,13 @@ $('#generate-quiz-btn').on('click', function() {
       <input value='this_week' type='checkbox' name='quiz[time_ago]'><span>Week</span> \
       <input value='this_month' type='checkbox' name='quiz[time_ago]'><span>Month</span> \
       <input value='this_year' type='checkbox' name='quiz[time_ago]'><span>Year</span> \
-      <input  type='checkbox' checked='true'><span>none</span>  \
+      <a id='uncheck'>Uncheck All</a>  \
       <p>Popularity</p> \
       \
-      <input type='checkbox' name='quiz[popular]' value='popular'><span>Popular</span> \
-      <input type='checkbox' name='quiz[popular]' checked='true' value='unpopular'><span>Least Answered (default)</span> \
+      <div> \
+        <input type='checkbox' name='quiz[popular]' value='popular'><span>Popular</span> \
+        <input type='checkbox' name='quiz[popular]' checked='true' value='unpopular'><span>Least Answered (default)</span> \
+      </div> \
        \
       <p>Select Notebooks...</p> \
       \
@@ -359,26 +361,55 @@ $('#generate-quiz-btn').on('click', function() {
     //     <option>1</option> \
     //     <option>1</option> \
     //     ");
-    var options = "<option value=''>All Notebooks</option>";
+    displayNotebookOptions();
+    createQuizInputEventBindings();
+    
+})
+  function displayNotebookOptions() {
+     var options = "<option value=''>All Notebooks</option>";
     for(var i = 0; i < notebooks.length; i++) {
       var notebook = notebooks[i];
       options += "<option value='" + notebook.id + "''>" + notebook.title +"</option>"
     }
     $('#notebook-select-dropdown').html(options);
-    $('#notebook-select-dropdown').on('change', function(){
-       var value = $(this).val();
-       var notebookName = $("#notebook-select-dropdown option[value='"+ value + "']").text();
-       $('#included-notebooks-list > p').append('<p>' + notebookName + '</p>');
-       var submitValue = "";
-       if($('#notebook-string').val()) {
-         submitValue = $('#notebook-string').val(); 
-         submitValue += ", " + value;
-       } else {
-        submitValue = value;
-       }
-       $('#notebook-string').val(submitValue);
+  }
+
+    function createQuizInputEventBindings() {
+      $('#notebook-select-dropdown').on('change', function(){
+        var value = $(this).val();
+          if(value == '') {
+          $('#notebook-string').val('');
+          $('#included-notebooks-list > p').html('');
+      }
+
+
+    var submitValue = "";
+    if($('#notebook-string').val()) {
+      if($('#notebook-string').val().indexOf(value) == -1 ) {
+        submitValue = $('#notebook-string').val(); 
+        submitValue += ", " + value;
+        $('#notebook-string').val(submitValue);
+        var notebookName = $("#notebook-select-dropdown option[value='"+ value + "']").text();
+        $('#included-notebooks-list > p').append('<p>' + notebookName + '</p>');
+      }
+    } else {
+      submitValue = value;
+      $('#notebook-string').val(submitValue);
+      var notebookName = $("#notebook-select-dropdown option[value='"+ value + "']").text();
+      $('#included-notebooks-list > p').append('<p>' + notebookName + '</p>'); 
+      }
     })
-})
+
+
+    $('#new_quiz input[name="quiz[popular]"], #new_quiz input[name="quiz[time_ago]"] ').on('click', function() {
+      $(this).siblings().attr('checked', false);
+      console.log('yo');
+      // $(this).attr('checked', true);
+    })
+    $('#uncheck').on('click', function(){
+      $('#new_quiz > input[name="quiz[time_ago]"]').attr('checked', false);
+    })
+  }
   // $('#generate_quiz_btn').on('click',function(){
   //   console.log('gen quizzzz');
   //   getLeastAnsweredQuiz();
