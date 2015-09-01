@@ -15,6 +15,8 @@ class NotesControllerTest < ActionController::TestCase
 
     assert_redirected_to "/sessions/new", "showing note, without being logged in, didn't redirect to root_path."
   end
+
+  
 end
 # ***************DEFAULT CODE**********************************
   # test "should get index" do
