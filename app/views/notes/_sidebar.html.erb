@@ -470,6 +470,8 @@ $('#generate-quiz-btn').on('click', function() {
 
 if(!hasBeenInitialSynced) {
   initialSync();
+} else {
+  normalSync();
 }
 
 setCorrectTabActive();

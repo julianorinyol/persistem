@@ -32,6 +32,57 @@ class NotesController < ApplicationController
     end
   end
 
+  def sync 
+    token = session[:authtoken]
+    
+    client = EvernoteOAuth::Client.new(token: token)
+    note_store = client.note_store
+
+    # Using a controlled loop, because not all types of events that cause USN to update on evernote's server's are being captured by my database, so using a loop based on usn, could end up being infinite.
+    iterator = 0
+    while (iterator < 5) 
+      if get_last_usn(note_store) > current_user.last_usn
+        getFilteredSyncChunk(note_store)
+      end
+      iterator += 1
+    end
+  end
+  
+# getFilteredSyncChunk(string authenticationToken,afterUSN, maxEntries,SyncChunkFilter filter)
+  def getFilteredSyncChunk note_store
+    sync_chunk_filter = Evernote::EDAM::NoteStore::SyncChunkFilter.new
+    sync_chunk_filter.includeNotes = true
+    sync_chunk_filter.includeNotebooks = true
+
+      
+    updated = note_store.getFilteredSyncChunk(current_user.last_usn, 5, sync_chunk_filter)
+    if updated.notes && updated.notes.size > 0
+      updated.notes.each do |note|
+        n = Note.where(guid: note.guid).first
+        if !n
+          notebook_id = Notebook.where(guid: note.notebookGuid).first
+          n = Note.create(user_id: current_user.id, notebook_guid: note.notebookGuid, notebook_id: notebook_id, public: false, guid: note.guid)
+        end
+
+        n.update(title: note.title, update_sequence_number: note.updateSequenceNum)
+        n.get_content(note_store, n)
+        current_user.update(last_usn: note.updateSequenceNum)
+      end
+    end
+
+    if updated.notebooks && updated.notebooks.size > 0
+      updated.notebooks.each do |notebook|
+        n = Notebook.where(guid: notebook.guid).first
+        if !n
+          n = Notebook.create(user_id: current_user.id, guid: notebook.guid)
+        end
+
+        n.update(title: notebook.name, update_sequence_number: notebook.updateSequenceNum)
+        current_user.update(last_usn: notebook.updateSequenceNum)
+      end
+    end
+  end
+
   def initial_sync
     if !current_user.synced
       token = session[:authtoken]
@@ -51,13 +102,20 @@ class NotesController < ApplicationController
         addNotesToDb(evernotes.notes)
         @my_notes = Note.where(user_id: current_user.id)
       end
-      current_user.update(synced: true)
+    
+      current_user.update(synced: true, last_usn: get_last_usn(note_store) )
       render json: @my_notes
     end
     # respond_to do |format|
     #   format.json
     #   format.html
     # end
+  end
+
+  def get_last_usn note_store
+      sync_chunk_filter = Evernote::EDAM::NoteStore::SyncChunkFilter.new
+      x = note_store.getFilteredSyncChunk(0, 1, sync_chunk_filter)
+      x.updateCount
   end
 
   def initial_sync_content
