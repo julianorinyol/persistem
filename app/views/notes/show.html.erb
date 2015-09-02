@@ -1,22 +1,20 @@
-<div class='container'>
 
   <%= render  'sidebar' %>
 
 
-  <div class='right-side-container'>
+  <div class='right-side-container col-md-7'>
     <div id='note-title'>
       <h2><%= @note.title %></h2>
     </div>
-    <div class='col-md-6' id='note-display-area'>
+    <div class='' id='note-display-area'>
       <%= @note.content.html_safe %>
     </div>
-     <div class='col-md-6'>
+     <div class=''>
       <%= render 'question_entry_form' %>
     <p id="notice"><%= notice %></p>
       <%= render 'questionlist' %>
     </div>
   </div>
-</div>
 
 
 <style>

@@ -1,0 +1,110 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or any plugin's vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any styles
+ * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
+ * file per style scope.
+ *
+ * this is the original ..................... require_tree .
+ *= require reset.css
+ *= require bootstrap.min.css
+ *= require notes.scss
+ *= require question.scss
+ *= require quiz.scss
+ *= require scaffolds.scss
+ *= require sessions.scss
+ *= require users.scss
+ *= require_self
+
+ */
+
+.right-side-container {
+    /*background: goldenrod;*/
+    background-image: url(/assets/upfeathers.png);
+    height: 100vh;
+}
+body {
+  height: 100vh;
+}
+
+
+
+#note_content {
+   height: 200px;
+   margin: 20px 0 0 0;
+     width: 100%;
+}
+
+#note_title {
+  height: 25px;
+}
+
+.note-inputs{
+  // background: purple;
+}
+#note_public {
+    margin: 5px;
+}
+
+div.actions input {
+  float:right;
+  color:white;
+  margin: 20px 0;
+}
+
+#new-note-button {
+}
+
+
+#notelist-tabs {
+  li {
+    list-style: none;
+    display: inline-block;
+  }
+}
+
+#notebook-list-tab {}
+#note-list-tab {}
+
+#table-container {
+  height: 65vh;
+  overflow: scroll;
+}
+
+#table-headers {
+  // position: absolute;
+}
+#note-display-area {
+  min-height: 300px;
+  background: white;
+  padding: 1.5em;
+  border-radius: 8px;
+  opacity: 0.9;
+}
+
+.welcome-page {
+  color: white;
+  margin: 14%;
+  h3 {
+    margin: 4%;
+  } 
+  ol {
+    margin: 6%;
+  }
+}
+#welcome-list {
+  list-style: decimal;
+  li ul li {
+    list-style: circle;
+    margin-left: 15px;
+  }
+}
+#welcome-weasel {
+  float: right;
+  width:100px;
+}
