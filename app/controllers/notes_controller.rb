@@ -33,6 +33,7 @@ class NotesController < ApplicationController
   end
 
   def initial_sync
+    if !current_user.synced
       token = session[:authtoken]
       client = EvernoteOAuth::Client.new(token: token)
       note_store = client.note_store
@@ -50,11 +51,25 @@ class NotesController < ApplicationController
         addNotesToDb(evernotes.notes)
         @my_notes = Note.where(user_id: current_user.id)
       end
+      current_user.update(synced: true)
       render json: @my_notes
+    end
     # respond_to do |format|
     #   format.json
     #   format.html
     # end
+  end
+
+  def initial_sync_content
+    token = session[:authtoken]
+    client = EvernoteOAuth::Client.new(token: token)
+    note_store = client.note_store
+
+    notes = Note.all
+    notes.each do |note|
+      note.get_content( note_store, note )
+    end
+    render json: Note.all
   end
 
   # def findNotesMetadata
@@ -187,6 +202,8 @@ class NotesController < ApplicationController
 
     @question = Question.new
     @questions = Question.where(note_id: params[:id].to_i )
+    @synced = current_user.synced
+
   end
 
   # # GET /notes/new
@@ -208,6 +225,7 @@ class NotesController < ApplicationController
     if !@note.content
       @note.get_content(note_store, @note)
     end
+    @synced = current_user.synced
 
     @question = Question.new
     @questions = Question.where(note_id: params[:id].to_i )

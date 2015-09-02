@@ -14,6 +14,7 @@ class QuizController < ApplicationController
       end
       @my_notes = Note.where(user_id: current_user.id)
       @my_notebooks = Notebook.where(user_id: current_user.id)
+      @synced = current_user.synced
     end 
   end
 
@@ -49,6 +50,8 @@ class QuizController < ApplicationController
       end
       @my_notes = Note.where(user_id: current_user.id)
       @my_notebooks = Notebook.where(user_id: current_user.id)
+      @synced = current_user.synced
+      
     end
   end
 

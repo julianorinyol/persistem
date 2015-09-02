@@ -29,6 +29,7 @@ class QuestionsController < ApplicationController
     @answer = Answer.new
     @answers = Answer.where(question_id: @question.id)
     if current_user
+      @synced = current_user.synced
       @my_questions = Question.where(user_id: current_user.id)
     end
     @note = Note.where(id: @question.note_id).first
