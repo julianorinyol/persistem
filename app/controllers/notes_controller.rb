@@ -1,24 +1,21 @@
 class NotesController < ApplicationController
   before_action :set_note, only: [:show, :edit, :update, :destroy]
   before_filter :restrict_access
-  before_action :set_my_notes, only: [:index, :show]
-  before_action :set_my_notebooks, only: [:index, :show]
-
+  before_action :set_my_notes_and_notebooks, only: [:index, :show]
 
   # GET /notes
   # GET /notes.json
   def index
     @notes = Note.where(public: true)
-    if current_user
-      @my_notes = Note.where(user_id: current_user.id)
+    @my_notes = Note.where(user_id: current_user.id)
 
-      if @my_notes.length < 1 && current_user.evernote_auth
-        getAllNotebooksForUser
-        getNotesFromEvernote
-      end
-      @my_notes = Note.where(user_id: current_user.id)
-      @my_notebooks = Notebook.where(user_id: current_user.id)
+    if @my_notes.length < 1 && current_user.evernote_auth
+      getAllNotebooksForUser
+      getNotesFromEvernote
     end
+    @my_notes = Note.where(user_id: current_user.id)
+    @my_notebooks = Notebook.where(user_id: current_user.id)
+
     @note = Note.new
     @question = Question.new
     @synced = current_user.synced
@@ -146,6 +143,7 @@ class NotesController < ApplicationController
     note_store = client.note_store
 
     note_filter = Evernote::EDAM::NoteStore::NoteFilter.new
+
     notebookCountsHash = note_store.findNoteCounts(note_filter, false)
     valuesArr = notebookCountsHash.notebookCounts.values
     valuesArr.inject(:+) #this sums the array
@@ -161,14 +159,14 @@ class NotesController < ApplicationController
     notebookCountsHash.notebookCounts.values.size
   end
 
-  def getAllNotesForNotebook(notebook)
-      token = session[:authtoken]
-      client = EvernoteOAuth::Client.new(token: token)
-      note_store = client.note_store
-      note_filter = Evernote::EDAM::NoteStore::NoteFilter.new
-      note_store.findNotes(note_filter)
+  # def getAllNotesForNotebook(notebook)
+  #     token = session[:authtoken]
+  #     client = EvernoteOAuth::Client.new(token: token)
+  #     note_store = client.note_store
+  #     note_filter = Evernote::EDAM::NoteStore::NoteFilter.new
+  #     note_store.findNotes(note_filter)
 
-  end
+  # end
 
   def getNotesFromEvernote
     # get all the notes from evernote. 10 at a time.
@@ -341,6 +339,6 @@ class NotesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def note_params
       params[:note]
-      params.require(:note).permit(:cntent, :public, :title)
+      params.require(:note).permit(:content, :public, :title)
     end
 end

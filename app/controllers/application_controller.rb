@@ -13,26 +13,16 @@ require "evernote_oauth"
   
   def restrict_access
     if !current_user
-      flash[:alert] = "You must log in."
+      # flash[:alert] = "You must log in."
       redirect_to new_session_path
     end
   end
 
-  def set_my_notes
-      if current_user
-        @my_notes = Note.where(user_id: current_user.id)
-
-      if @my_notes.length < 4 && current_user.evernote_auth
-        getAllNotebooksForUser
-        getNotesFromEvernote
-      end
+  def set_my_notes_and_notebooks
+    if current_user
       @my_notes = Note.where(user_id: current_user.id)
       @my_notebooks = Notebook.where(user_id: current_user.id)
     end
-  end
-
-  def set_my_notebooks
-
   end
 
   def current_user
