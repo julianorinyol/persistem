@@ -272,6 +272,20 @@ function initialSync() {
     }
   }); 
 }
+function normalSync() {
+  $.ajax({
+    url: '/notes/sync/evernote',
+    method: 'GET',
+    dataType: 'json',
+    success: function(res) {
+      notebooks = res;
+      callForNotes(res);
+    },
+    error: function(err, message) {
+      console.log('notebook get ajax failed' + message);
+    }
+  }); 
+}
 
 function getNotebookFromNote(note, notebooks) {
   for(var i = 0; i < notebooks.length; i++) {
@@ -284,7 +298,7 @@ function getNotebookFromNote(note, notebooks) {
 
 function callForNotes(notebooks){
   $.ajax({
-        url: '/notes/sync/evernote',
+        url: '/notes/sync/initial',
         method: 'GET',
         dataType: 'json',
         success: function(notes) {
