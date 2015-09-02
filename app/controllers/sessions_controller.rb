@@ -24,6 +24,4 @@
     session[:authtoken] = nil
     redirect_to notes_path
   end
-
-
 end
