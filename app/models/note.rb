@@ -37,4 +37,19 @@ class Note < ActiveRecord::Base
     mapped.each do |custom_obj| arr << custom_obj[:note] end
     return arr
   end
+  
+  def self.updateNotes(notes, current_user, note_store)
+    notes.each do |note|
+      n = Note.where(guid: note.guid).first
+      if !n
+        notebook_id = Notebook.where(guid: note.notebookGuid).first
+        n = Note.create(user_id: current_user.id, notebook_guid: note.notebookGuid, notebook_id: notebook_id, public: false, guid: note.guid)
+      end
+
+      n.update(title: note.title, update_sequence_number: note.updateSequenceNum)
+      n.get_content(note_store, n)
+      current_user.update(last_usn: note.updateSequenceNum)
+    end
+  end
+
 end

@@ -1,4 +1,4 @@
-class NotesController < ApplicationController
+  class NotesController < ApplicationController
   before_action :set_note, only: [:show, :edit, :update, :destroy]
   before_filter :restrict_access
   before_action :set_my_notes_and_notebooks, only: [:index, :show, :initial_sync]
@@ -48,31 +48,19 @@ class NotesController < ApplicationController
 
       
     updated = note_store.getFilteredSyncChunk(current_user.last_usn, 5, sync_chunk_filter)
-    if updated.notes && updated.notes.size > 0
-      updated.notes.each do |note|
-        n = Note.where(guid: note.guid).first
-        if !n
-          notebook_id = Notebook.where(guid: note.notebookGuid).first
-          n = Note.create(user_id: current_user.id, notebook_guid: note.notebookGuid, notebook_id: notebook_id, public: false, guid: note.guid)
-        end
 
-        n.update(title: note.title, update_sequence_number: note.updateSequenceNum)
-        n.get_content(note_store, n)
-        current_user.update(last_usn: note.updateSequenceNum)
-      end
+    handleUpdate(updated, note_store)
+  end
+
+  def handleUpdate updated, note_store 
+    if updated.notes && updated.notes.size > 0
+      Note.updateNotes(updated.notes, current_user, note_store)
     end
 
     if updated.notebooks && updated.notebooks.size > 0
-      updated.notebooks.each do |notebook|
-        n = Notebook.where(guid: notebook.guid).first
-        if !n
-          n = Notebook.create(user_id: current_user.id, guid: notebook.guid)
-        end
-
-        n.update(title: notebook.name, update_sequence_number: notebook.updateSequenceNum)
-        current_user.update(last_usn: notebook.updateSequenceNum)
-      end
+      Notebook.updateNotebooks(updated.notebooks, current_user)    
     end
+
   end
 
   def initial_sync
