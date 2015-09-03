@@ -13,5 +13,9 @@ class Notebook < ActiveRecord::Base
       current_user.update(last_usn: notebook.updateSequenceNum)
     end 
   end
+  def self.get_count_of_notes_by_notebook note_store
+    note_filter = Evernote::EDAM::NoteStore::NoteFilter.new
+    return note_store.findNoteCounts(note_filter, false)
+  end
 
 end
