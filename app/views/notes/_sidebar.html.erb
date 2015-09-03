@@ -55,8 +55,8 @@
 
 
 <script>
-var notebooks = <%= raw @my_notebooks.to_json %>;
-var myNotes = <%= raw @my_notes.to_json %>;
+var notebooks = <%= raw @notebooks.to_json %>;
+var myNotes = <%= raw @notes.to_json %>;
 var hasBeenInitialSynced = <%= raw @synced %>;
 
 function displayNotes(notes, notebooks) {

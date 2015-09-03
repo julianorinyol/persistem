@@ -1,20 +1,19 @@
 class NotesController < ApplicationController
   before_action :set_note, only: [:show, :edit, :update, :destroy]
   before_filter :restrict_access
-  before_action :set_my_notes_and_notebooks, only: [:index, :show]
+  before_action :set_my_notes_and_notebooks, only: [:index, :show, :initial_sync]
+  before_action :set_note_store, only: [:sync]
 
   # GET /notes
   # GET /notes.json
   def index
-    @notes = Note.where(public: true)
-    @my_notes = Note.where(user_id: current_user.id)
-
-    if @my_notes.length < 1 && current_user.evernote_auth
+    if @notes.length < 1 && current_user.evernote_auth
       getAllNotebooksForUser
       getNotesFromEvernote
+      # reset @notes and @notebooks after the query, in case of change..
+      @notes = Note.where(user_id: current_user.id)
+      @notebooks = Notebook.where(user_id: current_user.id)
     end
-    @my_notes = Note.where(user_id: current_user.id)
-    @my_notebooks = Notebook.where(user_id: current_user.id)
 
     @note = Note.new
     @question = Question.new
@@ -30,16 +29,12 @@ class NotesController < ApplicationController
   end
 
   def sync 
-    token = session[:authtoken]
-    
-    client = EvernoteOAuth::Client.new(token: token)
-    note_store = client.note_store
 
     # Using a controlled loop, because not all types of events that cause USN to update on evernote's server's are being captured by my database, so using a loop based on usn, could end up being infinite.
     iterator = 0
     while (iterator < 5) 
-      if get_last_usn(note_store) > current_user.last_usn
-        getFilteredSyncChunk(note_store)
+      if get_last_usn(@note_store) > current_user.last_usn
+        getFilteredSyncChunk(@note_store)
       end
       iterator += 1
     end
@@ -92,16 +87,16 @@ class NotesController < ApplicationController
       getAllNotebooksForUser  
       addNotesToDb(evernotes.notes)
 
-      @my_notes = Note.where(user_id: current_user.id)
+      @notes = Note.where(user_id: current_user.id)
 
-      while @my_notes.size < totalNoteNum
-        evernotes = note_store.findNotes(token, note_filter, @my_notes.size, 1000)
+      while @notes.size < totalNoteNum
+        evernotes = note_store.findNotes(token, note_filter, @notes.size, 1000)
         addNotesToDb(evernotes.notes)
-        @my_notes = Note.where(user_id: current_user.id)
+        @notes = Note.where(user_id: current_user.id)
       end
     
       current_user.update(synced: true, last_usn: get_last_usn(note_store) )
-      render json: @my_notes
+      render json: @notes
     end
     # respond_to do |format|
     #   format.json
@@ -242,16 +237,11 @@ class NotesController < ApplicationController
   # GET /notes/1
   # GET /notes/1.json
   def show
-     token = session[:authtoken]
+    token = session[:authtoken]
     client = EvernoteOAuth::Client.new(token: token)
     
     note_store = client.note_store
 
-    @notes = Note.where(public: true)
-    if current_user
-      @my_notes = Note.where(user_id: current_user.id)
-      @my_notebooks = Notebook.where(user_id: current_user.id)
-    end
     if !@note.content
       @note.get_content(note_store, @note)
     end
@@ -276,7 +266,7 @@ class NotesController < ApplicationController
 
     @notes = Note.where(public: true)
     if current_user
-      @my_notes = Note.where(user_id: current_user.id)
+      @notes = Note.where(user_id: current_user.id)
     end
     if !@note.content
       @note.get_content(note_store, @note)

@@ -1,19 +1,18 @@
 class QuizController < ApplicationController
   before_action :set_quiz, only: [:show, :edit, :update, :destroy]
-   before_filter :restrict_access
+  before_filter :restrict_access
   
   def index
     @quizzes = Quiz.where(user_id: current_user.id)
 
-     @notes = Note.where(public: true)
     if current_user
-      @my_notes = Note.where(user_id: current_user.id)
+      @notes = Note.where(user_id: current_user.id)
 
-      if @my_notes.length < 4 && current_user.evernote_auth
+      if @notes.length < 4 && current_user.evernote_auth
         getNotesFromEvernote
       end
-      @my_notes = Note.where(user_id: current_user.id)
-      @my_notebooks = Notebook.where(user_id: current_user.id)
+      @notes = Note.where(user_id: current_user.id)
+      @notebooks = Notebook.where(user_id: current_user.id)
       @synced = current_user.synced
     end 
   end
@@ -41,15 +40,14 @@ class QuizController < ApplicationController
   def show
     @answers = @quiz.get_previous_answers
 
-     @notes = Note.where(public: true)
     if current_user
-      @my_notes = Note.where(user_id: current_user.id)
+      @notes = Note.where(user_id: current_user.id)
 
-      if @my_notes.length < 4 && current_user.evernote_auth
+      if @notes.length < 4 && current_user.evernote_auth
         getNotesFromEvernote
       end
-      @my_notes = Note.where(user_id: current_user.id)
-      @my_notebooks = Notebook.where(user_id: current_user.id)
+      @notes = Note.where(user_id: current_user.id)
+      @notebooks = Notebook.where(user_id: current_user.id)
       @synced = current_user.synced
       
     end
