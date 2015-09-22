@@ -1,52 +1,36 @@
-
-
 <div class='container col-md-5'>
+  <div id'top-row'>
+    <a href="/notes"><h2>persistem</h2></a>
+    <small>
+      <% if current_user %>
+      Signed in as <%= current_user.email %> (<%= link_to "Log out", session_path("current"), method: :delete %>)
+      <% else %>
+      <%= link_to "Log In", new_session_path %> | <%= link_to "Sign Up", new_user_path %>
+      <% end %>
+      <%= link_to 'Generate Quiz', new_quiz_path %>
+      <p id='generate-quiz-btn'>Generate Quiz</p>
+      <a id='sync-button'>Sync With Evernote</a>
+    </small>
+  </div>  
 
-<div id'top-row'>
-  <a href="/notes"><h2>persistem</h2></a>
-  <small>
-    <% if current_user %>
-    Signed in as <%= current_user.email %> (<%= link_to "Log out", session_path("current"), method: :delete %>)
-    <% else %>
-    <%= link_to "Log In", new_session_path %> | <%= link_to "Sign Up", new_user_path %>
-    <% end %>
-    <%= link_to 'Generate Quiz', new_quiz_path %>
-    <p id='generate-quiz-btn'>Generate Quiz</p>
-    <a id='sync-button'>Sync With Evernote</a>
+  <ul id='notelist-tabs'class='nav nav-pills'><!---->
+    <li role='presentation' class="active"><a id='note-list-tab'>Your Notes</a></li>
+    <li role='presentation'><a id='notebook-list-tab'>Notebooks</a></li>
+    <li role='presentation'><a id='quiz-tab'>Quizzes</a></li>
+  </ul>
 
+  <div id='table-container'>
+    <table id='private-notes-list'class = 'table'>
+    <thead>
+      <tr id='table-headers'>
+          <th><strong id='table-header1'>Title</strong></th><th><strong id='table-header2'>Notebook</strong></th>
+      </tr>
+    </thead>
 
-  </small>
-</div>  
-
-<ul id='notelist-tabs'class='nav nav-pills'><!---->
-  <li role='presentation' class="active"><a id='note-list-tab'>Your Notes</a></li>
-  <li role='presentation'><a id='notebook-list-tab'>Notebooks</a></li>
-  <li role='presentation'><a id='quiz-tab'>Quizzes</a></li>
-</ul>
-
-<div id='table-container'>
-  <table id='private-notes-list'class = 'table'>
-  <thead>
-    <tr id='table-headers'>
-        <th><strong id='table-header1'>Title</strong></th><th><strong id='table-header2'>Notebook</strong></th>
-    </tr>
-  </thead>
-
-  <tbody>
-  </tbody>
-</table>
-</div>
-
- <%= link_to 'Download CSV list of your notes', notes_path(format: :csv) %>
-<% if !session[:authtoken] && @current_user %>
- <%= link_to 'Login via Evernote', '/auth/evernote' %>
-<% end %>
-<% if @current_user && session[:authtoken] %>
-  <p>You have authenticated with Evernote.</p>
-<% else %>
-  <p>Login to your persistem account to authenticate with Evernote.</p>
-<% end %>
-<br>
+    <tbody>
+    </tbody>
+  </table>
+  </div>
 </div>
 
 
@@ -58,142 +42,6 @@
 var notebooks = <%= raw @notebooks.to_json %>;
 var myNotes = <%= raw @notes.to_json %>;
 var hasBeenInitialSynced = <%= raw @synced %>;
-
-function displayNotes(notes, notebooks) {
-  $('#private-notes-list tbody').html('');
-  for(var i = 0; i < notes.length; i++) {
-    note = notes[i];
-    notebook = getNotebookFromNote(note, notebooks);
-    var trInnards = generateRow([note.title, notebook.title], ["class", "clickable-tr"], ["data-link",'/notes/' + note.id] );
-    tr = $(trInnards);
-    tr.appendTo($('#private-notes-list tbody'));
-  }
-}
-
-function displayNotebooks(notes, notebooks) {
-  for(var i = 0; i < notebooks.length; i++) {
-    notebook = notebooks[i];
-    var trInnards = generateRow([notebook.title, getNumberOfNotesInNotebook(notes,notebook)], ['class', 'bla-class'], ['id','bla'+i], ["data-link", "''"]);
-    tr = $(trInnards);
-    tr.appendTo($('#private-notes-list tbody'));
-
-    $("#bla" + i).on('click',function(){
-      var id = $(this).attr('id').slice(3, $(this).attr('id').length + 1); 
-      displayNotesForNotebook(myNotes, notebooks[id]);
-    })
-  }
-
-  $(".bla-class").on('mouseenter', function() {
-    $(this).css({"background":"purple", 'color':'white'});
-  })
-  $(".bla-class").on('mouseleave', function() {
-    $(this).css({"background":"white",'color':'black'});
-  })
-} 
-
-function displayNotesForNotebook(notes, notebook){
-  $('#private-notes-list tbody').html('');
-  notebooksNotes = getNotesForNotebook(notes, notebook);
-  for(var i = 0; i < notebooksNotes.length; i++) {
-    note = notebooksNotes[i];
-    var trInnards = generateRow([note.title, notebook.title], ['class', 'clickable-tr'], ['data-link','/notes/' + note.id]);
-    tr = $(trInnards);
-    tr.appendTo($('#private-notes-list tbody'));
-  }
-  setUpBindings();
-}
-
-//display takes  optional extra args... which create element attributes.  ex. ['class', 'testClass'] ---becomes---> class='testClass'
-// function display(objArray, rowContentArr) {
-//    $('#private-notes-list tbody').html('');
-//    var trInnards;
-//    for(var i = 2; i < objArray.length; i++) {
-//     //using optional extra args...
-//     trInnards = generateRow(rowContentArr, arguments[i]);
-//     tr = $(trInnards);
-//     tr.appendTo($('#private-notes-list tbody'));
-//    }
-//    setUpBindings();
-// }
-
-
-function displayQuizzes(quizzes) {
-   $('#private-notes-list tbody').html('');
-  for(var i = 0; i < quizzes.length; i++) {
-    quiz = quizzes[i];
-    var trInnards = generateRow([timeSince(convertDate(quiz.created_at)) + ' ago', '% answered'], ["class", "clickable-tr"], ["data-link",'/quiz/' + quiz.id] );
-    tr = $(trInnards);
-    tr.appendTo($('#private-notes-list tbody'));
-  }
-  setTableHeaders('Date Created', '% Finished');
-
-  setUpBindings();
-}
-
-function getQuizzes() {
-  $.ajax({
-    url: '/quizzes/sync',
-    method: 'GET',
-    dataType: 'json',
-    success: function(res) {
-      displayQuizzes(res);
-    },
-    error: function(err, message) {
-      console.log('notebook get ajax failed' + message);
-    }
-  })
-;}
-
- function generateRow(contentArray) {
-   //takes an array of objects {attr: 'class' val: 'my-class'}
-   var tr ="<tr";
-   var innards = buildInnards(contentArray);
-   //using optional extra args...
-   for(var i = 1; i < arguments.length; i++) {
-    argument = arguments[i];
-    tr += " " + argument[0] + "='" + argument[1] + "'";
-   }
-
-   tr += ">" + innards + "</tr>";
-   return tr;
- 
- }
-  function buildInnards(contentArray) {
-    var content;
-    var output = ""
-    for(var i = 0; i < contentArray.length; i++) {
-      content = contentArray[i];
-      output += "<td>"+ content +"</td>"
-    }
-    return output;
-  }
-
-function getNotesForNotebook(notes, notebook) {
-  notebooksNotes =[];
-  for(var i = 0; i < notes.length; i++) {
-    var note = notes[i];
-    if( note.notebook_guid == notebook.guid ){
-      notebooksNotes.push(note);
-    }
-  }
-  return notebooksNotes;
-}
-
-function setCorrectTabActive() {
-  if(window.location.href.indexOf('quiz') > 0) {
-    getQuizzes();
-  } else if(window.location.href.indexOf('notes') > 0) {
-    // console.log('hey');
-    // displayWelcomePage();
-    displayNotes(myNotes, notebooks);
-  } else {
-    displayNotes(myNotes, notebooks);
-  }
-}
-
-function getNumberOfNotesInNotebook(notes, notebook) {
-  return getNotesForNotebook(notes, notebook).length;
-}
 
 $('#notebook-list-tab, #note-list-tab, #quiz-tab').on('click', function(){
   console.log('clicked');
@@ -216,276 +64,6 @@ $('#quiz-tab').on('click', function(){
    getQuizzes();
    setUpBindings();
 })
-
-function setTableHeaders() {
-  for(var i = 0; i < arguments.length; i++) {
-    var arg = arguments[i];
-     $('#table-header' + (i + 1)).text(arg);
-  }
-}
-
-function convertDate(unixDateString) {
-  return new Date(unixDateString);
-}
-
-function timeSince(date) {
-
-    var seconds = Math.floor((new Date() - date) / 1000);
-
-    var interval = Math.floor(seconds / 31536000);
-
-    if (interval > 1) {
-        return interval + " years";
-    }
-    interval = Math.floor(seconds / 2592000);
-    if (interval > 1) {
-        return interval + " months";
-    }
-    interval = Math.floor(seconds / 86400);
-    if (interval > 1) {
-        return interval + " days";
-    }
-    interval = Math.floor(seconds / 3600);
-    if (interval > 1) {
-        return interval + " hours";
-    }
-    interval = Math.floor(seconds / 60);
-    if (interval > 1) {
-        return interval + " minutes";
-    }
-    return Math.floor(seconds) + " seconds";
-}
-
-
-$('#sync-button').on('click', function(){
-  console.log('clicked');   
-  initialSync();
-});
-
-function initialSync() {
-  $.ajax({
-    url: '/notebooks/list',
-    method: 'GET',
-    dataType: 'json',
-    success: function(res) {
-      notebooks = res;
-      callForNotes(res);
-    },
-    error: function(err, message) {
-      console.log('notebook get ajax failed' + message);
-    }
-  }); 
-}
-function normalSync() {
-  $.ajax({
-    url: '/notes/sync/evernote',
-    method: 'GET',
-    dataType: 'json',
-    success: function(res) {
-      notebooks = res;
-      callForNotes(res);
-    },
-    error: function(err, message) {
-      console.log('notebook get ajax failed' + message);
-    }
-  }); 
-}
-
-function getNotebookFromNote(note, notebooks) {
-  for(var i = 0; i < notebooks.length; i++) {
-    notebook = notebooks[i];
-    if(notebook.guid == note.notebook_guid) {
-      return notebook;
-    }
-  }
-}
-
-function callForNotes(notebooks){
-  $.ajax({
-        url: '/notes/sync/initial',
-        method: 'GET',
-        dataType: 'json',
-        success: function(notes) {
-          console.log('ajax success!');
-          myNotes = notes;
-          initialCallForContent();
-          displayNotes(myNotes, notebooks);
-          setUpBindings();
-        },
-        error: function(phase, message){
-          console.log('ajax post failed', message);
-          console.log('ajax post failed');
-        }
-      });
-}
-
-function initialCallForContent() {
-   $.ajax({
-        url: '/notes/sync/content',
-        method: 'GET',
-        dataType: 'json',
-        success: function(notes) {
-          console.log('content fetch success!');
-          myNotes = notes;
-        },
-        error: function(phase, message){
-          console.log('ajax post failed', message);
-        }
-      });
-}
-
-
-function setUpBindings(){
-    $("tr[data-link].clickable-tr").click(function() {
-      window.location = $(this).data("link")
-    })
-    $(".clickable-tr").on('mouseenter', function() {
-      $(this).css({"background":"purple", 'color':'white'});
-    })
-    $(".clickable-tr").on('mouseleave', function() {
-      $(this).css({"background":"white",'color':'black'});
-    })
-}
-// <form class="new_question" id="new_question" action="/questions" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="✓"><input type="hidden" name="authenticity_token" value="26TAEakEbH3+N7+3rnEY/54PsVKeXqFibj6icyxyc9I7VMZWpoobqagSZJIADIFYwHC/wVaO94pP9CvKfJ5QIw==">
-
-//   <textarea class="question-inputs" placeholder="Add a question...." name="question[text]" id="question_text"></textarea>
-//   <input value="4" type="hidden" name="question[note_id]" id="question_note_id">
-//   <input value="1" type="hidden" name="question[user_id]" id="question_user_id">
-
-//  <div class="actions">
-//     <input type="submit" name="commit" value="Create Question" id="create-question-button">
-//   </div>
-
-// </form>
-
-
-$('#generate-quiz-btn').on('click', function() {
-   $('.right-side-container').html(
-    "<h3>Quiz Generate</h3> \
-    <p><a id='generate_quiz_btn' class='btn btn-primary' href='/quiz/generate/new_least_answered'>random questions</a></p> \
-    <p><a id='' class='btn btn-primary' href='/quiz/generate/new_least_answered'>Least Answered Questions</a></p> \
-    <br><br>\
-    <h3>Custom Quiz</h3> \
-    \
-    <form class='new_quiz' id='new_quiz' action='/quiz/generate/custom' accept-charset='UTF-8' method='post'> \
-      <input name='utf8' type='hidden' value='✓'> \
-      <input type='hidden' name='authenticity_token' value='" + $('meta[name="csrf-token"]').attr('content') + "'> \
-      <p>Select date range...</p> \
-    \
-      <input value='today' type='checkbox' name='quiz[time_ago]'><span>Day</span> \
-      <input value='this_week' type='checkbox' name='quiz[time_ago]'><span>Week</span> \
-      <input value='this_month' type='checkbox' name='quiz[time_ago]'><span>Month</span> \
-      <input value='this_year' type='checkbox' name='quiz[time_ago]'><span>Year</span> \
-      <a id='uncheck'>Uncheck All</a>  \
-      <p>Popularity</p> \
-      \
-      <div> \
-        <input type='checkbox' name='quiz[popular]' value='popular'><span>Popular</span> \
-        <input type='checkbox' name='quiz[popular]' checked='true' value='unpopular'><span>Least Answered (default)</span> \
-      </div> \
-       \
-      <p>Select Notebooks...</p> \
-      \
-      \
-      <select id='notebook-select-dropdown' name='quiz[notebooks]'> \
-      </select> \
-      <input id='notebook-string' type='hidden' name='quiz[notebooks]'> \
-      <div class='actions'> \
-        <input type='submit' name='commit' value='Create Quiz' id='create-quiz-button'> \
-      </div> \
-    </form> \
-    \
-    <div id='included-notebooks-list'> \
-      <p>Included Notebooks</p> \
-    </div> \
-    ");
-    // $('#notebook-select-dropdown').html(" \
-    //   <option value='" + "''>1</option> \
-    //     <option>1</option> \
-    //     <option>1</option> \
-    //     <option>1</option> \
-    //     ");
-    displayNotebookOptions();
-    createQuizInputEventBindings();
-    
-})
-  function displayNotebookOptions() {
-     var options = "<option value=''>All Notebooks</option>";
-    for(var i = 0; i < notebooks.length; i++) {
-      var notebook = notebooks[i];
-      options += "<option value='" + notebook.id + "''>" + notebook.title +"</option>"
-    }
-    $('#notebook-select-dropdown').html(options);
-  }
-
-  function displayWelcomePage() {
-    $(function() {
-      $('.right-side-container').html(" \
-        <div class='welcome-page'> \
-          <h1>Welcome!</h1> \
-          <h3>Get Started...</h3> \
-           <ol id='welcome-list'> \
-            <li>Select A Note<ul><li>Write some questions to help you review and remember it</li></ul></li> \
-            <li>Generate a quiz and answer questions to test your knowledge of your knowledge.</li> \
-           </ol> \
-       </div> \
-        ");
-    });
-  }
-
-    function createQuizInputEventBindings() {
-      $('#notebook-select-dropdown').on('change', function(){
-        var value = $(this).val();
-          if(value == '') {
-          $('#notebook-string').val('');
-          $('#included-notebooks-list > p').html('');
-      }
-
-
-    var submitValue = "";
-    if($('#notebook-string').val()) {
-      if($('#notebook-string').val().indexOf(value) == -1 ) {
-        submitValue = $('#notebook-string').val(); 
-        submitValue += ", " + value;
-        $('#notebook-string').val(submitValue);
-        var notebookName = $("#notebook-select-dropdown option[value='"+ value + "']").text();
-        $('#included-notebooks-list > p').append('<p>' + notebookName + '</p>');
-      }
-    } else {
-      submitValue = value;
-      $('#notebook-string').val(submitValue);
-      var notebookName = $("#notebook-select-dropdown option[value='"+ value + "']").text();
-      $('#included-notebooks-list > p').append('<p>' + notebookName + '</p>'); 
-      }
-    })
-
-
-    $('#new_quiz input[name="quiz[popular]"], #new_quiz input[name="quiz[time_ago]"] ').on('click', function() {
-      $(this).siblings().attr('checked', false);
-    })
-    $('#uncheck').on('click', function(){
-      $('#new_quiz > input[name="quiz[time_ago]"]').attr('checked', false);
-    })
-  }
-  // $('#generate_quiz_btn').on('click',function(){
-  //   console.log('gen quizzzz');
-  //   getLeastAnsweredQuiz();
-  // })
-
-
-// function getLeastAnsweredQuiz() {
-//     $.ajax({
-//       url: '/quiz/generate/new_least_answered/',
-//       method: 'GET',
-//       dataType: 'json',
-//       success: function(res) {
-//         debugger;
-//       },
-//       error: function(err, message) {
-//         console.log('notebook get ajax failed', err, message);
-//       }
-//   });
-// }
 
 if(!hasBeenInitialSynced) {
   initialSync();
