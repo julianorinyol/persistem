@@ -18,3 +18,5 @@
 
 # Ignore evernote API client secrets
 /config/evernote.yml
+
+/config/secrets.yml
