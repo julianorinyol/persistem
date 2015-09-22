@@ -30,7 +30,6 @@
 
   def sync 
     # Using a controlled loop, because not all types of events that cause USN to update on evernote's server's are being captured by my database, so using a loop based on usn, could end up being infinite.
-    binding.pry
     iterator = 0
     while (iterator < 5) 
       if get_last_usn(@note_store) > current_user.last_usn

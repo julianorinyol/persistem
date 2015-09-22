@@ -1,5 +1,0 @@
- id |          email          |                       password_digest                        |         created_at         |         updated_at         | firstname | lastname |                                             evernote_auth                                             
-----+-------------------------+--------------------------------------------------------------+----------------------------+----------------------------+-----------+----------+-------------------------------------------------------------------------------------------------------
-  1 | julianorinyol@gmail.com | $2a$10$F2BaiT7WGAxoc45CFQ49tOV4vBGdPblwVqVigTs3HnQ5oGokJW7Ra | 2015-08-20 20:36:28.406871 | 2015-08-20 20:54:54.279036 | Julian    | Orinyol  | S=s1:U=91350:E=156a495c079:C=14f4ce49160:P=185:A=julianorinyol:V=2:H=95a4d8fbde2fccd764ed007dcf606168
-(1 row)
-
