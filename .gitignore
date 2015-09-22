@@ -15,3 +15,6 @@
 /log/*
 !/log/.keep
 /tmp
+
+# Ignore evernote API client secrets
+/config/evernote.yml

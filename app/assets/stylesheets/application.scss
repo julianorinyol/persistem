@@ -23,9 +23,15 @@
 
  */
 
+$main-color: hsla(239, 100%, 30%, 0.5); //#000039 blue
+$second-color: #ECEB73; //gold
+$third-color:   #0094C6;  //blue
+$fourth-color: #005E7C; //more blue
+$fifth-color: #C64144; //red
+
 .right-side-container {
     /*background: goldenrod;*/
-    background: hsla(239, 100%, 30%, 0.5);
+    background: $main-color;
     /*background-image: url(/assets/upfeathers.png);*/
     height: 100vh;
     overflow: hidden;
@@ -36,8 +42,6 @@
 body {
   max-height: 100vh;
 }
-
-
 
 #note_content {
    height: 200px;
@@ -64,7 +68,6 @@ div.actions input {
 
 #new-note-button {
 }
-
 
 #notelist-tabs {
   margin-top: 30px;

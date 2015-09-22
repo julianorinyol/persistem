@@ -10,11 +10,11 @@
       <%= @note.content.html_safe %>
     </div>
     <ul id='question-list-tabs'class='nav nav-pills'><!---->
-      <li role='presentation' class="active"><a id='add-question-tab'>Write A Question For This Note</a></li>
+      <li role='presentation' class="question-tab-active"><a id='add-question-tab'>Write A Question For This Note</a></li>
       <li role='presentation'><a id='list-questions-tab'>All Questions for This Note</a></li>
     </ul>
      <div id='question-area'class=''>
-      <div id='question-entry-form'
+      <div id='question-entry-form'>
         <%= render 'question_entry_form' %>
         <p id="notice"><%= notice %></p>
       </div>
@@ -47,33 +47,59 @@ function displayQuestions(questions) {
 $('#add-question-tab, #list-questions-tab').on('click', function(){
   console.log('clicked');
   $('#question-list-tabs li').removeClass();
-  $(this).parent().addClass('active');
+  $(this).parent().addClass('question-tab-active');
 })
-$("tr[data-link].questions-clickable-tr").click(function() {
+$("tr[data-link].question-clickable-tr").click(function() {
   window.location = $(this).data("link")
 })
 $(".question-clickable-tr").on('mouseenter', function() {
-  $(this).css({"background":"goldenrod", 'color':'pink'});
+  $(this).css({'color':'pink'});
 })
-$(".questions-clickable-tr").on('mouseleave', function() {
+$(".question-clickable-tr").on('mouseleave', function() {
   $(this).css({'color':'black'});
 })
+setUpBindings();
 </script>
 
 <style>
+  .question-tab-active {
+    background: goldenrod;
+    border-radius: 5px;
+  }
   li ul li{
     position: relative;
     left: -15px;
   }
   #note-display-area {
-    max-height: 450px;
+    max-height: 60%;
     overflow: scroll;
   }
   #question-area {
     overflow-y: scroll;
-    height: 129px;
+    height: 17.5%;
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    width: 100%;
   }
   #question-display-area {
     display: none;
+  }
+  #question_text {
+    background-color: hsla(100, 100%, 100%, 0);
+    border: none;
+    color:white;
+    font-size: 1.5em;
+    height: 80px;
+  }
+  #question-entry-form div.actions input {
+   position: absolute;
+   bottom:0;
+   right:0;
+  } 
+  #question-list-tabs {
+    margin-top: 5px;
+    position: absolute;
+    bottom: 18%;
   }
 </style>
