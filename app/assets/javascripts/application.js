@@ -295,56 +295,7 @@ function setUpBindings(){
 // </form>
 
 
-$('#generate-quiz-btn').on('click', function() {
-   $('.right-side-container').html(
-    "<h3>Quiz Generate</h3> \
-    <p><a id='generate_quiz_btn' class='btn btn-primary' href='/quiz/generate/new_least_answered'>random questions</a></p> \
-    <p><a id='' class='btn btn-primary' href='/quiz/generate/new_least_answered'>Least Answered Questions</a></p> \
-    <br><br>\
-    <h3>Custom Quiz</h3> \
-    \
-    <form class='new_quiz' id='new_quiz' action='/quiz/generate/custom' accept-charset='UTF-8' method='post'> \
-      <input name='utf8' type='hidden' value='✓'> \
-      <input type='hidden' name='authenticity_token' value='" + $('meta[name="csrf-token"]').attr('content') + "'> \
-      <p>Select date range...</p> \
-    \
-      <input value='today' type='checkbox' name='quiz[time_ago]'><span>Day</span> \
-      <input value='this_week' type='checkbox' name='quiz[time_ago]'><span>Week</span> \
-      <input value='this_month' type='checkbox' name='quiz[time_ago]'><span>Month</span> \
-      <input value='this_year' type='checkbox' name='quiz[time_ago]'><span>Year</span> \
-      <a id='uncheck'>Uncheck All</a>  \
-      <p>Popularity</p> \
-      \
-      <div> \
-        <input type='checkbox' name='quiz[popular]' value='popular'><span>Popular</span> \
-        <input type='checkbox' name='quiz[popular]' checked='true' value='unpopular'><span>Least Answered (default)</span> \
-      </div> \
-       \
-      <p>Select Notebooks...</p> \
-      \
-      \
-      <select id='notebook-select-dropdown' name='quiz[notebooks]'> \
-      </select> \
-      <input id='notebook-string' type='hidden' name='quiz[notebooks]'> \
-      <div class='actions'> \
-        <input type='submit' name='commit' value='Create Quiz' id='create-quiz-button'> \
-      </div> \
-    </form> \
-    \
-    <div id='included-notebooks-list'> \
-      <p>Included Notebooks</p> \
-    </div> \
-    ");
-    // $('#notebook-select-dropdown').html(" \
-    //   <option value='" + "''>1</option> \
-    //     <option>1</option> \
-    //     <option>1</option> \
-    //     <option>1</option> \
-    //     ");
-    displayNotebookOptions();
-    createQuizInputEventBindings();
-    
-})
+
   function displayNotebookOptions() {
      var options = "<option value=''>All Notebooks</option>";
     for(var i = 0; i < notebooks.length; i++) {
