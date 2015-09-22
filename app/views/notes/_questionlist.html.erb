@@ -1,12 +1,9 @@
-<div id='question-display-area'>
 <% if !@questions.empty? %>
   <table class='table'>
-    <thead><tr><td>Questions</td><td></td></tr></thead>
     <tbody>
       <% @questions.each do |question| %>
-        <tr class='clickable-tr' data-link="<%= edit_question_path(question) %>"><td><%= question.text %></td></tr>
+        <tr class='blablabla' data-link="<%= edit_question_path(question) %>"><td><%= question.text %></td></tr>
       <% end %>
     </tbody>
   </table>
 <% end %>
-</div>

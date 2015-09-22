@@ -202,7 +202,6 @@
     @question = Question.new
     @questions = Question.where(note_id: params[:id].to_i )
     @synced = current_user.synced
-
   end
 
   # # GET /notes/new

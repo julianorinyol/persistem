@@ -9,13 +9,56 @@
     <div class='' id='note-display-area'>
       <%= @note.content.html_safe %>
     </div>
-     <div class=''>
-      <%= render 'question_entry_form' %>
-    <p id="notice"><%= notice %></p>
-      <%= render 'questionlist' %>
+    <ul id='question-list-tabs'class='nav nav-pills'><!---->
+      <li role='presentation' class="active"><a id='add-question-tab'>Write A Question For This Note</a></li>
+      <li role='presentation'><a id='list-questions-tab'>All Questions for This Note</a></li>
+    </ul>
+     <div id='question-area'class=''>
+      <div id='question-entry-form'
+        <%= render 'question_entry_form' %>
+        <p id="notice"><%= notice %></p>
+      </div>
+      <div id='question-display-area'>
+        <%= render 'questionlist' %>
+      </div>
     </div>
   </div>
 
+<script>
+var questions = <%= raw @questions.to_json %>;
+
+$('#add-question-tab').on('click', function(){
+  console.log('clicked');
+  displayQuestionForm();
+})
+$('#list-questions-tab').on('click', function(){
+  console.log('clicked');
+  displayQuestions(questions);
+})
+function displayQuestionForm() {
+  $('#question-display-area').css('display', 'none');
+  $('#question-entry-form').css('display', 'block');
+} 
+function displayQuestions(questions) {
+  $('#question-entry-form').css('display', 'none');
+  $('#question-display-area').css('display', 'block');
+}
+
+$('#add-question-tab, #list-questions-tab').on('click', function(){
+  console.log('clicked');
+  $('#question-list-tabs li').removeClass();
+  $(this).parent().addClass('active');
+})
+$("tr[data-link].questions-clickable-tr").click(function() {
+  window.location = $(this).data("link")
+})
+$(".question-clickable-tr").on('mouseenter', function() {
+  $(this).css({"background":"goldenrod", 'color':'pink'});
+})
+$(".questions-clickable-tr").on('mouseleave', function() {
+  $(this).css({'color':'black'});
+})
+</script>
 
 <style>
   li ul li{
@@ -23,7 +66,14 @@
     left: -15px;
   }
   #note-display-area {
-    max-height: 500px;
+    max-height: 450px;
     overflow: scroll;
+  }
+  #question-area {
+    overflow-y: scroll;
+    height: 129px;
+  }
+  #question-display-area {
+    display: none;
   }
 </style>
