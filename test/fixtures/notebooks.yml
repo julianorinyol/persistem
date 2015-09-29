@@ -1,0 +1,15 @@
+
+
+
+one:
+  guid: sdfk3ahj4h3sdkjafh
+  title: 'greeting'
+  user_id: 1
+  update_sequence_number: 43
+
+  # create_table "notebooks", force: :cascade do |t|
+  #   t.string  "guid"
+  #   t.string  "title"
+  #   t.integer "user_id"
+  #   t.integer "update_sequence_number"
+  # end

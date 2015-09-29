@@ -4,7 +4,7 @@ class Quiz < ActiveRecord::Base
 
 
   def get_questions num
-    self.questions << Question.order("RANDOM()").take(num)
+    self.questions << Question.where(user_id: user.id).order("RANDOM()").take(num)
     # Thing.order("RANDOM()").first
   end
 
@@ -17,7 +17,7 @@ class Quiz < ActiveRecord::Base
     # Question.includes(:answers)
     least_used_ids = []
 
-    ids = Question.order("RANDOM()").pluck(:id)
+    ids = Question.where(user_id: self.user.id).order("RANDOM()").pluck(:id)
 
     used_question_ids = Answer.pluck(:question_id)
     
@@ -54,9 +54,9 @@ class Quiz < ActiveRecord::Base
     # first 2 are exclusive queries, and then popular is an order_by
 
     if params[:time_ago]
-      questions = Question.send(params[:time_ago]).includes(:note)
+      questions = Question.where(user_id: user.id).send(params[:time_ago]).includes(:note)
     else  
-      questions = Question.joins(:note)
+      questions = Question.joins(:note).where(user_id: user.id)
     end
     
     # notebooks is an array of strings
@@ -105,7 +105,7 @@ class Quiz < ActiveRecord::Base
   def get_previous_answers
     @answers = []
     self.questions.each_with_index do |question, index|
-      x = Answer.where(quiz_id: self.id, question_id: question.id)
+      x = Answer.where(user_id: user.id, quiz_id: self.id, question_id: question.id)
       if(x.length > 0)
         @answers.push({index: index, text: question.text})
       end
@@ -114,11 +114,11 @@ class Quiz < ActiveRecord::Base
   end
 
 
-  def test_set_times
-    questions = Question.all
-    questions.each do |q|
-      q.update(created_at: (Time.now - rand(1..100).days) )
-    end
-  end
+  # def test_set_times
+  #   questions = Question.all
+  #   questions.each do |q|
+  #     q.update(created_at: (Time.now - rand(1..100).days) )
+  #   end
+  # end
 
 end
