@@ -1,3 +1,4 @@
+
 // This is a manifest file that'll be compiled into application.js, which will include all the files
 // listed below.
 //
@@ -328,31 +329,29 @@ function setUpBindings(){
           $('#included-notebooks-list > p').html('');
       }
 
-
-    var submitValue = "";
-    if($('#notebook-string').val()) {
-      if($('#notebook-string').val().indexOf(value) == -1 ) {
-        submitValue = $('#notebook-string').val(); 
-        submitValue += ", " + value;
+      var submitValue = "";
+      if($('#notebook-string').val()) {
+        if($('#notebook-string').val().indexOf(value) == -1 ) {
+          submitValue = $('#notebook-string').val(); 
+          submitValue += ", " + value;
+          $('#notebook-string').val(submitValue);
+          var notebookName = $("#notebook-select-dropdown option[value='"+ value + "']").text();
+          $('#included-notebooks-list > p').append('<p>' + notebookName + '</p>');
+        }
+      } else {
+        submitValue = value;
         $('#notebook-string').val(submitValue);
         var notebookName = $("#notebook-select-dropdown option[value='"+ value + "']").text();
-        $('#included-notebooks-list > p').append('<p>' + notebookName + '</p>');
-      }
-    } else {
-      submitValue = value;
-      $('#notebook-string').val(submitValue);
-      var notebookName = $("#notebook-select-dropdown option[value='"+ value + "']").text();
-      $('#included-notebooks-list > p').append('<p>' + notebookName + '</p>'); 
-      }
-    })
+        $('#included-notebooks-list > p').append('<p>' + notebookName + '</p>'); 
+        }
+      })
 
-
-    $('#new_quiz input[name="quiz[popular]"], #new_quiz input[name="quiz[time_ago]"] ').on('click', function() {
-      $(this).siblings().attr('checked', false);
-    })
-    $('#uncheck').on('click', function(){
-      $('#new_quiz > input[name="quiz[time_ago]"]').attr('checked', false);
-    })
+      $('#new_quiz input[name="quiz[popular]"], #new_quiz input[name="quiz[time_ago]"] ').on('click', function() {
+        $(this).siblings().attr('checked', false);
+      })
+      $('#uncheck').on('click', function(){
+        $('.date > input[name="quiz[time_ago]"]').attr('checked', false);
+      })
   }
   // $('#generate_quiz_btn').on('click',function(){
   //   console.log('gen quizzzz');
