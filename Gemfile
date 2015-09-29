@@ -53,6 +53,7 @@ group :development, :test do
   gem 'sqlite3'
 
   gem 'pry'
+  gem 'pry-rails'
   gem 'pry-nav'
 
   # Access an IRB console on exception pages or by using <%= console %> in views

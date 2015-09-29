@@ -121,7 +121,6 @@
       token = session[:authtoken]
       client = EvernoteOAuth::Client.new(token: token)
       note_store = client.note_store
-      # @notebooks = note_store.listNotebooks
       note_filter = Evernote::EDAM::NoteStore::NoteFilter.new
       @first_10_notes =  note_store.findNotes(note_filter, 0, 10)
 
