@@ -4,7 +4,7 @@ class Question < ActiveRecord::Base
   belongs_to :user
   # has_many :questions_quiz
   has_and_belongs_to_many :quizzes
-
+  delegate :notebook, :to => :note
   # has_many :quizzes, through: :questions_quiz
 
   scope :today, -> do where("created_at BETWEEN ? AND ?", Time.zone.now.beginning_of_day, Time.zone.now.end_of_day) end

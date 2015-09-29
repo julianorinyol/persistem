@@ -1,7 +1,8 @@
 class Notebook < ActiveRecord::Base
   belongs_to :user
-  has_many :notes, inverse_of: :notebook
-
+  has_many :notes#, inverse_of: :notebook
+  has_many :questions, through: :notes 
+  has_many :answers, through: :questions
 
   def self.updateNotebooks(notebooks, current_user)
     notebooks.each do |notebook|
