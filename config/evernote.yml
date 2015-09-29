@@ -1,14 +1,14 @@
 test:
-  consumer_key: "julianorinyol"
-  consumer_secret: "035478b9892a814e"
+  consumer_key: <%= ENV["CONSUMER_KEY"] %>
+  consumer_secret: <%= ENV["CONSUMER_SECRET"] %>
   sandbox: true
 
 development:
-  consumer_key: "julianorinyol"
-  consumer_secret: "035478b9892a814e"
+  consumer_key:  <%= ENV["CONSUMER_KEY"] %>
+  consumer_secret: <%= ENV["CONSUMER_SECRET"] %>
   sandbox: false
 
 production:
-  consumer_key: "julianorinyol"
-  consumer_secret: "035478b9892a814e"
+  consumer_key: <%= ENV["CONSUMER_KEY"] %>
+  consumer_secret: <%= ENV["CONSUMER_SECRET"] %>
   sandbox: false
