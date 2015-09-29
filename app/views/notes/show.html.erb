@@ -72,10 +72,12 @@ $('#back-btn').on('click', function(){
 function displayQuestionForm() {
   $('#question-display-area').css('display', 'none');
   $('#question-entry-form').css('display', 'block');
+  $('#answers-view').css('display','none');
 } 
 function displayQuestions(questions) {
   $('#question-entry-form').css('display', 'none');
   $('#question-display-area').css('display', 'block');
+  $('#answers-view').css('display','none');
 }
 
 function displayAnswers(question_id) {
