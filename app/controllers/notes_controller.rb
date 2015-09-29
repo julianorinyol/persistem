@@ -132,7 +132,7 @@
       # if the Note doesn't exist in db, create it.   
       if !Note.where(guid: note.guid).exists?
         nbook = Notebook.where(guid: note.notebookGuid).first
-        Note.create(guid: note.guid, title: note.title, user_id: current_user.id, public: false, notebook_guid: note.notebookGuid, notebook_id:nbook.id, update_sequence_number: note.updateSequenceNum )
+        Note.create(guid: note.guid, title: note.title, user_id: current_user.id, public: false, notebook_guid: note.notebookGuid, notebook_id: nbook.id, update_sequence_number: note.updateSequenceNum )
       else
         # if it is already in db,   update the title, if needed.
         this_note = Note.where(guid: note.guid).first

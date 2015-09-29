@@ -5,10 +5,8 @@ class Note < ActiveRecord::Base
   has_many :questions
   belongs_to :notebook
   has_many :answers, through: :questions
-  # validates :user_id, :guid, :title, :public, :notebook_guid, :notebook_id, :update_sequence_number, presence: true
-  # # validate associations...
-  # validates :user, :notebook, presence: true
-  # validates :public, inclusion: { in: [true, false] }
+  validates :guid, :title, :user_id, :notebook_guid, :notebook_id, :update_sequence_number, presence: true
+  validates :public, inclusion: { in: [true, false] }
 
   # scope :popular, -> do where("created_at BETWEEN ? AND ?", Time.zone.now.beginning_of_day, Time.zone.now.end_of_day) end
    # scope :popular, -> do where(self.) end
