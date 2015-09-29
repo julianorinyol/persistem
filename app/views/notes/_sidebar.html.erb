@@ -1,4 +1,4 @@
-<div class='container col-md-5'>
+<div class='col-md-5'>
   <div id'top-row'>
     <a href="/notes"><h2>persistem</h2></a>
     <small>
@@ -8,7 +8,7 @@
       <%= link_to "Log In", new_session_path %> | <%= link_to "Sign Up", new_user_path %>
       <% end %>
     </small>
-        <p id='generate-quiz-btn'>Generate Quiz</p>
+        <button id='generate-quiz-btn' class='btn btn-warning'>Generate Quiz</button>
   </div>  
 
   <ul id='notelist-tabs'class='nav nav-pills'><!---->
@@ -65,42 +65,48 @@ $('#quiz-tab').on('click', function(){
 
 $('#generate-quiz-btn').on('click', function() {
    $('.right-side-container').html(
-    "<h3>Quiz Generate</h3> \
-    <p><a id='generate_quiz_btn' class='btn btn-primary' href='/quiz/generate/new_least_answered'>random questions</a></p> \
-    <p><a id='' class='btn btn-primary' href='/quiz/generate/new_least_answered'>Least Answered Questions</a></p> \
-    <br><br>\
-    <h3>Custom Quiz</h3> \
-    \
-    <form class='new_quiz' id='new_quiz' action='/quiz/generate/custom' accept-charset='UTF-8' method='post'> \
-      <input name='utf8' type='hidden' value='✓'> \
-      <input type='hidden' name='authenticity_token' value='" + $('meta[name="csrf-token"]').attr('content') + "'> \
-      <p>Select date range...</p> \
-    \
-      <input value='today' type='checkbox' name='quiz[time_ago]'><span>Day</span> \
-      <input value='this_week' type='checkbox' name='quiz[time_ago]'><span>Week</span> \
-      <input value='this_month' type='checkbox' name='quiz[time_ago]'><span>Month</span> \
-      <input value='this_year' type='checkbox' name='quiz[time_ago]'><span>Year</span> \
-      <a id='uncheck'>Uncheck All</a>  \
-      <p>Popularity</p> \
-      \
-      <div> \
-        <input type='checkbox' name='quiz[popular]' value='popular'><span>Popular</span> \
-        <input type='checkbox' name='quiz[popular]' checked='true' value='unpopular'><span>Least Answered (default)</span> \
+    "<div id='quiz-form-container' class=''> \
+      <h1>Generate a quiz to test your knowledge.. </h1> \
+      <h3 id='quick-generate-header'>Quick Generate...</h3>  \
+      <div id='quick-gen-buttons'> \
+        <p class='quiz-quick-gen-btn'><a id='generate_quiz_btn' class='btn btn-primary' href='/quiz/generate/new_least_answered'>random questions</a></p> \
+        <p class='quiz-quick-gen-btn'><a id='' class='btn btn-primary' href='/quiz/generate/new_least_answered'>Least Answered Questions</a></p> \
+      <br><br>\
       </div> \
-       \
-      <p>Select Notebooks...</p> \
+      <h3 id='custom-quiz-header'>Custom Quiz</h3> \
       \
+      <form class='new_quiz' id='new_quiz' action='/quiz/generate/custom' accept-charset='UTF-8' method='post'> \
+        <input name='utf8' type='hidden' value='✓'> \
+        <input type='hidden' name='authenticity_token' value='" + $('meta[name="csrf-token"]').attr('content') + "'> \
+        <p id='date-instructions'>Only include questions generated in the last:</p> \
+        \
+        <div id='date-selectors'> \
+          <div class='form-group date'><input value='today' type='checkbox' name='quiz[time_ago]'><span>Day</span> </div> \
+          <div class='form-group date'><input value='this_week' type='checkbox' name='quiz[time_ago]'><span>Week</span></div> \
+          <div class='form-group date'><input value='this_month' type='checkbox' name='quiz[time_ago]'><span>Month</span></div> \
+          <div class='form-group date'><input value='this_year' type='checkbox' name='quiz[time_ago]'><span>Year</span></div> \
+          <a id='uncheck'>Uncheck All</a> \
+        </div> \
+        <p id='popularity-header'>Popularity</p> \
+        <div> \
+          <input type='checkbox' name='quiz[popular]' value='popular'><span>Popular</span> \
+          <input type='checkbox' name='quiz[popular]' checked='true' value='unpopular'><span>Least Answered (default)</span> \
+        </div> \
+         \
+        <p>Select Notebooks...</p> \
+        \
+        \
+        <div id='included-notebooks-list'> \
+          <p>Included Notebooks</p> \
+        </div> \
+        <select id='notebook-select-dropdown' name='quiz[notebooks]'> \
+        </select> \
+        <input id='notebook-string' type='hidden' name='quiz[notebooks]'> \
+        <div class='actions'> \
+          <input type='submit' name='commit' value='Create Quiz' id='create-quiz-button' class='btn btn-primary'> \
+        </div> \
+      </form> \
       \
-      <select id='notebook-select-dropdown' name='quiz[notebooks]'> \
-      </select> \
-      <input id='notebook-string' type='hidden' name='quiz[notebooks]'> \
-      <div class='actions'> \
-        <input type='submit' name='commit' value='Create Quiz' id='create-quiz-button'> \
-      </div> \
-    </form> \
-    \
-    <div id='included-notebooks-list'> \
-      <p>Included Notebooks</p> \
     </div> \
     ");
     // $('#notebook-select-dropdown').html(" \

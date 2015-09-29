@@ -9,18 +9,48 @@
     <div class='' id='note-display-area'>
       <%= @note.content.html_safe %>
     </div>
-    <ul id='question-list-tabs'class='nav nav-pills'><!---->
-      <li role='presentation' class="question-tab-active"><a id='add-question-tab'>Write A Question For This Note</a></li>
-      <li role='presentation'><a id='list-questions-tab'>All Questions for This Note</a></li>
-    </ul>
-     <div id='question-area'class=''>
-      <div id='question-entry-form'>
-        <%= render 'question_entry_form' %>
-        <p id="notice"><%= notice %></p>
-      </div>
-      <div id='question-display-area'>
-        <%= render 'questionlist' %>
-      </div>
+      <div id='bottom-area'>
+        <ul id='question-list-tabs'class='nav nav-pills'><!---->
+          <li role='presentation' class="question-tab-active"><a id='add-question-tab'>Write A Question For This Note</a></li>
+          <li role='presentation'><a id='list-questions-tab'>All Questions for This Note</a></li>
+        </ul>
+        <div id='question-area'class=''>
+          <div id='question-entry-form'>
+            <%= render 'question_entry_form' %>
+            <p id="notice"><%= notice %></p>
+          </div>
+          <div id='question-display-area'>
+            <%= render 'questionlist' %>
+          </div>
+          <div id='answers-view'>
+            <a class="btn" id="back-btn">back</a>
+            <h4 id='question-display'></h4>
+
+            <%= form_for(@answer) do |f| %>
+              <% if @answer.errors.any? %>
+                <div id="error_explanation">
+                  <h2><%= pluralize(@answer.errors.count, "error") %> prohibited this answer from being saved:</h2>
+
+                  <ul>
+                  <% @answer.errors.full_messages.each do |message| %>
+                    <li><%= message %></li>
+                  <% end %>
+                  </ul>
+                </div>
+              <% end %>
+
+              <%= f.text_area :text, :class =>'answer-inputs col-md-7', :placeholder => 'Type answer here...'  %>
+              <%= f.hidden_field :note_id, :value => @note.id %>
+              <%= f.hidden_field :user_id, :value => @current_user.id %>
+              <%= f.hidden_field :question_id, :value => 1 %>
+             <div class="actions">
+                <%= f.submit :id =>'create-answer-button' %>
+              </div>
+
+              <% end %>
+
+          </div>
+        </div>
     </div>
   </div>
 
@@ -28,12 +58,16 @@
 var questions = <%= raw @questions.to_json %>;
 
 $('#add-question-tab').on('click', function(){
-  console.log('clicked');
   displayQuestionForm();
 })
 $('#list-questions-tab').on('click', function(){
-  console.log('clicked');
   displayQuestions(questions);
+})
+$('#back-btn').on('click', function(){
+  displayQuestionForm();
+  $('#question-list-tabs').css('display', 'block');
+  $('#question-list-tabs li').removeClass();
+  $('#question-list-tabs li:nth-child(1)').addClass('question-tab-active');
 })
 function displayQuestionForm() {
   $('#question-display-area').css('display', 'none');
@@ -44,13 +78,32 @@ function displayQuestions(questions) {
   $('#question-display-area').css('display', 'block');
 }
 
+function displayAnswers(question_id) {
+  $('#question-display-area').css('display', 'none');
+  $('#question-entry-form').css('display', 'none');
+  $('#question-list-tabs').css('display', 'none');
+  $('#answers-view').css('display','block');
+  var question = getQuestionForId(question_id);
+  $('#question-display').text(question.text)
+}
+function getQuestionForId(id){
+  for(var i = 0; i < questions.length; i++) {
+    if(id == questions[i].id) {
+      return questions[i];
+    }
+  }
+  return false;
+}
+
 $('#add-question-tab, #list-questions-tab').on('click', function(){
-  console.log('clicked');
   $('#question-list-tabs li').removeClass();
   $(this).parent().addClass('question-tab-active');
 })
-$("tr[data-link].question-clickable-tr").click(function() {
-  window.location = $(this).data("link")
+$(".question-clickable-tr").click(function() {
+  console.log('a question was clicked');
+  var text = $(this.children[0]).text();
+  $('#answer_question_id')[0].value = $(this).data().id;
+  displayAnswers($(this).data().id);
 })
 $(".question-clickable-tr").on('mouseenter', function() {
   $(this).css({'color':'pink'});
@@ -82,7 +135,7 @@ setUpBindings();
     right: 0px;
     width: 100%;
   }
-  #question-display-area {
+  #question-display-area, #answers-view {
     display: none;
   }
   #question_text {

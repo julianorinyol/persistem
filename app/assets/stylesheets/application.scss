@@ -140,3 +140,83 @@ div.actions input {
 ::-webkit-scrollbar-thumb:window-inactive {
   background: hsla(39, 0%, 50%, .2); 
 }
+
+/*Generate quiz page *******************/
+#generate-quiz-btn {
+  margin-left: 200px;
+  // background: $second-color;
+}
+#quiz-form-container {
+  margin: auto;
+  width: 80%;
+}
+.quiz-quick-gen-btn {
+  float: left;
+  margin: 10px;
+}
+#quiz-form-container {
+  color: white;
+  padding-top: 50px;
+  font-size: 1.2em;
+  h3 {
+    clear: both;
+    width: 50%;
+    margin: auto;
+  }
+  a {
+    color: white;
+  }
+  #custom-quiz-header {
+    margin-top: 55px;
+    margin-bottom: 15px;
+  }
+  #quick-generate-header {
+    margin: 30px auto 10px;
+  }
+  form {
+    width: 70%;
+    margin: auto;
+  }
+  p {
+    font-size: 1.2em;
+  }
+  #date-instructions {
+    width: 43%;
+    float: left;
+    margin: 20px;
+  }
+  #date-selectors {
+    float: right;
+    width: 40%;
+  }
+  #popularity-header {
+    clear:both;
+  }
+  .form-group {
+    margin-bottom: 10px;
+  }
+  #quick-gen-buttons {
+    margin: auto;
+    width: 60%;
+  }
+  #notebook-select-dropdown {
+    color:black;
+    float: left;
+    width: 60%;
+    margin: 1%;
+  }
+  #create-quiz-button {
+    color:black;
+    float: none;
+    clear:both;
+    margin: 30px auto;
+  }
+  #included-notebooks-list {
+    font-size: 9px;
+    width: 30%;
+    // overflow:
+    float: left;
+    background-color: hsla(1,100%,100%, 0.2);
+    padding: 8px;
+  }
+}

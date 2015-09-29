@@ -28,9 +28,9 @@
     <% flash.each do |key, value| %>
             <%= content_tag(:div, value) %>
       <% end %>
+      <div class="container-fluid">
           <%= yield %>
 
-      <div class="container">
         <%= render 'layouts/footer' %>
       </div>
   </body>

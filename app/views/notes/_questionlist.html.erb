@@ -2,7 +2,7 @@
   <table class='table'>
     <tbody>
       <% @questions.each do |question| %>
-        <tr class='question-clickable-tr' data-link="<%= edit_question_path(question) %>"><td><%= question.text %></td></tr>
+        <tr class='question-clickable-tr' data-id=<%= question.id %>><td><%= question.text %></td></tr>
       <% end %>
     </tbody>
   </table>
