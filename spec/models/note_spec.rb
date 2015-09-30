@@ -178,8 +178,6 @@ describe Note do
       public: false
     )
     expect(note2.is_already_in_db?).to be false
-
-
   end
 
 #   def get_content note_store, note
@@ -194,22 +192,26 @@ describe Note do
 #4)test that the notes content is now updated..
 
 #   def self.parseENML xml_content
-  it 'should parse the ENML' do 
+  it 'parses ENML' do 
     xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<!DOCTYPE en-note SYSTEM \"http://xml.evernote.com/pub/enml2.dtd\">\r\n\r\n<en-note style=\"word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-line-break: after-white-space;\"><div><br/></div><div><a href=\"http://en.wikipedia.org/wiki/Doomsday_rule#Finding_a_year.27s_Doomsday\">http://en.wikipedia.org/wiki/Doomsday_rule#Finding_a_year.27s_Doomsday</a></div><div><br/></div></en-note>"
 
     parsed = "<div>\n  <br/>\n</div><div>\n  <a href=\"http://en.wikipedia.org/wiki/Doomsday_rule#Finding_a_year.27s_Doomsday\">http://en.wikipedia.org/wiki/Doomsday_rule#Finding_a_year.27s_Doomsday</a>\n</div><div>\n  <br/>\n</div>"
     expect(Note::parseENML(xml)).to eq parsed
   end
 
-#   def self.updateNotes(notes, current_user, note_store)
-  it 'should update the users last usn'
+  # def self.popular
+  # The function should return all the users notes, sorted by how many questions they have. 
+  it 'sorts the users notes by how many questions each has' do
+    # create_notes(10)
+    # create_questions(100)
 
-#   def self.updateNotes(notes, current_user, note_store)
-  it 'should create a note if one with that guid doesn\'t exist yet '
-
-#   def self.updateNotes(notes, current_user, note_store)
-  it 'should update a notes title if it already exists'
-
+    expect(Note::popular(@user.id)[0].questions.size).to be > Note::popular(@user.id)[1].questions.size
+  end
+  # def create_notes amount 
+  #   amount.times do 
+      
+  #   end
+  # end
 end
 
 

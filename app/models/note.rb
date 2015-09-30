@@ -27,6 +27,7 @@ class Note < ActiveRecord::Base
     xml_doc.css("en-note").children.to_s
   end
 
+  #A Notes popularity is determined by how many questions there are in the database for it. The function should return all the users notes, sorted by how many questions they have. 
   def self.popular current_user
     notes = Note.where(user_id: current_user.id).includes(:questions)
 
