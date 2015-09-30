@@ -175,7 +175,6 @@
     client = EvernoteOAuth::Client.new(token: token)
     
     note_store = client.note_store
-
     if !@note.content
       @note.get_content(note_store, @note)
     end
