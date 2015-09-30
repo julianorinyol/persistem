@@ -32,13 +32,13 @@ class Note < ActiveRecord::Base
 
     counts = Hash.new 0
 
-    notes.each do |n|
-      counts[n.id] = { note: n, amount: n.questions.size }
+    notes.each do |note|
+      counts[note.id] = { note: note, amount: note.questions.size }
     end
-    mapped = counts.values.sort_by do |obj| obj['amount'] end
-    arr = []
-    mapped.each do |custom_obj| arr << custom_obj[:note] end
-    return arr
+    counts_sorted_by_amount = counts.values.sort_by do |count| count['amount'] end
+    most_popular_notes = []
+    counts_sorted_by_amount.each do |custom_obj| most_popular_notes << custom_obj[:note] end
+    return most_popular_notes
   end
   
 end
