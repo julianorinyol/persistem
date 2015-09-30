@@ -168,24 +168,6 @@
     end
   end
 
-  # def getAllNotesForAllNotebooks
-    # token = session[:authtoken]
-    # client = EvernoteOAuth::Client.new(token: token)
-    # note_store = client.note_store
-    # @notebooks = note_store.listNotebooks
-
-  #   @arr_of_arrs_of_notes = []
-
-  #   @notebooks.each do |notebook|
-
-  #     note_filter = Evernote::EDAM::NoteStore::NoteFilter.new
-  #     note_filter.notebookGuid = notebook.guid
-  #     @arr_of_arrs_of_notes << note_store.findNotes(note_filter, 0, 10)
-  #   end
-
-  # end
-
-
   # GET /notes/1
   # GET /notes/1.json
   def show
@@ -199,7 +181,7 @@
     end
 
     @question = Question.new
-    @questions = Question.where(note_id: params[:id].to_i )
+    @questions = Question.where(note_id: params[:id].to_i, user_id: current_user.id )
     @synced = current_user.synced
     @answer = Answer.new
   end
@@ -225,7 +207,7 @@
     @synced = current_user.synced
 
     @question = Question.new
-    @questions = Question.where(note_id: params[:id].to_i )
+    @questions = Question.where(note_id: params[:id].to_i, user_id: current_user.id  )
   end
 
   # # POST /notes
