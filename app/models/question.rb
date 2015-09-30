@@ -13,7 +13,7 @@ class Question < ActiveRecord::Base
   scope :this_year,  -> do where("created_at BETWEEN ? AND ?", (Time.zone.now - 1.year).beginning_of_day, Time.zone.now.end_of_day) end
 
   def self.popular 
-    questions = Question.includes(:answers)
+    questions = Question.where(user_id: current_user.id).includes(:answers)
 
     counts = Hash.new 0
 

@@ -199,14 +199,7 @@ describe Note do
 
     parsed = "<div>\n  <br/>\n</div><div>\n  <a href=\"http://en.wikipedia.org/wiki/Doomsday_rule#Finding_a_year.27s_Doomsday\">http://en.wikipedia.org/wiki/Doomsday_rule#Finding_a_year.27s_Doomsday</a>\n</div><div>\n  <br/>\n</div>"
     expect(Note::parseENML(xml)).to eq parsed
-
   end
-
-#   def self.popular 
-  it 'should return all the users\'s notes, sorted by how many questions they have'
-
-#   def self.popular 
-  it 'should only include the users notes'
 
 #   def self.updateNotes(notes, current_user, note_store)
   it 'should update the users last usn'

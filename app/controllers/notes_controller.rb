@@ -53,7 +53,7 @@
 
   def handleUpdate updated, note_store 
     if updated.notes && updated.notes.size > 0
-      Note.updateNotes(updated.notes, current_user, note_store)
+      current_user.update_notes(updated.notes, note_store)
     end
 
     if updated.notebooks && updated.notebooks.size > 0
