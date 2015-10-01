@@ -31,7 +31,7 @@ class Note < ActiveRecord::Base
   def self.popular current_user
     notes = Note.where(user_id: current_user.id).includes(:questions)
 
-    counts = Hash.new 0
+    counts = {}
     notes.each do |note|
       counts[note.id] = { note: note, amount: note.questions.size }
     end

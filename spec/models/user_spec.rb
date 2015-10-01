@@ -61,7 +61,6 @@ describe User do
     end
   end
   # *********************************Methods************************************************************** #
-end
 
 
    # def update_notes(notes,note_store)
@@ -71,6 +70,7 @@ end
 
    it "sets the users update_sequence_number to the most recent usn"
    
+end
   # has_many :notes#, inverse_of: :user
   # has_many :quizzes
   # has_many :notebooks

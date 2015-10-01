@@ -17,7 +17,7 @@ FactoryGirl.define do
   end
 
   factory :notebook do
-    user_id { User.offset(rand(User.count)).first }
+    user { User.offset(rand(User.count)).first || create(:user) }
     guid {"asdf#{rand(100)}" }
     title {"notebook title: #{rand(100)}" }
     update_sequence_number {rand(100)}
@@ -36,7 +36,7 @@ FactoryGirl.define do
   factory :note do
     title { "notetitle: " + rand(1000).to_s }
     guid { "afsd" + rand(100000).to_s }
-    user { User.offset(rand(User.count)).first }
+    user { User.offset(rand(User.count)).first || create(:user) }
     notebook { user.notebooks.empty? ? create(:notebook, user: user) : user.notebooks.sample }
     # User.joins(:notebooks).take(1)   --> gets a random user with a notebook
     notebook_guid { notebook.guid }
@@ -45,13 +45,13 @@ FactoryGirl.define do
   end
 
   factory :question do 
-    user  { User.offset(rand(User.count)).first }
+    user  { User.offset(rand(User.count)).first || create(:user) }
     note { user.notes.empty? ? create(:note, user: user) : user.notes.sample }
     text { 'question text' + rand(100).to_s }
   end
 
   factory :answer do 
-    user  { User.offset(rand(User.count)).first }
+    user  { User.offset(rand(User.count)).first || create(:user) }
     note_id { user.notes.empty? ? create(:note, user: user) : user.notes.sample.id }
     question { note.questions.empty? ? create(:question, note: note) : note.questions.sample }
     text { 'answer text' + rand(100).to_s }
