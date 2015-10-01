@@ -7,6 +7,15 @@ describe Question do
   end
 
   #*********************************Validations**********************************************************# 
+  # create_table "questions", force: :cascade do |t|
+  #   t.integer  "note_id"
+  #   t.string   "text"
+  #   t.integer  "subject_id"
+  #   t.integer  "user_id"
+  #   t.integer  "answer_id"
+  #   t.datetime "created_at", null: false
+  #   t.datetime "updated_at", null: false
+  # end
 
   # it "is valid with an email, password_digest, firstname, lastname, evernote_auth" do
   #   @user 
@@ -29,6 +38,24 @@ describe Question do
 
   #*********************************Associations**********************************************************# 
 
+  # belongs_to :note
+  # has_many :answers
+  # belongs_to :user
+  # # has_many :questions_quiz
+  # has_and_belongs_to_many :quizzes
+  # delegate :notebook, :to => :note
+  # # has_many :quizzes, through: :questions_quiz
+
+  # *********************************Scopes************************************************************** #
+  # scope :today
+  # scope :this_week
+  # scope :this_month
+  # scope :this_year
+
   # *********************************Methods************************************************************** #
+  # def self.popular 
+  
+  # def self.sort_by_popularity questions
+
 
 end

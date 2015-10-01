@@ -59,17 +59,21 @@ end
     create(:answer, question: question)
     expect(@notebook.answers.first).to be_an Answer
   end
-  
+
 
 
 
   # *********************************Methods************************************************************** #
+  it "creates new notebooks if they don't exist yet" do
+    
+  end
+
+  it "updates notebooks that have been changed"
+
+  it "sets the users update_sequence_number to the most recent usn"
+
+
+  # def self.get_count_of_notes_by_notebook note_store
+  it "it returns the amount of notes in each notebook**in what format????"
 end
-
-
-# create_table "notebooks", force: :cascade do |t|
-#     t.string  "guid"
-#     t.string  "title"
-#     t.integer "user_id"
-#     t.integer "update_sequence_number"
-#   end
+# def self.updateNotebooks(notebooks, current_user)

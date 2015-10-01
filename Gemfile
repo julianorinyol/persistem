@@ -64,6 +64,7 @@ group :development, :test do
   gem "factory_girl_rails", "~> 4.0"
   gem 'rspec-rails'
   # gem 'guard-rspec', require: false
+  gem 'faker'
 end
 
 group :test do

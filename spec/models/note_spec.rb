@@ -2,20 +2,6 @@ require 'rails_helper'
 
 describe Note do
   before(:each) do
-    # @user = User.create(
-    #   email: 'Donkey@Anderson.com', 
-    #   password: 'catcatcat', 
-    #   password_confirmation: 'catcatcat',
-    #   firstname: 'Donkey', 
-    #   lastname: 'Anderson', 
-    #   evernote_auth: 'asdfj4fj52'
-    # )
-    # @notebook = Notebook.create(
-    #   guid: '1234dsfa4',
-    #   title: 'myNotebook',
-    #   user_id: @user.id,
-    #   update_sequence_number: 123
-    # )
     @user = create(:user)
     @notebook = create(:notebook, user_id: @user.id)
     @note = build(:note, user_id: @user.id, notebook_id: @notebook.id, notebook_guid: @notebook.guid)
@@ -24,20 +10,6 @@ describe Note do
     create(:note, user: @user, notebook: @notebook)
   end
 
-   # create_table "users", force: :cascade do |t|
-   #    t.string   "email"
-   #    t.string   "password_digest"
-   #    t.datetime "created_at",                      null: false
-   #    t.datetime "updated_at",                      null: false
-   #    t.string   "firstname"
-   #    t.string   "lastname"
-   #    t.string   "evernote_auth"
-   #    t.integer  "last_usn"
-   #    t.boolean  "synced",          default: false
-   #  end
-
-
-  it "has a valid factory"
   it "is valid with a guid, title, user_id, notebook_guid, notbooke_id, update_sequence_number, and public" do
     expect(@note).to be_valid
   end
@@ -77,22 +49,8 @@ describe Note do
     @note.valid?
     expect(@note.errors[:update_sequence_number]).to include("can't be blank")
   end
-
-  # it "is invalid without public" do
-  #   note = Note.new(
-  #     title: 'bla',
-  #     guid: 'asdfj324', 
-  #     user_id: @user.id, 
-  #     notebook_guid: @notebook.guid, 
-  #     notebook_id: @notebook.id, 
-  #     update_sequence_number: 14, 
-  #     public: nil
-  #   )
-  #   note.valid?
-  #   expect(note.errors[:public]).to include("can't be blank")
-  # end
-
-
+  
+ it "do i need to test public???"
   #*********************************Associations**********************************************************# 
 
   it "has a user that can be accessed" do
@@ -132,15 +90,31 @@ describe Note do
   end
 
 #   def get_content note_store, note
-  it 'should get content and save it in db '
-  # How do we test this?  
-  # what the function does...  sends a request to the evernote api, parses it and saves it in the db
-  #we could test that it is parsing and saving in the db?  by creating a fake response object...
-  #how can we fake the return of an api??
-  # 1)create note with no content
-# 2)create note_store
-#3) call the function, somehow faking the response (even though it's halfway through the function...)
-#4)test that the notes content is now updated..
+  it 'gets content and save it in db ' do
+    xml_sample = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<!DOCTYPE en-note SYSTEM \"http://xml.evernote.com/pub/enml2.dtd\">\r\n\r\n<en-note style=\"word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-line-break: after-white-space;\"><div><br/></div><div><a href=\"http://en.wikipedia.org/wiki/Doomsday_rule#Finding_a_year.27s_Doomsday\">http://en.wikipedia.org/wiki/Doomsday_rule#Finding_a_year.27s_Doomsday</a></div><div><br/></div></en-note>"
+   parsed_xml_sample = "<div>\n  <br/>\n</div><div>\n  <a href=\"http://en.wikipedia.org/wiki/Doomsday_rule#Finding_a_year.27s_Doomsday\">http://en.wikipedia.org/wiki/Doomsday_rule#Finding_a_year.27s_Doomsday</a>\n</div><div>\n  <br/>\n</div>"
+
+    @note.content = '<header>OverWriteME</header><main>this content should be overwritten!</main>'
+    @note.save
+    note_store = double('Note Store', getNoteContent: xml_sample)
+
+    @note.get_content note_store, @note
+    expect(@note.content).to eq parsed_xml_sample
+    
+  end
+
+#   def get_content note_store, note
+  it "contacts the evernote api for real and gets note content and saves to db" do
+  # Write a test that accesses the sandbox!  Or should this type of test go in controller tests??
+    user = create(:user, email: "persistemsample@gmail.com", evernote_auth: ENV["TEST_AUTH_TOKEN"])
+    notebook = create(:notebook, guid: "93658a6c-ef7b-4511-8890-b767ea5b9ca9")
+    note = create(:note, user: user, content: "<div>this should get updated by the function!</div>", guid: "77526061-74e7-4cfb-b5f4-8c751edc75d2", notebook: notebook, notebook_guid: "93658a6c-ef7b-4511-8890-b767ea5b9ca9")
+    token = user.evernote_auth
+    client = EvernoteOAuth::Client.new(token: token)
+    note_store = client.note_store
+    note.get_content(note_store, note)
+    expect(note.content).to eq "<div>note content   lalalalla</div><div>laasdf</div>"
+  end
 
 #   def self.parseENML xml_content
   it 'parses ENML' do 
@@ -153,33 +127,16 @@ describe Note do
   # def self.popular
   # The function should return all the users notes, sorted by how many questions they have. 
   it 'sorts the users notes by how many questions each has' do
-    # create_notes(10)
-    # # create_questions(100)
     5.times do 
       create(:note, user: @user)
     end
     100.times do 
-      # random_note = @user.notes.sample
       create(:question, user: @user)
     end
     sorted_notes = Note::popular(@user)
     expect(sorted_notes[0].questions.size).to be >= sorted_notes[1].questions.size
   end
-  # def create_notes amount 
-  #   amount.times do 
 
-  #   end
-  # end
 end
-
-
-    # note = Note.new(title: 'bla', guid: 'asdf23', user_id: @user.id, notebook_guid: @notebook.guid, notebook_id: @notebook.id, update_sequence_number: 14, public: false)
-
-
-# def is_already_in_db?
-# def get_content note_store, note
-# def self.parseENML xml_content
-# def self.popular 
-
 
   

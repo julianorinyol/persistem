@@ -1,9 +1,9 @@
 # This will guess the User class
 FactoryGirl.define do
   factory :user do
-    firstname "Donkey" 
-    lastname "Anderson" 
-    email { "#{firstname}.#{lastname}#{rand(1000)}@example.com".downcase }
+    firstname { Faker::Name.first_name } 
+    lastname { Faker::Name.last_name }
+    email { Faker::Internet.free_email("#{firstname} #{lastname}" ) }
     password "catcatcat" 
     password_confirmation "catcatcat"
     evernote_auth {"asdf#{rand(100)}" }
@@ -19,7 +19,7 @@ FactoryGirl.define do
   factory :notebook do
     user { User.offset(rand(User.count)).first || create(:user) }
     guid {"asdf#{rand(100)}" }
-    title {"notebook title: #{rand(100)}" }
+    title { Faker::Lorem.words(rand(3)+1).join(' ') }
     update_sequence_number {rand(100)}
   end
 
