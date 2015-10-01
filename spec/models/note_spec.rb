@@ -95,9 +95,29 @@ describe Note do
 
   #*********************************Associations**********************************************************# 
 
+  it "has a user that can be accessed" do
+    @note.save
+    expect(@note.user).to be_a User
+  end
 
-  it "is invalid without a user" 
-  it "is invalid without a notebook"
+  it "has a notebook that can be accessed" do
+    @note.save
+    expect(@note.notebook).to be_a Notebook
+  end
+
+  it "has questions that can be accessed" do
+    @note.save
+    create(:question, note: @note)
+    expect(@note.questions.first).to be_a Question
+  end
+
+  it "has answers that can be accessed" do
+    @note.save
+    question = create(:question, note: @note)
+    create(:answer, question: question)
+    expect(@note.answers.first).to be_an Answer
+  end
+
 
 
   # *********************************Methods************************************************************** #
@@ -162,8 +182,4 @@ end
 # def self.popular 
 
 
-  # belongs_to :user
-  # has_many :subjects
-  # has_many :questions
-  # belongs_to :notebook
-  # has_many :answers, through: :questions
+  

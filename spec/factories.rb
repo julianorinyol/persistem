@@ -17,7 +17,7 @@ FactoryGirl.define do
   end
 
   factory :notebook do
-    user_id { User.first.id }
+    user_id { User.offset(rand(User.count)).first }
     guid {"asdf#{rand(100)}" }
     title {"notebook title: #{rand(100)}" }
     update_sequence_number {rand(100)}
@@ -37,7 +37,7 @@ FactoryGirl.define do
     title { "notetitle: " + rand(1000).to_s }
     guid { "afsd" + rand(100000).to_s }
     user { User.offset(rand(User.count)).first }
-    notebook { user.notebooks.sample }
+    notebook { user.notebooks.empty? ? create(:notebook, user: user) : user.notebooks.sample }
     # User.joins(:notebooks).take(1)   --> gets a random user with a notebook
     notebook_guid { notebook.guid }
     update_sequence_number { rand(1000) }
@@ -46,9 +46,27 @@ FactoryGirl.define do
 
   factory :question do 
     user  { User.offset(rand(User.count)).first }
-    note_id { user.notes.sample.id }
-    text { 'text' + rand(100).to_s }
+    note { user.notes.sample }
+    text { 'question text' + rand(100).to_s }
   end
+
+  factory :answer do 
+    user  { User.offset(rand(User.count)).first }
+    note_id { user.notes.sample.id }
+    question { note.questions.sample }
+    text { 'answer text' + rand(100).to_s }
+  end
+  # create_table "answers", force: :cascade do |t|
+  #   t.integer  "note_id"
+  #   t.integer  "subject_id"
+  #   t.integer  "user_id"
+  #   t.integer  "question_id"
+  #   t.string   "text"
+  #   t.datetime "created_at",  null: false
+  #   t.datetime "updated_at",  null: false
+  #   t.integer  "quiz_id"
+  # end
+
 
   # factory :question_with_note_notebook_and_user, class: Question do
   #   note  :note_with_user_and_notebook
