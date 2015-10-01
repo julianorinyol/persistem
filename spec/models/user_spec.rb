@@ -63,6 +63,14 @@ describe User do
   # *********************************Methods************************************************************** #
 end
 
+
+   # def update_notes(notes,note_store)
+   it "creates new notes if they don't exist yet"
+
+   it "updates notes that have been changed"
+
+   it "sets the users update_sequence_number to the most recent usn"
+   
   # has_many :notes#, inverse_of: :user
   # has_many :quizzes
   # has_many :notebooks

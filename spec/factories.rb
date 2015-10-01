@@ -46,14 +46,14 @@ FactoryGirl.define do
 
   factory :question do 
     user  { User.offset(rand(User.count)).first }
-    note { user.notes.sample }
+    note { user.notes.empty? ? create(:note, user: user) : user.notes.sample }
     text { 'question text' + rand(100).to_s }
   end
 
   factory :answer do 
     user  { User.offset(rand(User.count)).first }
-    note_id { user.notes.sample.id }
-    question { note.questions.sample }
+    note_id { user.notes.empty? ? create(:note, user: user) : user.notes.sample.id }
+    question { note.questions.empty? ? create(:question, note: note) : note.questions.sample }
     text { 'answer text' + rand(100).to_s }
   end
   # create_table "answers", force: :cascade do |t|
