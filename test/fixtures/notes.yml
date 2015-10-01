@@ -4,17 +4,17 @@
 # model remove the '{}' from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-one:
-  content: 'hello everyone'
-  user_id: 1
-  public: false
-  subject_id: 
-  title: 'greeting'
-  guid: sdfkahj4h3sdkjafh
-  notebook_guid: 
-  notebook_id: 1
-  update_sequence_number: 42
-two: {}
+# one:
+#   content: 'hello everyone'
+#   user_id: 1
+#   public: false
+#   subject_id: 
+#   title: 'greeting'
+#   guid: sdfkahj4h3sdkjafh
+#   notebook_guid: 
+#   notebook_id: 1
+#   update_sequence_number: 42
+# two: {}
 #  column: value
 
 

@@ -1,11 +1,11 @@
 
 
 
-one:
-  guid: sdfk3ahj4h3sdkjafh
-  title: 'greeting'
-  user_id: 1
-  update_sequence_number: 43
+# one:
+#   guid: sdfk3ahj4h3sdkjafh
+#   title: 'greeting'
+#   user_id: 1
+#   update_sequence_number: 43
 
   # create_table "notebooks", force: :cascade do |t|
   #   t.string  "guid"

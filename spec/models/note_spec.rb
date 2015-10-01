@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 describe Note do
-
   before(:each) do
     @user = User.create(
       email: 'Donkey@Anderson.com', 
@@ -209,7 +208,7 @@ describe Note do
   end
   # def create_notes amount 
   #   amount.times do 
-      
+
   #   end
   # end
 end
