@@ -36,25 +36,37 @@ FactoryGirl.define do
   factory :note do
     title { "notetitle: " + rand(1000).to_s }
     guid { "afsd" + rand(100000).to_s }
-    user_id { User.first.id }
-    notebook_id { 
-      @this_notebook = User.first.notebooks.first.id
-    }
+    user { User.offset(rand(User.count)).first }
+    notebook { user.notebooks.sample }
     # User.joins(:notebooks).take(1)   --> gets a random user with a notebook
-    notebook_guid { User.first.notebooks.first.guid }
+    notebook_guid { notebook.guid }
     update_sequence_number { rand(1000) }
     public false    
   end
 
-   # Note.new(
-   #    title: 'bla',
-   #    guid: 'asdf23', 
-   #    user_id: @user.id, 
-   #    notebook_guid: @notebook.guid, 
-   #    notebook_id: @notebook.id, 
-   #    update_sequence_number: 14, 
-   #    public: false
-   #  )
+  factory :question do 
+    user  { User.offset(rand(User.count)).first }
+    note_id { user.notes.sample.id }
+    text { 'text' + rand(100).to_s }
+  end
+
+  # factory :question_with_note_notebook_and_user, class: Question do
+  #   note  :note_with_user_and_notebook
+  #   user  { note.user }
+  #   text { 'text' + rand(100).to_s }
+  # end
+
+
+  # create_table "questions", force: :cascade do |t|
+  #   t.integer  "note_id"
+  #   t.string   "text"
+  #   t.integer  "subject_id"
+  #   t.integer  "user_id"
+  #   t.integer  "answer_id"
+  #   t.datetime "created_at", null: false
+  #   t.datetime "updated_at", null: false
+  # end
+
 
   # This will use the User class (Admin would have been guessed)
   # factory :admin, class: User do

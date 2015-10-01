@@ -2,20 +2,26 @@ require 'rails_helper'
 
 describe Note do
   before(:each) do
-    @user = User.create(
-      email: 'Donkey@Anderson.com', 
-      password: 'catcatcat', 
-      password_confirmation: 'catcatcat',
-      firstname: 'Donkey', 
-      lastname: 'Anderson', 
-      evernote_auth: 'asdfj4fj52'
-    )
-    @notebook = Notebook.create(
-      guid: '1234dsfa4',
-      title: 'myNotebook',
-      user_id: @user.id,
-      update_sequence_number: 123
-    )
+    # @user = User.create(
+    #   email: 'Donkey@Anderson.com', 
+    #   password: 'catcatcat', 
+    #   password_confirmation: 'catcatcat',
+    #   firstname: 'Donkey', 
+    #   lastname: 'Anderson', 
+    #   evernote_auth: 'asdfj4fj52'
+    # )
+    # @notebook = Notebook.create(
+    #   guid: '1234dsfa4',
+    #   title: 'myNotebook',
+    #   user_id: @user.id,
+    #   update_sequence_number: 123
+    # )
+    @user = create(:user)
+    @notebook = create(:notebook, user_id: @user.id)
+    @note = build(:note, user_id: @user.id, notebook_id: @notebook.id, notebook_guid: @notebook.guid)
+
+    # doing this only because question's factory doesn't work...
+    create(:note, user: @user, notebook: @notebook)
   end
 
    # create_table "users", force: :cascade do |t|
@@ -33,100 +39,43 @@ describe Note do
 
   it "has a valid factory"
   it "is valid with a guid, title, user_id, notebook_guid, notbooke_id, update_sequence_number, and public" do
-    note = Note.new(
-      title: 'bla',
-      guid: 'asdf23', 
-      user_id: @user.id, 
-      notebook_guid: @notebook.guid, 
-      notebook_id: @notebook.id, 
-      update_sequence_number: 14, 
-      public: false
-    )
-    expect(note).to be_valid
+    expect(@note).to be_valid
   end
 
   it "is invalid without guid" do
-    note = Note.new(
-      title: 'bla',
-      guid: nil, 
-      user_id: @user.id, 
-      notebook_guid: @notebook.guid, 
-      notebook_id: @notebook.id, 
-      update_sequence_number: 14, 
-      public: false
-    )
-    note.valid?
-    expect(note.errors[:guid]).to include("can't be blank")
+    @note.guid = nil
+    @note.valid?
+    expect(@note.errors[:guid]).to include("can't be blank")
   end
 
   it "is invalid without title" do
-    note = Note.new(
-      title: nil,
-      guid: 'asdfj324', 
-      user_id: @user.id, 
-      notebook_guid: @notebook.guid, 
-      notebook_id: @notebook.id, 
-      update_sequence_number: 14, 
-      public: false
-    )
-    note.valid?
-    expect(note.errors[:title]).to include("can't be blank")
+    @note.title = nil
+    @note.valid?
+    expect(@note.errors[:title]).to include("can't be blank")
   end
 
   it "is invalid without user_id" do
-    note = Note.new(
-      title: 'bla',
-      guid: 'asdfj324', 
-      user_id: nil, 
-      notebook_guid: @notebook.guid, 
-      notebook_id: @notebook.id, 
-      update_sequence_number: 14, 
-      public: false
-    )
-    note.valid?
-    expect(note.errors[:user_id]).to include("can't be blank")
+    @note.user_id = nil
+    @note.valid?
+    expect(@note.errors[:user_id]).to include("can't be blank")
   end
 
   it "is invalid without :notebook_guid" do
-    note = Note.new(
-      title: 'bla',
-      guid: 'asdfj324', 
-      user_id: @user.id, 
-      notebook_guid: nil, 
-      notebook_id: @notebook.id, 
-      update_sequence_number: 14, 
-      public: false
-    )
-    note.valid?
-    expect(note.errors[:notebook_guid]).to include("can't be blank")
+    @note.notebook_guid = nil
+    @note.valid?
+    expect(@note.errors[:notebook_guid]).to include("can't be blank")
   end
 
   it "is invalid without notebook_id" do
-    note = Note.new(
-      title: 'bla',
-      guid: 'asdfj324', 
-      user_id: @user.id, 
-      notebook_guid: @notebook.guid, 
-      notebook_id: nil, 
-      update_sequence_number: 14, 
-      public: false
-    )
-    note.valid?
-    expect(note.errors[:notebook_id]).to include("can't be blank")
+    @note.notebook_id = nil
+    @note.valid?
+    expect(@note.errors[:notebook_id]).to include("can't be blank")
   end
 
   it "is invalid without update_sequence_number" do
-    note = Note.new(
-      title: 'bla',
-      guid: 'asdfj324', 
-      user_id: @user.id, 
-      notebook_guid: @notebook.guid, 
-      notebook_id: @notebook.id, 
-      update_sequence_number: nil, 
-      public: false
-    )
-    note.valid?
-    expect(note.errors[:update_sequence_number]).to include("can't be blank")
+    @note.update_sequence_number = nil
+    @note.valid?
+    expect(@note.errors[:update_sequence_number]).to include("can't be blank")
   end
 
   # it "is invalid without public" do
@@ -155,27 +104,10 @@ describe Note do
 
 # is_already_in_db?
   it 'should return true if a record is in the db' do
-    User.create()
-    note = Note.create(
-      title: 'bla',
-      guid: 'asdf23', 
-      user_id: @user.id, 
-      notebook_guid: @notebook.guid, 
-      notebook_id: @notebook.id, 
-      update_sequence_number: 14, 
-      public: false
-    )
+    note = create(:note)
     expect(note.is_already_in_db?).to be true
     
-    note2 = Note.new(
-      title: 'blaasdfa',
-      guid: 'asdf23fd', 
-      user_id: @user.id, 
-      notebook_guid: @notebook.guid, 
-      notebook_id: @notebook.id, 
-      update_sequence_number: 14, 
-      public: false
-    )
+    note2 = build(:note)
     expect(note2.is_already_in_db?).to be false
   end
 
@@ -202,9 +134,16 @@ describe Note do
   # The function should return all the users notes, sorted by how many questions they have. 
   it 'sorts the users notes by how many questions each has' do
     # create_notes(10)
-    # create_questions(100)
-
-    expect(Note::popular(@user.id)[0].questions.size).to be > Note::popular(@user.id)[1].questions.size
+    # # create_questions(100)
+    5.times do 
+      create(:note, user: @user)
+    end
+    100.times do 
+      # random_note = @user.notes.sample
+      create(:question, user: @user)
+    end
+    sorted_notes = Note::popular(@user)
+    expect(sorted_notes[0].questions.size).to be >= sorted_notes[1].questions.size
   end
   # def create_notes amount 
   #   amount.times do 
@@ -221,7 +160,6 @@ end
 # def get_content note_store, note
 # def self.parseENML xml_content
 # def self.popular 
-# def self.updateNotes(notes, current_user, note_store)
 
 
   # belongs_to :user
@@ -229,40 +167,3 @@ end
   # has_many :questions
   # belongs_to :notebook
   # has_many :answers, through: :questions
-
-
-   # create_table "notes", force: :cascade do |t|
-  #   t.datetime "created_at",             null: false
-  #   t.datetime "updated_at",             null: false
-  #   t.string   "content"
-  #   t.integer  "user_id"
-  #   t.boolean  "public"
-  #   t.integer  "subject_id"
-  #   t.string   "title"
-  #   t.string   "guid"
-  #   t.string   "notebook_guid"
-  #   t.integer  "notebook_id"
-  #   t.integer  "update_sequence_number"
-  # end
-
-
-
-
-
-  # create_table "notebooks", force: :cascade do |t|
-  #     t.string  "guid"
-  #     t.string  "title"
-  #     t.integer "user_id"
-  #     t.integer "update_sequence_number"
-  #   end
-  # create_table "users", force: :cascade do |t|
-  #     t.string   "email"
-  #     t.string   "password_digest"
-  #     t.datetime "created_at",                      null: false
-  #     t.datetime "updated_at",                      null: false
-  #     t.string   "firstname"
-  #     t.string   "lastname"
-  #     t.string   "evernote_auth"
-  #     t.integer  "last_usn"
-  #     t.boolean  "synced",          default: false
-  #   end
