@@ -12,7 +12,7 @@ Rails.application.routes.draw do
   post 'answers/createAsync' => 'answers#createViaAjax'
 
 
-  resources :notes
+  resources :notes, only: [:show, :index]
   get 'notes/sync/initial'=> 'notes#initial_sync'
   get 'notes/sync/evernote'=> 'notes#sync'
 
