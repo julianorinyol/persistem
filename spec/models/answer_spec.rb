@@ -5,29 +5,34 @@ describe Answer do
   before(:each) do
     @answer = build(:answer)
   end
+  # create_table "answers", force: :cascade do |t|
+  #   t.integer  "note_id"
+  #   t.integer  "subject_id"
+  #   t.integer  "user_id"
+  #   t.integer  "question_id"
+  #   t.string   "text"
+  #   t.datetime "created_at",  null: false
+  #   t.datetime "updated_at",  null: false
+  #   t.integer  "quiz_id"
+  # end
 
   #*********************************Validations**********************************************************# 
+   it { is_expected.to validate_presence_of :text }
+   it { is_expected.to validate_presence_of :user_id }
+   it { is_expected.to validate_presence_of :question_id }
 
-  # it "is valid with an email, password_digest, firstname, lastname, evernote_auth" do
-  #   @user 
-  #   expect(@user).to be_valid
+
+  # it "is valid with an question_id, text, user_id" do
+  #   expect(@answer).to be_valid
   # end
-  # it "is invalid without a unique email" do 
-  #   @user.email = nil
-  #   @user.valid?
-  #   expect(@user.errors[:email]).to include("can't be blank")
-
-  #   @user.save
-  #   user2 = build(:user, email: @user.email)
-  #   user2.valid?
-  #   expect(user2.errors[:email]).to include("can't be blank")
-
-  #   user2.email = 'bla@bla.com'
-  #   expect(user2.valid?).to be true
-  # end
-
 
   #*********************************Associations**********************************************************# 
+  # belongs_to :question
+  # belongs_to :user
+  # delegate :note, :to => :question
+  # delegate :notebook, :to => :note
+  it { is_expected.to belong_to(:user) }
+  it { is_expected.to belong_to(:question) }
 
   # *********************************Methods************************************************************** #
 
