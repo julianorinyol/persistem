@@ -52,27 +52,54 @@ describe Question do
   # *********************************Methods************************************************************** #
   
   # def self.popular 
-  it "sorts the questions by how many answers each has" do
-    binding.pry
+  it "sorts all the user's questions by how many answers each has least to most" do
     5.times do 
       create(:question)
     end
     100.times do
       create(:answer)
     end
-    sorted_questions = Question::popular
-    expect(sorted_questions[0].answers.size).to be >= sorted_questions[1].answers.size
+    sorted_questions = Question::popular User.first
+    sorted_questions.each_with_index do |question, index|
+      expect(question.answers.size).to be <= sorted_questions[index+1].answers.size unless index == sorted_questions.size - 1 
+    end
+    expect(sorted_questions[0].answers.size).to be <= sorted_questions[1].answers.size 
   end
-    # 5.times do 
-    #   create(:note, user: @user)
-    # end
-    # 100.times do 
-    #   create(:question, user: @user)
-    # end
-    # sorted_notes = Note::popular(@user)
-    # expect(sorted_notes[0].questions.size).to be >= sorted_notes[1].questions.size
+  # def self.popular current_user
+  #   questions = Question.where(user_id: current_user.id).includes(:answers)
+
+  #   counts = Hash.new 0
+
+  #   questions.each do |q|
+  #     counts[q.id] = { question: q, amount: q.answers.size }
+  #   end
+  #   mapped = counts.values.sort_by do |obj| obj['amount'] end
+  #   arr = []
+  #   mapped.each do |custom_obj| arr << custom_obj[:question] end
+  #   return arr
+  # end
 
   # def self.sort_by_popularity questions
+  it "sorts an array of questions by their popularity returning in orded the least popular first" do 
+    5.times do 
+      create(:question)
+    end
+    100.times do
+      create(:answer)
+    end
+    sorted_questions = Question::sort_by_popularity Question.all
+    expect(sorted_questions.first.answers.size <= sorted_questions.last.answers.size).to be true 
+  end
+  # def self.sort_by_popularity questions
+  #   counts = Hash.new 0
 
+  #   questions.each do |q|
+  #     counts[q.id] = { question: q, amount: q.answers.size }
+  #   end
+  #   mapped = counts.values.sort_by do |obj| obj['amount'] end
+  #   arr = []
+  #   mapped.each do |custom_obj| arr << custom_obj[:question] end
+  #   return arr
+  # end
 
 end
