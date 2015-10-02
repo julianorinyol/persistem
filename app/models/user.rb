@@ -15,17 +15,18 @@ class User < ActiveRecord::Base
 
   validates :password, length: { in: 6..20 }, on: :create
 
-   def update_notes(notes,note_store)
-    notes.each do |note|
-      n = Note.where(guid: note.guid).first
-      if !n
-        notebook_id = Notebook.where(guid: note.notebookGuid).first
-        n = Note.create(user_id: id, notebook_guid: note.notebookGuid, notebook_id: notebook_id, public: false, guid: note.guid)
+   def update_notes(evernotes, note_store)
+    binding.pry
+    evernotes.each do |evernote_note|
+      note = Note.where(guid: evernote_note.guid).first
+      if !note
+        notebook_id = Notebook.where(guid: evernote_note.notebookGuid).first.id
+        note = Note.create(user_id: id, notebook_guid: evernote_note.notebookGuid, notebook_id: notebook_id, public: false, guid: evernote_note.guid)
       end
 
-      n.update(title: note.title, update_sequence_number: note.updateSequenceNum)
-      n.get_content(note_store, n)
-      self.update(last_usn: note.updateSequenceNum)
+      note.update(title: evernote_note.title, update_sequence_number: evernote_note.updateSequenceNum)
+      note.get_content(note_store, note)
+      self.update(last_usn: evernote_note.updateSequenceNum)
     end
   end
 

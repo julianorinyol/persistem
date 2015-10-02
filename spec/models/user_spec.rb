@@ -61,15 +61,66 @@ describe User do
     end
   end
   # *********************************Methods************************************************************** #
+  class EvernoteSample 
+    attr_accessor :guid, :notebookGuid, :title, :updateSequenceNum
+
+    def initialize user
+      @guid = rand(1000).to_s
+      @notebookGuid = user.notebooks.sample.guid || create(:notebook, user: user).guid
+      @title = Faker::Lorem.words(rand(3)+1).join(' ')
+      @updateSequenceNum = rand(1000)
+    end
+  end
+
+   def create_evernote_samples num
+    samples = []
+    num.times do 
+      samples << EvernoteSample.new(@user)
+    end
+    return samples
+   end
 
 
    # def update_notes(notes,note_store)
-   it "creates new notes if they don't exist yet"
+   it "creates new notes if they don't exist yet" do
+    @user.save
+    @notebook = create(:notebook, user: @user)
+    create(:note)
+    create(:note)
+
+    number_of_notes_before = @user.notes.size
+      evernote_notes = create_evernote_samples(3)
+      binding.pry
+
+    note_store = double('Note Store')
+    # guid, notebookGuid, title, updateSequenceNum
+
+    Note.any_instance.stub(:get_content).and_return('<big><scary>cats</scary></big>')
+
+    @user.update_notes evernote_notes, note_store
+    
+    number_of_notes = @user.notes.size
+    binding.pry
+    expect(number_of_notes).to be > number_of_notes_before
+   end
 
    it "updates notes that have been changed"
 
    it "sets the users update_sequence_number to the most recent usn"
    
+  #  def update_notes(evernotes, note_store)
+  #   evernotes.each do |evernote_note|
+  #     note = Note.where(guid: evernote_note.guid).first
+  #     if !note
+  #       notebook_id = Notebook.where(guid: evernote_note.notebookGuid).first
+  #       note = Note.create(user_id: id, notebook_guid: evernote_note.notebookGuid, notebook_id: notebook_id, public: false, guid: evernote_note.guid)
+  #     end
+
+  #     note.update(title: evernote_note.title, update_sequence_number: evernote_note.updateSequenceNum)
+  #     note.get_content(note_store, note)
+  #     self.update(last_usn: evernote_note.updateSequenceNum)
+  #   end
+  # end
 end
   # has_many :notes#, inverse_of: :user
   # has_many :quizzes

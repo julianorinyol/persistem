@@ -4,8 +4,8 @@ FactoryGirl.define do
     firstname { Faker::Name.first_name } 
     lastname { Faker::Name.last_name }
     email { Faker::Internet.free_email("#{firstname} #{lastname}" ) }
-    password "catcatcat" 
-    password_confirmation "catcatcat"
+    password "password" 
+    password_confirmation "password"
     evernote_auth {"asdf#{rand(100)}" }
   end
 
@@ -56,34 +56,7 @@ FactoryGirl.define do
     question { note.questions.empty? ? create(:question, note: note) : note.questions.sample }
     text { 'answer text' + rand(100).to_s }
   end
-  # create_table "answers", force: :cascade do |t|
-  #   t.integer  "note_id"
-  #   t.integer  "subject_id"
-  #   t.integer  "user_id"
-  #   t.integer  "question_id"
-  #   t.string   "text"
-  #   t.datetime "created_at",  null: false
-  #   t.datetime "updated_at",  null: false
-  #   t.integer  "quiz_id"
-  # end
 
-
-  # factory :question_with_note_notebook_and_user, class: Question do
-  #   note  :note_with_user_and_notebook
-  #   user  { note.user }
-  #   text { 'text' + rand(100).to_s }
-  # end
-
-
-  # create_table "questions", force: :cascade do |t|
-  #   t.integer  "note_id"
-  #   t.string   "text"
-  #   t.integer  "subject_id"
-  #   t.integer  "user_id"
-  #   t.integer  "answer_id"
-  #   t.datetime "created_at", null: false
-  #   t.datetime "updated_at", null: false
-  # end
 
 
   # This will use the User class (Admin would have been guessed)
