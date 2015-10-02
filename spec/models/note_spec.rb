@@ -96,6 +96,8 @@ describe Note do
     expect(sorted_notes[0].questions.size).to be >= sorted_notes[1].questions.size
   end
 
+  it "doesn't return any notes that don't belong to the current user"
+
 end
 
   

@@ -38,7 +38,7 @@ class QuizController < ApplicationController
   end
 
   def show
-    @answers = @quiz.get_previous_answers
+    # @answers = @quiz.get_previous_answers
 
     if current_user
       @notes = Note.where(user_id: current_user.id)
@@ -49,7 +49,6 @@ class QuizController < ApplicationController
       @notes = Note.where(user_id: current_user.id)
       @notebooks = Notebook.where(user_id: current_user.id)
       @synced = current_user.synced
-      
     end
   end
 

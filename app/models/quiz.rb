@@ -17,7 +17,7 @@ class Quiz < ActiveRecord::Base
     # Question.includes(:answers)
     least_used_ids = []
 
-    ids = Question.where(user_id: self.user.id).order("RANDOM()").pluck(:id)
+    ids = Question.where(user_id: user.id).order("RANDOM()").pluck(:id)
 
     used_question_ids = Answer.pluck(:question_id)
     
@@ -102,6 +102,7 @@ class Quiz < ActiveRecord::Base
     Hash[hashy.to_a.sample(hashy.length)]
   end
 
+  # what does this do???? it returns a questions text??
   def get_previous_answers
     @answers = []
     self.questions.each_with_index do |question, index|

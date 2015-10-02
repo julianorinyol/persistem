@@ -169,7 +169,8 @@ end
     user.notebooks.each do |nb|
       expect(counts[nb.guid]).to eq nb.notes.size
     end
-
   end
+
+  it "doesn't expose any notebooks that don't belong to the current user "
 
 end

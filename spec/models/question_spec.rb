@@ -102,4 +102,6 @@ describe Question do
   #   return arr
   # end
 
+
+    it "doesn't expose any questions that don't belong to the current user"
 end
