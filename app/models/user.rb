@@ -16,7 +16,6 @@ class User < ActiveRecord::Base
   validates :password, length: { in: 6..20 }, on: :create
 
    def update_notes(evernotes, note_store)
-    binding.pry
     evernotes.each do |evernote_note|
       note = Note.where(guid: evernote_note.guid).first
       if !note

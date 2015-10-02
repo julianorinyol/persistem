@@ -90,7 +90,6 @@ describe User do
 
     number_of_notes_before = @user.notes.size
       evernote_notes = create_evernote_samples(3)
-      binding.pry
 
     note_store = double('Note Store')
     # guid, notebookGuid, title, updateSequenceNum
@@ -100,7 +99,6 @@ describe User do
     @user.update_notes evernote_notes, note_store
     
     number_of_notes = @user.notes.size
-    binding.pry
     expect(number_of_notes).to be > number_of_notes_before
    end
 
