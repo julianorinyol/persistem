@@ -64,45 +64,66 @@ describe User do
   class EvernoteSample 
     attr_accessor :guid, :notebookGuid, :title, :updateSequenceNum
 
-    def initialize user
-      @guid = rand(1000).to_s
+    def initialize user, guid=false
       @notebookGuid = user.notebooks.sample.guid || create(:notebook, user: user).guid
       @title = Faker::Lorem.words(rand(3)+1).join(' ')
       @updateSequenceNum = rand(1000)
+      @guid = guid || rand(1000).to_s
     end
   end
 
-   def create_evernote_samples num
+   def create_evernote_samples num, updating=nil
     samples = []
+    count = @user.notes.count
     num.times do 
-      samples << EvernoteSample.new(@user)
+      if updating
+        samples << EvernoteSample.new(@user, @user.notes[samples.size].guid)
+      else
+        samples << EvernoteSample.new(@user)
+      end
+
     end
     return samples
    end
 
 
    # def update_notes(notes,note_store)
-   it "creates new notes if they don't exist yet" do
-    @user.save
-    @notebook = create(:notebook, user: @user)
-    create(:note)
-    create(:note)
+    it "creates new notes if they don't exist yet" do
+      @user.save
+      @notebook = create(:notebook, user: @user)
+      create(:note)
+      create(:note)
 
-    number_of_notes_before = @user.notes.size
+      number_of_notes_before = @user.notes.size
       evernote_notes = create_evernote_samples(3)
 
-    note_store = double('Note Store')
-    # guid, notebookGuid, title, updateSequenceNum
+      note_store = double('Note Store')
+      # guid, notebookGuid, title, updateSequenceNum
 
-    Note.any_instance.stub(:get_content).and_return('<big><scary>cats</scary></big>')
+      # this actually just blocks the code that would otherwise break because the notestore isnt real, and the evernote doesn't have content.
+      Note.any_instance.stub(:get_content).and_return('')
 
-    @user.update_notes evernote_notes, note_store
-    
-    number_of_notes = @user.notes.size
-    expect(number_of_notes).to be > number_of_notes_before
-   end
+      @user.update_notes evernote_notes, note_store
 
-   it "updates notes that have been changed"
+      number_of_notes = @user.notes.size
+      expect(number_of_notes).to be > number_of_notes_before
+    end
+
+    it "updates notes that have been changed" do
+      @user.save
+      @notebook = create(:notebook, user: @user)
+      
+      # this actually just blocks the code that would otherwise break because the notestore isnt real, and the evernote doesn't have content.
+      Note.any_instance.stub(:get_content).and_return('')
+
+      create(:note)
+      create(:note)
+      number_of_notes_before = @user.notes.size
+      evernote_notes = create_evernote_samples(2, true)
+      number_of_notes = @user.notes.size
+      expect(number_of_notes).to eq number_of_notes_before
+      # expect that an instance of the note class will receive call to get_content...
+    end
 
    it "sets the users update_sequence_number to the most recent usn"
    
