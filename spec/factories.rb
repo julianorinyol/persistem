@@ -11,28 +11,11 @@ FactoryGirl.define do
     last_usn { 0 }
   end
 
-  factory :notebook_and_user, class: Notebook do
-    user
-    guid {"asdf#{rand(100)}" }
-    title {"notebook title: #{rand(100)}" }
-    update_sequence_number {rand(100)}
-  end
-
   factory :notebook do
     user { User.offset(rand(User.count)).first || create(:user) }
     guid {"asdf#{rand(100)}" }
     title { Faker::Lorem.words(rand(3)+1).join(' ') }
     sequence(:update_sequence_number) {|n| user.last_usn + 1000 +n }
-  end
-
-  factory :note_with_user_and_notebook, class: Note do
-    title { "notetitle: " + rand(1000).to_s }
-    guid { "afsd" + rand(100000).to_s }
-    user
-    notebook
-    notebook_guid 'asdfnl23' 
-    update_sequence_number { rand(1000) }
-    public false
   end
 
   factory :note do
