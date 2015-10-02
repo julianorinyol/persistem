@@ -113,6 +113,7 @@ describe Note do
     client = EvernoteOAuth::Client.new(token: token)
     note_store = client.note_store
     note.get_content(note_store, note)
+    #this is the actual note content in persistemsample@gmail.com's sandbox.evernote account, if changed, this will fail.. 
     expect(note.content).to eq "<div>note content   lalalalla</div><div>laasdf</div>"
   end
 

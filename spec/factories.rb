@@ -1,5 +1,6 @@
 # This will guess the User class
 FactoryGirl.define do
+
   factory :user do
     firstname { Faker::Name.first_name } 
     lastname { Faker::Name.last_name }
@@ -7,6 +8,7 @@ FactoryGirl.define do
     password "password" 
     password_confirmation "password"
     evernote_auth {"asdf#{rand(100)}" }
+    last_usn { 0 }
   end
 
   factory :notebook_and_user, class: Notebook do
@@ -20,7 +22,7 @@ FactoryGirl.define do
     user { User.offset(rand(User.count)).first || create(:user) }
     guid {"asdf#{rand(100)}" }
     title { Faker::Lorem.words(rand(3)+1).join(' ') }
-    update_sequence_number {rand(100)}
+    sequence(:update_sequence_number) {|n| user.last_usn + 1000 +n }
   end
 
   factory :note_with_user_and_notebook, class: Note do
@@ -40,7 +42,7 @@ FactoryGirl.define do
     notebook { user.notebooks.empty? ? create(:notebook, user: user) : user.notebooks.sample }
     # User.joins(:notebooks).take(1)   --> gets a random user with a notebook
     notebook_guid { notebook.guid }
-    update_sequence_number { rand(1000) }
+    sequence(:update_sequence_number) {|n| user.last_usn + n }
     public false    
   end
 

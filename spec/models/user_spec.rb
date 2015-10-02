@@ -61,6 +61,7 @@ describe User do
     end
   end
   # *********************************Methods************************************************************** #
+  
   class EvernoteSample 
     attr_accessor :guid, :notebookGuid, :title, :updateSequenceNum
 
@@ -125,7 +126,27 @@ describe User do
       # expect that an instance of the note class will receive call to get_content...
     end
 
-   it "sets the users update_sequence_number to the most recent usn"
+    it "temporary test to see if usn changed needs to be written properly" do
+      @user.save
+      @notebook = create(:notebook, user: @user)
+      create(:note)
+      create(:note)
+      number_of_notes_before = @user.notes.size
+      evernote_notes = create_evernote_samples(3)
+
+      note_store = double('Note Store')
+      # guid, notebookGuid, title, updateSequenceNum
+
+      # this actually just blocks the code that would otherwise break because the notestore isnt real, and the evernote doesn't have content.
+      Note.any_instance.stub(:get_content).and_return('')
+
+      @user.update_notes evernote_notes, note_store
+
+      number_of_notes = @user.notes.size
+      expect(@user.last_usn).to be evernote_notes.last.updateSequenceNum
+    end
+
+    it "sets the users update_sequence_number to the most recent usn" 
    
   #  def update_notes(evernotes, note_store)
   #   evernotes.each do |evernote_note|
