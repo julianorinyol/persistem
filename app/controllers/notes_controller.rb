@@ -9,7 +9,7 @@
   def index
     if @notes.length < 1 && current_user.evernote_auth
       get_all_notebooks
-      get_notes_from_evernote
+      get_notes_from_evernote 10
       # reset @notes and @notebooks after the query, in case of change..
       @notes = Note.where(user_id: current_user.id)
       @notebooks = Notebook.where(user_id: current_user.id)
@@ -26,6 +26,23 @@
         headers['Content-Type'] ||= 'text/csv'
       end
     end
+  end
+
+  # GET /notes/1
+  # GET /notes/1.json
+  def show
+    token = session[:authtoken]
+    client = EvernoteOAuth::Client.new(token: token)
+    
+    note_store = client.note_store
+    if !@note.content
+      @note.get_content(note_store, @note)
+    end
+
+    @question = Question.new
+    @questions = Question.where(note_id: params[:id].to_i, user_id: current_user.id )
+    @synced = current_user.synced
+    @answer = Answer.new
   end
 
   def sync 
@@ -107,24 +124,15 @@
     notebookCountsHash.notebookCounts.values.size
   end
 
-  # def getAllNotesForNotebook(notebook)
-  #     token = session[:authtoken]
-  #     client = EvernoteOAuth::Client.new(token: token)
-  #     note_store = client.note_store
-  #     note_filter = Evernote::EDAM::NoteStore::NoteFilter.new
-  #     note_store.findNotes(note_filter)
-
-  # end
-
-  def get_notes_from_evernote
+  def get_notes_from_evernote num
     # get all the notes from evernote. 10 at a time.
       token = session[:authtoken]
       client = EvernoteOAuth::Client.new(token: token)
       note_store = client.note_store
       note_filter = Evernote::EDAM::NoteStore::NoteFilter.new
-      @first_10_notes =  note_store.findNotes(note_filter, 0, 10)
+      @first_num_notes =  note_store.findNotes(note_filter, 0, num)
 
-      add_notes_to_db(@first_10_notes.notes)
+      add_notes_to_db(@first_num_notes.notes)
   end
 
   def add_notes_to_db notes
@@ -168,24 +176,10 @@
     end
   end
 
-  # GET /notes/1
-  # GET /notes/1.json
-  def show
-    token = session[:authtoken]
-    client = EvernoteOAuth::Client.new(token: token)
-    
-    note_store = client.note_store
-    if !@note.content
-      @note.get_content(note_store, @note)
-    end
-
-    @question = Question.new
-    @questions = Question.where(note_id: params[:id].to_i, user_id: current_user.id )
-    @synced = current_user.synced
-    @answer = Answer.new
-  end
 
   private
+
+  
     # Use callbacks to share common setup or constraints between actions.
     def set_note
         @note = Note.find(params[:id])
