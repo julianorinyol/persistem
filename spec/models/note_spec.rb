@@ -10,73 +10,31 @@ describe Note do
     create(:note, user: @user, notebook: @notebook)
   end
 
+
   it "is valid with a guid, title, user_id, notebook_guid, notbooke_id, update_sequence_number, and public" do
     expect(@note).to be_valid
   end
 
-  it "is invalid without guid" do
-    @note.guid = nil
-    @note.valid?
-    expect(@note.errors[:guid]).to include("can't be blank")
-  end
+  it { is_expected.to validate_presence_of :guid }
 
-  it "is invalid without title" do
-    @note.title = nil
-    @note.valid?
-    expect(@note.errors[:title]).to include("can't be blank")
-  end
+  it { is_expected.to validate_presence_of :title }
 
-  it "is invalid without user_id" do
-    @note.user_id = nil
-    @note.valid?
-    expect(@note.errors[:user_id]).to include("can't be blank")
-  end
+  it { is_expected.to validate_presence_of :user_id }
 
-  it "is invalid without :notebook_guid" do
-    @note.notebook_guid = nil
-    @note.valid?
-    expect(@note.errors[:notebook_guid]).to include("can't be blank")
-  end
+  it { is_expected.to validate_presence_of :notebook_guid }
+ 
+  it { is_expected.to validate_presence_of :notebook_id }
 
-  it "is invalid without notebook_id" do
-    @note.notebook_id = nil
-    @note.valid?
-    expect(@note.errors[:notebook_id]).to include("can't be blank")
-  end
+  it { is_expected.to validate_presence_of :update_sequence_number }
 
-  it "is invalid without update_sequence_number" do
-    @note.update_sequence_number = nil
-    @note.valid?
-    expect(@note.errors[:update_sequence_number]).to include("can't be blank")
-  end
   
- it "do i need to test public???"
+  it "do i need to test public???"
   #*********************************Associations**********************************************************# 
 
-  it "has a user that can be accessed" do
-    @note.save
-    expect(@note.user).to be_a User
-  end
-
-  it "has a notebook that can be accessed" do
-    @note.save
-    expect(@note.notebook).to be_a Notebook
-  end
-
-  it "has questions that can be accessed" do
-    @note.save
-    create(:question, note: @note)
-    expect(@note.questions.first).to be_a Question
-  end
-
-  it "has answers that can be accessed" do
-    @note.save
-    question = create(:question, note: @note)
-    create(:answer, question: question)
-    expect(@note.answers.first).to be_an Answer
-  end
-
-
+  it { is_expected.to belong_to(:user) }
+  it { is_expected.to belong_to(:notebook) }
+  it { is_expected.to have_many(:questions) }
+  it { is_expected.to have_many(:answers) }
 
   # *********************************Methods************************************************************** #
 

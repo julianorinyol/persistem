@@ -54,8 +54,11 @@ FactoryGirl.define do
 
   factory :answer do 
     user  { User.offset(rand(User.count)).first || create(:user) }
-    note_id { user.notes.empty? ? create(:note, user: user) : user.notes.sample.id }
-    question { note.questions.empty? ? create(:question, note: note) : note.questions.sample }
+    question { 
+      note = (user.notes.empty? ? create(:note, user:user) : user.notes.sample) 
+      note.questions.empty? ? create(:question, user: user) : note.questions.sample 
+    }
+    note_id { question.note.id }
     text { 'answer text' + rand(100).to_s }
   end
 
