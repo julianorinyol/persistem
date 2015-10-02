@@ -251,13 +251,13 @@
 #     note_store.getDefaultNotebook
 #   end
 
-#   def getFilteredSyncChunk
+#   def get_filtered_sync_chunk
 #     client = EvernoteOAuth::Client.new(token: authtoken)
 #     note_store = client.note_store
 
 #     sync_chunk_filter = Evernote::EDAM::NoteStore::SyncChunkFilter.new
 #     sync_chunk_filter.includeNotes = true
-#     note_store.getFilteredSyncChunk(0, 1, sync_chunk_filter)
+#     note_store.get_filtered_sync_chunk(0, 1, sync_chunk_filter)
 #   end
 
 #   def getLinkedNotebookSyncChunk

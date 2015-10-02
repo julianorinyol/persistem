@@ -11,8 +11,8 @@ RSpec.describe NotesController, type: :controller do
       # Needs to stub any real api calls!
         # Object.any_instance.stub(:NotesController).and_return(:return_value)
       # it "sets @note to a new note" do
-      #   NotesController.any_instance.stub(:getAllNotebooks)
-      #   NotesController.any_instance.stub(:getNotesFromEvernote)
+      #   NotesController.any_instance.stub(:get_all_notebooks)
+      #   NotesController.any_instance.stub(:get_notes_from_evernote)
       # end
       it "sets @question to a new question"
       it "sets @synced to either true or false" do
@@ -20,15 +20,15 @@ RSpec.describe NotesController, type: :controller do
       end
       # it "starts an ajax call if @synced is false??"
       it "renders :index" do
-        NotesController.any_instance.stub(:getAllNotebooks)
-        NotesController.any_instance.stub(:getNotesFromEvernote)
+        NotesController.any_instance.stub(:get_all_notebooks)
+        NotesController.any_instance.stub(:get_notes_from_evernote)
         get :index
-        expect(@controller).to have_received(:getAllNotebooks)
+        expect(@controller).to have_received(:get_all_notebooks)
         expect(response).to render_template :index
       end
       it "sets @note to a new note" do
-        NotesController.any_instance.stub(:getAllNotebooks)
-        NotesController.any_instance.stub(:getNotesFromEvernote)
+        NotesController.any_instance.stub(:get_all_notebooks)
+        NotesController.any_instance.stub(:get_notes_from_evernote)
       end
       it "sets @question to a new question"
       it "sets @synced to either true or false" 
@@ -74,7 +74,7 @@ RSpec.describe NotesController, type: :controller do
     describe "#handleUpdate" do 
 
     end
-    describe "#getFilteredSyncChunk note_store" do 
+    describe "#get_filtered_sync_chunk note_store" do 
 
     end
     describe 'get_last_usn(note_store)' do 
@@ -83,15 +83,15 @@ RSpec.describe NotesController, type: :controller do
     end
     describe "count_all_notebooks" do
     end
-    describe "getNotesFromEvernote" do
+    describe "get_notes_from_evernote" do
     end
-    describe "addNotesToDb(notes)" do
+    describe "add_notes_to_db(notes)" do
     end
     describe "set_note" do
     end
     describe "note_params" do 
     end
-    
+
 
 
              #            Prefix Verb   URI Pattern                                 Controller#Action
@@ -109,8 +109,8 @@ end
 
 # def index
 #     if @notes.length < 1 && current_user.evernote_auth
-#       getAllNotebooks
-#       getNotesFromEvernote
+#       get_all_notebooks
+#       get_notes_from_evernote
 #       # reset @notes and @notebooks after the query, in case of change..
 #       @notes = Note.where(user_id: current_user.id)
 #       @notebooks = Notebook.where(user_id: current_user.id)

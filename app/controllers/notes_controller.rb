@@ -8,8 +8,8 @@
   # GET /notes.json
   def index
     if @notes.length < 1 && current_user.evernote_auth
-      getAllNotebooks
-      getNotesFromEvernote
+      get_all_notebooks
+      get_notes_from_evernote
       # reset @notes and @notebooks after the query, in case of change..
       @notes = Note.where(user_id: current_user.id)
       @notebooks = Notebook.where(user_id: current_user.id)
@@ -33,25 +33,25 @@
     iterator = 0
     while (iterator < 5) 
       if get_last_usn(@note_store) > current_user.last_usn
-        getFilteredSyncChunk(@note_store)
+        get_filtered_sync_chunk(@note_store)
       end
       iterator += 1
     end
   end
   
-# getFilteredSyncChunk(string authenticationToken,afterUSN, maxEntries,SyncChunkFilter filter)
-  def getFilteredSyncChunk note_store
+# get_filtered_sync_chunk(string authenticationToken,afterUSN, maxEntries,SyncChunkFilter filter)
+  def get_filtered_sync_chunk note_store
     sync_chunk_filter = Evernote::EDAM::NoteStore::SyncChunkFilter.new
     sync_chunk_filter.includeNotes = true
     sync_chunk_filter.includeNotebooks = true
 
       
-    updated = note_store.getFilteredSyncChunk(current_user.last_usn, 5, sync_chunk_filter)
+    updated = note_store.get_filtered_sync_chunk(current_user.last_usn, 5, sync_chunk_filter)
 
-    handleUpdate(updated, note_store)
+    handle_update(updated, note_store)
   end
 
-  def handleUpdate updated, note_store 
+  def handle_update updated, note_store 
     if updated.notes && updated.notes.size > 0
       current_user.update_notes(updated.notes, note_store)
     end
@@ -66,7 +66,7 @@
       note_filter = Evernote::EDAM::NoteStore::NoteFilter.new
       totalNoteNum = count_all_notes
       
-      getAllNotebooks  
+      get_all_notebooks  
 
       @notes = Note.where(user_id: current_user.id)
 
@@ -83,7 +83,7 @@
 
   def get_last_usn note_store
       sync_chunk_filter = Evernote::EDAM::NoteStore::SyncChunkFilter.new
-      chunk = note_store.getFilteredSyncChunk(0, 1, sync_chunk_filter)
+      chunk = note_store.get_filtered_sync_chunk(0, 1, sync_chunk_filter)
       return chunk.updateCount
   end
 
@@ -116,7 +116,7 @@
 
   # end
 
-  def getNotesFromEvernote
+  def get_notes_from_evernote
     # get all the notes from evernote. 10 at a time.
       token = session[:authtoken]
       client = EvernoteOAuth::Client.new(token: token)
@@ -124,10 +124,10 @@
       note_filter = Evernote::EDAM::NoteStore::NoteFilter.new
       @first_10_notes =  note_store.findNotes(note_filter, 0, 10)
 
-      addNotesToDb(@first_10_notes.notes)
+      add_notes_to_db(@first_10_notes.notes)
   end
 
-  def addNotesToDb notes
+  def add_notes_to_db notes
     notes.each do |note|
       # if the Note doesn't exist in db, create it.   
       if !Note.where(guid: note.guid).exists?
@@ -143,17 +143,17 @@
     end
   end
 
-  def getAllNotebooks
+  def get_all_notebooks
       token = session[:authtoken]
       client = EvernoteOAuth::Client.new(token: token)
       note_store = client.note_store
       # totalCount = count_all_notebooks
       @notebooks = note_store.listNotebooks
-      addNotebooksToDb @notebooks
+      add_notebooks_to_db @notebooks
       return @notebooks
   end
 
-  def addNotebooksToDb notebooks
+  def add_notebooks_to_db notebooks
     notebooks.each do |notebook|
       # if the Note doesn't exist in db, create it.   
       if !Notebook.where(guid: notebook.guid).exists?

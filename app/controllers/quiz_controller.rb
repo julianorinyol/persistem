@@ -9,7 +9,7 @@ class QuizController < ApplicationController
       @notes = Note.where(user_id: current_user.id)
 
       if @notes.length < 4 && current_user.evernote_auth
-        getNotesFromEvernote
+        get_notes_from_evernote
       end
       @notes = Note.where(user_id: current_user.id)
       @notebooks = Notebook.where(user_id: current_user.id)
@@ -44,7 +44,7 @@ class QuizController < ApplicationController
       @notes = Note.where(user_id: current_user.id)
 
       if @notes.length < 4 && current_user.evernote_auth
-        getNotesFromEvernote
+        get_notes_from_evernote
       end
       @notes = Note.where(user_id: current_user.id)
       @notebooks = Notebook.where(user_id: current_user.id)
