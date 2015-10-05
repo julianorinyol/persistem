@@ -42,7 +42,6 @@ var myNotes = <%= raw @notes.to_json %>;
 var hasBeenInitialSynced = <%= raw @synced %>;
 
 $('#notebook-list-tab, #note-list-tab, #quiz-tab').on('click', function(){
-  console.log('clicked');
   $('#notelist-tabs li').removeClass();
   $(this).parent().addClass('active');
   $('#private-notes-list tbody').html('');

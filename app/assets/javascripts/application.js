@@ -16,6 +16,7 @@
 //= require turbolinks
 //= require_tree .
 
+// ************************ Display & HTML generating functions ********************************* \\
 
 
 function displayNotes(notes, notebooks) {
@@ -89,19 +90,6 @@ function displayQuizzes(quizzes) {
   setUpBindings();
 }
 
-function getQuizzes() {
-  $.ajax({
-    url: '/quizzes/sync',
-    method: 'GET',
-    dataType: 'json',
-    success: function(res) {
-      displayQuizzes(res);
-    },
-    error: function(err, message) {
-      console.log('notebook get ajax failed' + message);
-    }
-  })
-;}
 
  function generateRow(contentArray) {
    //takes an array of objects {attr: 'class' val: 'my-class'}
@@ -127,16 +115,6 @@ function getQuizzes() {
     return output;
   }
 
-function getNotesForNotebook(notes, notebook) {
-  notebooksNotes =[];
-  for(var i = 0; i < notes.length; i++) {
-    var note = notes[i];
-    if( note.notebook_guid == notebook.guid ){
-      notebooksNotes.push(note);
-    }
-  }
-  return notebooksNotes;
-}
 
 function setCorrectTabActive() {
   if(window.location.href.indexOf('quiz') > 0) {
@@ -150,9 +128,7 @@ function setCorrectTabActive() {
   }
 }
 
-function getNumberOfNotesInNotebook(notes, notebook) {
-  return getNotesForNotebook(notes, notebook).length;
-}
+
 
 function setTableHeaders() {
   for(var i = 0; i < arguments.length; i++) {
@@ -192,112 +168,19 @@ function timeSince(date) {
     }
     return Math.floor(seconds) + " seconds";
 }
-
-
-$('#sync-button').on('click', function(){
-  console.log('clicked');   
-  initialSync();
-});
-
-function initialSync() {
-  $.ajax({
-    url: '/notebooks/list',
-    method: 'GET',
-    dataType: 'json',
-    success: function(res) {
-      notebooks = res;
-      callForNotes(res);
-    },
-    error: function(err, message) {
-      console.log('notebook get ajax failed' + message);
-    }
-  }); 
-}
-function normalSync() {
-  $.ajax({
-    url: '/notes/sync/evernote',
-    method: 'GET',
-    dataType: 'json',
-    success: function(res) {
-      notebooks = res;
-      callForNotes(res);
-    },
-    error: function(err, message) {
-      console.log('notebook get ajax failed' + message);
-    }
-  }); 
-}
-
-function getNotebookFromNote(note, notebooks) {
-  for(var i = 0; i < notebooks.length; i++) {
-    notebook = notebooks[i];
-    if(notebook.guid == note.notebook_guid) {
-      return notebook;
-    }
-  }
-}
-
-function callForNotes(notebooks){
-  $.ajax({
-        url: '/notes/sync/initial',
-        method: 'GET',
-        dataType: 'json',
-        success: function(notes) {
-          console.log('ajax success!');
-          myNotes = notes;
-          initialCallForContent();
-          displayNotes(myNotes, notebooks);
-          setUpBindings();
-        },
-        error: function(phase, message){
-          console.log('ajax post failed', message);
-          console.log('ajax post failed');
-        }
-      });
-}
-
-function initialCallForContent() {
-   $.ajax({
-        url: '/notes/sync/content',
-        method: 'GET',
-        dataType: 'json',
-        success: function(notes) {
-          console.log('content fetch success!');
-          myNotes = notes;
-        },
-        error: function(phase, message){
-          console.log('ajax post failed', message);
-        }
-      });
-}
-
-
 function setUpBindings(){
-    $("tr[data-link].clickable-tr").click(function() {
-      window.location = $(this).data("link")
-    })
-    $(".clickable-tr").on('mouseenter', function() {
-      $(this).css({"background":"purple", 'color':'white'});
-    })
-    $(".clickable-tr").on('mouseleave', function() {
-      $(this).css({"background":"white",'color':'black'});
-    })
+  $("tr[data-link].clickable-tr").click(function() {
+    window.location = $(this).data("link")
+  })
+  $(".clickable-tr").on('mouseenter', function() {
+    $(this).css({"background":"purple", 'color':'white'});
+  })
+  $(".clickable-tr").on('mouseleave', function() {
+    $(this).css({"background":"white",'color':'black'});
+  })
 }
-// <form class="new_question" id="new_question" action="/questions" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="✓"><input type="hidden" name="authenticity_token" value="26TAEakEbH3+N7+3rnEY/54PsVKeXqFibj6icyxyc9I7VMZWpoobqagSZJIADIFYwHC/wVaO94pP9CvKfJ5QIw==">
 
-//   <textarea class="question-inputs" placeholder="Add a question...." name="question[text]" id="question_text"></textarea>
-//   <input value="4" type="hidden" name="question[note_id]" id="question_note_id">
-//   <input value="1" type="hidden" name="question[user_id]" id="question_user_id">
-
-//  <div class="actions">
-//     <input type="submit" name="commit" value="Create Question" id="create-question-button">
-//   </div>
-
-// </form>
-
-
-
-  function displayNotebookOptions() {
+function displayNotebookOptions() {
      var options = "<option value=''>All Notebooks</option>";
     for(var i = 0; i < notebooks.length; i++) {
       var notebook = notebooks[i];
@@ -353,6 +236,107 @@ function setUpBindings(){
         $('.date > input[name="quiz[time_ago]"]').attr('checked', false);
       })
   }
+
+// ************************Sorting and Retrieval Functions********************************* \\
+function getNotebookFromNote(note, notebooks) {
+  for(var i = 0; i < notebooks.length; i++) {
+    notebook = notebooks[i];
+    if(notebook.guid == note.notebook_guid) {
+      return notebook;
+    }
+  }
+}
+function getNotesForNotebook(notes, notebook) {
+  notebooksNotes =[];
+  for(var i = 0; i < notes.length; i++) {
+    var note = notes[i];
+    if( note.notebook_guid == notebook.guid ){
+      notebooksNotes.push(note);
+    }
+  }
+  return notebooksNotes;
+}
+function getNumberOfNotesInNotebook(notes, notebook) {
+  return getNotesForNotebook(notes, notebook).length;
+}
+
+// ************************AJAX Functions********************************* \\
+function getQuizzes() {
+  $.ajax({
+    url: '/quizzes/sync',
+    method: 'GET',
+    dataType: 'json',
+    success: function(res) {
+      displayQuizzes(res);
+    },
+    error: function(err, message) {
+      console.log('notebook get ajax failed' + message);
+    }
+  });
+}
+function initialSync() {
+  $.ajax({
+    url: '/notebooks/list',
+    method: 'GET',
+    dataType: 'json',
+    success: function(res) {
+      notebooks = res;
+      callForNotes(res);
+    },
+    error: function(err, message) {
+      console.log('notebook get ajax failed' + message);
+    }
+  }); 
+}
+function normalSync() {
+  $.ajax({
+    url: '/notes/sync/evernote',
+    method: 'GET',
+    dataType: 'json',
+    success: function(res) {
+      notebooks = res;
+      callForNotes(res);
+    },
+    error: function(err, message) {
+      console.log('notebook get ajax failed' + message);
+    }
+  }); 
+}
+
+function callForNotes(notebooks){
+  $.ajax({
+        url: '/notes/sync/initial',
+        method: 'GET',
+        dataType: 'json',
+        success: function(notes) {
+          console.log('ajax success!');
+          myNotes = notes;
+          initialCallForContent();
+          displayNotes(myNotes, notebooks);
+          setUpBindings();
+        },
+        error: function(phase, message){
+          console.log('ajax post failed', message);
+          console.log('ajax post failed');
+        }
+      });
+}
+
+function initialCallForContent() {
+   $.ajax({
+        url: '/notes/sync/content',
+        method: 'GET',
+        dataType: 'json',
+        success: function(notes) {
+          console.log('content fetch success!');
+          myNotes = notes;
+        },
+        error: function(phase, message){
+          console.log('ajax post failed', message);
+        }
+      });
+}
+  
   // $('#generate_quiz_btn').on('click',function(){
   //   console.log('gen quizzzz');
   //   getLeastAnsweredQuiz();
