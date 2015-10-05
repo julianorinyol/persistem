@@ -10,7 +10,8 @@ describe("Application", function() {
   it("should fail", function() {
     // player.play(song);
     // expect(player.currentlyPlayingSong).toEqual(song);
-    expect(true).toBe(false);
+    // expect(true).toBe(false);
+    pending();
     // //demonstrates use of custom matcher
     // expect(player).toBePlaying(song);
   });
@@ -39,10 +40,9 @@ describe("Application", function() {
   //getNumberOfNotesInNotebook(notes, notebook)
   it("returns the number of notes in a notebook", function() {
     // Note.new(title, content, id, notebook) // notebook can be a nested object...
-    // notes = 
-    // notebook = 
-    // getNumberOfNotesForNotebook(notes, notebook)
-    pending()
+    notes = [new sampleNote(), new sampleNote(), new sampleNote(), new sampleNote() ]
+    var result = getNumberOfNotesInNotebook(notes, notebooks[0])
+    expect(result).toEqual(4);
   });
 
   // **AJAX**
@@ -53,6 +53,4 @@ describe("Application", function() {
   //initialCallForContent()
   //
 
-
-
-}
+});
