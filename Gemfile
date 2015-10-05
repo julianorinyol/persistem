@@ -73,4 +73,5 @@ group :test do
   gem 'launchy'
   gem 'cucumber-rails'
   gem 'shoulda-matchers'
+  gem 'database_cleaner'
 end
