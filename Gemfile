@@ -71,5 +71,6 @@ group :test do
   gem 'capybara'
   gem 'guard-rspec'
   gem 'launchy'
+  gem 'cucumber-rails'
   gem 'shoulda-matchers'
 end
