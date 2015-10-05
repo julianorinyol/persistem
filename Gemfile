@@ -65,6 +65,7 @@ group :development, :test do
   gem 'rspec-rails'
   # gem 'guard-rspec', require: false
   gem 'faker'
+  gem 'jasmine'
 end
 
 group :test do
