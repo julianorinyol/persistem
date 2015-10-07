@@ -1,5 +1,15 @@
 # This will guess the User class
 FactoryGirl.define do
+  
+  factory :evernote_user do
+    firstname { Faker::Name.first_name } 
+    lastname { Faker::Name.last_name }
+    email { Faker::Internet.free_email("#{firstname} #{lastname}" ) }
+    password "password" 
+    password_confirmation "password"
+    evernote_auth "TEST_AUTH_TOKEN"
+    last_usn { 0 }
+  end
 
   factory :user do
     firstname { Faker::Name.first_name } 
