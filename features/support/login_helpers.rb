@@ -13,7 +13,7 @@ module LoginHelpers
 
     # Warning! This sets @current_user even if the login fails.
     # This should be fixed.
-    @current_user = Person.find_by_email(email)
+    @current_user = User.find_by_email(email)
   end
 
   def logout()

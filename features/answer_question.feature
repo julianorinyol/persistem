@@ -4,22 +4,22 @@ Feature: Answer question
   I want to submit an answer when I'm viewing my questions
 
   Scenario: View the answer submission form
-    Given I'm logged in
+    Given I log in
     When I view a note
     And I click list questions
     And I click on a question
-    Then I should see an Answer submission form
+    Then I see an Answer submission form
 
   Scenario: Submit an answer
-    Given I'm logged in 
+    Given I log in
     When I view the answer submission form for a question
     And I fill out the form and click submit
     Then the answer should be saved in the database
-    And I should see it in the answer list
+    And I see it in the answer list
 
   Scenario: Browse Answers
-    Given I'm logged in 
-    When I'm viewing questions for a note 
+    Given I log in
+    When I view questions for a note 
     And I click on a question
     And the question has 5 answers
-    Then I should see a list of Answers
+    Then I see a list of answers
