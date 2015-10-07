@@ -10,8 +10,8 @@ require 'cucumber/rails'
 # Capybara.default_driver = :webkit
 require 'capybara/poltergeist'
 
-require_relative "./login_helpers.rb" 
-include LoginHelpers
+require_relative "./config.rb"
+
 
 # Capybara defaults to CSS3 selectors rather than XPath.
 # If you'd prefer to use XPath, just uncomment this line and adjust any

@@ -3,8 +3,7 @@ Given(/^a registered User that has not yet authenticated with Evernote$/) do
 end
 
 When(/^I visit the home page$/) do
-  
-  set_speed(:slow)
+  # set_speed(:slow)
   visit new_session_path
   expect(current_path).to eq "/sessions/new"
 end
