@@ -49,17 +49,17 @@ $('#notebook-list-tab, #note-list-tab, #quiz-tab').on('click', function(){
 
 $('#notebook-list-tab').on('click', function(){
    displayNotebooks(myNotes, notebooks);   
-   setUpBindings();
+   setUpTableRowBindings();
    setTableHeaders('Notebooks', 'Number of Notes');
 })
 $('#note-list-tab').on('click', function(){
    displayNotes(myNotes, notebooks);
    setTableHeaders('Title', 'Notebook');
-   setUpBindings();
+   setUpTableRowBindings();
 })
 $('#quiz-tab').on('click', function(){
    getQuizzes();
-   setUpBindings();
+   setUpTableRowBindings();
 })
 
 $('#generate-quiz-btn').on('click', function() {
@@ -126,5 +126,5 @@ if(!hasBeenInitialSynced) {
   normalSync();
 }
 setCorrectTabActive();
-setUpBindings();
+setUpTableRowBindings();
 </script>

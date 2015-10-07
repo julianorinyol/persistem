@@ -27,7 +27,7 @@ describe("Application", function() {
   // setTableHeaders()
   // convertDate(unixDateString)
   // timeSince(date)
-  // setUpBindings()
+  // setUpTableRowBindings()
   // displayNotebookOptions()
   // displayWelcomePage()
   //createQuizInputEventBindings()

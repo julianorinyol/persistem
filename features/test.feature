@@ -1,8 +1,9 @@
 Feature: Test Cucumber
-  In order choose where to navigate
-  As an user
-  I want to view the homepage
+  In order to see my notes 
+  As an authenticated user
+  I visit the home page
 
-  Scenario: unauthed site visitor
+  Scenario: authenticated user
+    Given an authenticated user 
     When  I visit the home page
-    Then I should see the title
+    Then I should see my email

@@ -60,7 +60,7 @@ function displayNotesForNotebook(notes, notebook){
     tr = $(trInnards);
     tr.appendTo($('#private-notes-list tbody'));
   }
-  setUpBindings();
+  setUpTableRowBindings();
 }
 
 //display takes  optional extra args... which create element attributes.  ex. ['class', 'testClass'] ---becomes---> class='testClass'
@@ -73,7 +73,7 @@ function displayNotesForNotebook(notes, notebook){
 //     tr = $(trInnards);
 //     tr.appendTo($('#private-notes-list tbody'));
 //    }
-//    setUpBindings();
+//    setUpTableRowBindings();
 // }
 
 
@@ -87,7 +87,7 @@ function displayQuizzes(quizzes) {
   }
   setTableHeaders('Date Created', '% Finished');
 
-  setUpBindings();
+  setUpTableRowBindings();
 }
 
 
@@ -168,7 +168,7 @@ function timeSince(date) {
     }
     return Math.floor(seconds) + " seconds";
 }
-function setUpBindings(){
+function setUpTableRowBindings(){
   $("tr[data-link].clickable-tr").click(function() {
     window.location = $(this).data("link")
   })
@@ -313,7 +313,7 @@ function callForNotes(notebooks){
           myNotes = notes;
           initialCallForContent();
           displayNotes(myNotes, notebooks);
-          setUpBindings();
+          setUpTableRowBindings();
         },
         error: function(phase, message){
           console.log('ajax post failed', message);

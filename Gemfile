@@ -66,6 +66,9 @@ group :development, :test do
   # gem 'guard-rspec', require: false
   gem 'faker'
   gem 'jasmine'
+  gem 'selenium-webdriver'
+  gem "capybara-webkit"
+  gem 'poltergeist'
 end
 
 group :test do

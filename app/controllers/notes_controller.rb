@@ -61,9 +61,8 @@
     sync_chunk_filter = Evernote::EDAM::NoteStore::SyncChunkFilter.new
     sync_chunk_filter.includeNotes = true
     sync_chunk_filter.includeNotebooks = true
-
       
-    updated = note_store.get_filtered_sync_chunk(current_user.last_usn, 5, sync_chunk_filter)
+    updated = note_store.getFilteredSyncChunk(current_user.last_usn, 5, sync_chunk_filter)
 
     handle_update(updated, note_store)
   end
@@ -100,7 +99,7 @@
 
   def get_last_usn note_store
       sync_chunk_filter = Evernote::EDAM::NoteStore::SyncChunkFilter.new
-      chunk = note_store.get_filtered_sync_chunk(0, 1, sync_chunk_filter)
+      chunk = note_store.getFilteredSyncChunk(0, 1, sync_chunk_filter)
       return chunk.updateCount
   end
 
