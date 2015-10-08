@@ -11,6 +11,7 @@ FactoryGirl.define do
     last_usn { 0 }
   end
 
+
   factory :user do
     firstname { Faker::Name.first_name } 
     lastname { Faker::Name.last_name }

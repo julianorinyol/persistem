@@ -14,7 +14,7 @@ When(/^fill in the form with my details$/) do
   fill_in "Password", with: 'password'
   click_button "Log In"
   expect(current_path).to eq "/notes"
-  Capybara.default_max_wait_time = 10
+  # Capybara.default_max_wait_time = 10
 end
 
 Then(/^I should be redirected to an Evernote login page$/) do
