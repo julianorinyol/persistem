@@ -38,7 +38,6 @@ end
 
 
 Given(/^a user with a session already started, has note in account$/) do
-  binding.pry
   u = FactoryGirl.create(:user)
   u.update(synced: true)
   page.driver.browser.authorize u.email, 'password'
@@ -46,7 +45,6 @@ Given(/^a user with a session already started, has note in account$/) do
 end
 
 When(/^I visit the root_path$/) do
-binding.pry
   visit notes_path
 end
 
