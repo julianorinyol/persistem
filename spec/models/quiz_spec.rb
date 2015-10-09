@@ -70,10 +70,10 @@ describe Quiz do
     @quiz.add_questions_with_least_answers 7
 
     # Get an array of the 7 smallest number of answers a question has, ordered smallest to biggest.
-    num_answers_for_quizzes_questions = get_num_of_dependants_for_all("Question", 'answers')[0, 7]
+    num_answers_for_all_questions = get_num_of_dependants_for_all("Question", 'answers')[0, 7]
 
-    num_answer_all_questions = get_num_of_dependants_for_array(@quiz.questions, 'answers')
-    expect(num_answers_for_quizzes_questions).to eq num_answer_all_questions
+    num_answers_quizzes_questions = get_num_of_dependants_for_array(@quiz.questions, 'answers')
+    expect(num_answers_quizzes_questions).to eq num_answers_for_all_questions
   end
 
 
@@ -101,44 +101,6 @@ describe Quiz do
 
   it "doesn't expose other users notes, when creating custom quiz by date"
 
-
-  #  def custom num_questions, params
-  #   # first 2 are exclusive queries, and then popular is an order_by
-
-  #   if params[:time_ago]
-  #     questions = Question.where(user_id: user.id).send(params[:time_ago]).includes(:note)
-  #   else  
-  #     questions = Question.joins(:note).where(user_id: user.id)
-  #   end
-    
-  #   # notebooks is an array of strings
-  #   if params[:notebooks] && params[:notebooks].length > 0 
-  #     # Cant get the godamn query to work:
-  #       #  it works like Question.joins(:note).where('notebook_id = (1,2)')
-  #     # Question.joins(:note).where('notebook_id = ?', params[:notebooks])
-  #     notebook_ids_ints = [];
-  #     params[:notebooks].split(',').each do |id|
-  #       notebook_ids_ints << id.to_i
-  #     end
-  #     results = filter_out_questions_not_in_notebook_array(questions, notebook_ids_ints)
-  #   else 
-  #     results = questions
-  #   end
-    
-  #   if params[:popular] && params[:popular] == 'popular'
-  #     results = Question.sort_by_popularity(results)
-  #   end
-
-  #   correct_num = []
-
-  #   results.each do|r|
-  #     if correct_num.size < num_questions
-  #       correct_num << r
-  #     end
-  #   end
-  #   self.questions << correct_num
-  # end
-
   it "creates a custom quiz selecting only questions from particular notebooks" do
     @quiz.save
     # create some notebooks
@@ -146,7 +108,6 @@ describe Quiz do
     # create some questions, randomly distributed among notebooks.
     create_x_many_objects(35, 'note')
     create_x_many_objects(35, 'question')
-    binding.pry
     notebook_ids = [Notebook.first.id, Notebook.last.id]
     notebook_param = "" + notebook_ids[0].to_s + ", " + notebook_ids[1].to_s
     params = { time_ago: nil, popular: "unpopular", notebooks: notebook_param }
@@ -155,18 +116,114 @@ describe Quiz do
     @quiz.questions.each do |question|
       expect(notebook_ids.include?(question.notebook.id)).to be true
     end
-
   end
 
-  it "doesn't expose other users notes, when creating custom quiz by notebook"
+  it "doesn't expose other users notes, when creating custom quiz by notebook" do 
+    @quiz.save
+    user1 = User.first
+    user2 = create(:user)
+    create_x_many_objects(10, 'notebook')
+    create_x_many_objects(50, 'note')
+    create_x_many_objects(100, 'question')
+    notebook_ids = [user1.notebooks.sample.id,user1.notebooks.sample.id]
+    notebook_param = "" + notebook_ids[0].to_s + ", " + notebook_ids[1].to_s
+    params = { time_ago: nil, popular: "unpopular", notebooks: notebook_param }
+    @quiz.custom(7, params)
+    @quiz.questions.each do |question|
+      expect(question.user_id).to_not eq user2.id
+    end
+  end
 
-  it "creates a custom quiz selecting more popular questions"
+  it "creates a custom quiz selecting more popular questions" do
+    @quiz.save
+    # create some notebooks
+    create_x_many_objects(5, 'notebook')
+    # create some questions, randomly distributed among notebooks.
+    create_x_many_objects(12, 'note')
+    create_x_many_objects(35, 'question')
+    create_x_many_objects(100, 'answer')
 
-  it "doesn't expose other users notes, when creating custom quiz by popularity"
+    params = { time_ago: nil, popular: "popular", notebooks: nil }
+    @quiz.custom(7, params)
+    num_of_answers_for_each_question = get_num_of_dependants_for_all("question","answers").reverse[0,7]
+    num_answers_quizzes_questions = get_num_of_dependants_for_array(@quiz.questions, 'answers')
+    expect(num_answers_quizzes_questions).to eq num_of_answers_for_each_question
+  end
+  # num_answers_for_all_questions = get_num_of_dependants_for_all("Question", 'answers')[0, 7]
+
+  # num_answers_quizzes_questions = get_num_of_dependants_for_array(@quiz.questions, 'answers')
+  # expect(num_answers_for_all_questions).to eq num_answers_quizzes_questions
+
+  it "doesn't expose other users notes, when creating custom quiz by popularity" do
+    @quiz.save
+    user1 = User.first
+    user2 = create(:user)
+    # create some notebooks
+    create_x_many_objects(10, 'notebook')
+    # create some questions, randomly distributed among notebooks.
+    create_x_many_objects(20, 'note')
+    create_x_many_objects(70, 'question')
+    create_x_many_objects(200, 'answer')
+
+    # check for reasonable distribution.. giving space for probability so tests don't fail at random times
+    expect(user2.answers.size).to be > 75
+    ensure_each_user_has_at_least_one
+
+    params = { time_ago: nil, popular: "popular", notebooks: nil }
+    @quiz.custom(7, params)
+    num_of_answers_for_each_question = get_num_of_dependants_for_all("question","answers").reverse[0,7]
+    num_answers_quizzes_questions = get_num_of_dependants_for_array(@quiz.questions, 'answers')
+
+    @quiz.questions.each do |question|
+      expect(question.user.id).to be user1.id
+      expect(question.user.id).not_to be user2.id
+    end
+  end
 
 
 
-  it "selects questions from last week the first notebook only in order of least popular"
+  it "selects questions from this year the first notebook only in order of least popular" do
+
+
+    user = User.first
+    2.times do
+      create(:notebook)
+    end
+    # using only 2 notes, ONE from each notebook, as this makes it easier to query questions...
+    note1 = create(:note,notebook_id: Notebook.first.id)
+    note2 = create(:note, notebook_id: Notebook.last.id)
+
+    40.times do 
+      # questions generated before year
+      months_ago = rand(100) + 13
+      create(:question, created_at: (Time.now - months_ago.months))
+    end
+    60.times do 
+      # questions generated this year
+      days_ago = rand(363) + 1
+      create(:question, created_at: (Time.now - days_ago.days))
+    end
+    create_x_many_objects(300, 'answer')
+
+    expect(Question.this_year.size).to eq 60
+
+    notebook_param = Notebook.first.id.to_s
+    params = { time_ago: "this_year", popular: "unpopular", notebooks: notebook_param }
+    @quiz.custom(7, params)
+
+    # verify that they were the least popular of the subset
+    this_year_questions_from_this_notebook = Note.first.questions.where("created_at >= :start_date", {start_date: Time.now - 1.year})
+    nums_of_answers_for_questions_this_year_from_this_notebook = get_num_of_dependants_for_array(this_year_questions_from_this_notebook, "answers")[0,7]
+
+    @quiz.questions.each do |question|
+      # verify time
+      expect(question.created_at).to be > (Time.now - 1.year)
+      # verify notebook
+      expect(question.notebook.id).to eq Notebook.first.id
+    end
+
+    expect(get_num_of_dependants_for_array(@quiz.questions, "answers")).to eq nums_of_answers_for_questions_this_year_from_this_notebook
+  end
 
   it "doesn't expose other peoples notes"
 
