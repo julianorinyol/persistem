@@ -98,6 +98,10 @@ describe Quiz do
       expect(question.created_at).to be > (Time.zone.now - 7.days).beginning_of_day
     end
   end
+
+  it "doesn't expose other users notes, when creating custom quiz by date"
+
+
   #  def custom num_questions, params
   #   # first 2 are exclusive queries, and then popular is an order_by
 
@@ -135,9 +139,31 @@ describe Quiz do
   #   self.questions << correct_num
   # end
 
-  it "creates a custom quiz selecting only questions from particular notebooks"
+  it "creates a custom quiz selecting only questions from particular notebooks" do
+    @quiz.save
+    # create some notebooks
+    create_x_many_objects(5, 'notebook')
+    # create some questions, randomly distributed among notebooks.
+    create_x_many_objects(35, 'note')
+    create_x_many_objects(35, 'question')
+    binding.pry
+    notebook_ids = [Notebook.first.id, Notebook.last.id]
+    notebook_param = "" + notebook_ids[0].to_s + ", " + notebook_ids[1].to_s
+    params = { time_ago: nil, popular: "unpopular", notebooks: notebook_param }
+    @quiz.custom(7, params)
+    # expect(@quiz.questions.size).to eq ???????
+    @quiz.questions.each do |question|
+      expect(notebook_ids.include?(question.notebook.id)).to be true
+    end
+
+  end
+
+  it "doesn't expose other users notes, when creating custom quiz by notebook"
 
   it "creates a custom quiz selecting more popular questions"
+
+  it "doesn't expose other users notes, when creating custom quiz by popularity"
+
 
 
   it "selects questions from last week the first notebook only in order of least popular"
