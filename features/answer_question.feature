@@ -12,15 +12,16 @@ Feature: Answer question
     Then I see an Answer submission form
 
   Scenario: Submit an answer
-    Given I log in aaa
+    Given I log in
+    And I have 3 questions for each note
     When I view the answer submission form for a question
-    And I fill out the form and click submit
-    Then the answer should be saved in the database
-    And I see it in the answer list
+    And I fill in the "answer form" with "Answer123" and click submit
+    Then "Answer123" is listed on the page
 
   Scenario: Browse Answers
-    Given I log in aaa
+    Given I log in
+    And I have 3 questions for each note
+    And each "question" has 5 "answers"
     When I view questions for a note 
     And I click on a question
-    And the question has 5 answers
     Then I see a list of answers

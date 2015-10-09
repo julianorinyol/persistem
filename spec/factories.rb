@@ -55,8 +55,9 @@ FactoryGirl.define do
     note_id { question.note.id }
     text { 'answer text' + rand(100).to_s }
   end
-
-
+  factory :quiz do 
+    user  { User.offset(rand(User.count)).first || create(:user) }
+  end
 
   # This will use the User class (Admin would have been guessed)
   # factory :admin, class: User do

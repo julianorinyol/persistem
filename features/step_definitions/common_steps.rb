@@ -1,5 +1,5 @@
 Given(/^I log in$/) do
-  set_speed(:medium)
+  # set_speed(:medium)
   user = create(:evernote_user, synced: false)
   # create(:notebook, guid: ENV["FIRST_NOTEBOOK_GUID"])
   # create(:notebook, guid: ENV["SECOND_NOTEBOOK_GUID"])
@@ -9,4 +9,40 @@ end
 
 Given(/^I visit the home page$/) do
   visit root_path
+end
+
+
+# good for one field forms only....
+When(/^I fill in the "(.*?)" with "(.*?)" and click submit$/) do |form_name, text|
+  field_id = {answerform:"answer_text"}[form_name.gsub(/\s+/, "").to_sym]
+  fill_in field_id, with: text
+
+  submit_id = {answerform:'create-answer-button'}[form_name.gsub(/\s+/, "").to_sym]
+  find_by_id(submit_id).click()
+end
+
+Then(/^"(.*?)" is listed on the page$/) do |text|
+  expect(page).to have_content(text)
+end
+
+#     And each "question" has 5 "answers"
+Given(/^each "(.*?)" has (\d+) "(.*?)"$/) do |parent_class, quantity, child_class|
+# remove the last letter.. an  s..
+  child_class = child_class[0..(child_class.length - 2)]
+  Object.const_get(parent_class.titleize).all.each do |obj|
+    quantity.to_i.times do
+      id = parent_class + "_id"
+      id = id.to_sym
+      create(child_class.to_sym, "#{id}": obj.id )
+    end
+  end
+end
+
+When(/^I click "(.*?)"$/) do |button_text|
+  exect(page).to have_content(button_text)
+  click_on(button_text)
+end
+
+Then(/^I see (\d+) notes$/) do |arg1|
+  pending # express the regexp above with the code you wish you had
 end

@@ -23,7 +23,20 @@ describe Quiz do
 
   # *********************************Methods************************************************************** #
   # def get_questions num
-  it "adds up to the specified number of questions that are the users to its question array"
+  it "adds up to the specified number of questions that are the users to its question array" do
+    # make a quiz
+
+    # make 5 questions
+    binding.pry
+
+    @quiz.get_questions(5)
+    expect(@quiz.questions.size).to eq 5
+  end
+
+  # def get_questions num
+  #   self.questions << Question.where(user_id: user.id).order("RANDOM()").take(num)
+  #   # Thing.order("RANDOM()").first
+  # end
 
   it "doesn't expose any questions that don't belong to the current user"
 
