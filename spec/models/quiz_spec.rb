@@ -53,44 +53,26 @@ describe Quiz do
   # def add_questions_with_least_answers num and get_questions_with_least_answers
   it "adds up to the number specified of questions to the questions array in the order of those that have the least answers" do
     @quiz.save
-    15.times do 
-      create(:question)
-    end
-    100.times do 
-      create(:answer)
-    end
+    create_x_many_objects(15, 'question')
+    create_x_many_objects(100, 'answer')
     # make answers, distribute them randomly
     @quiz.add_questions_with_least_answers 7
     expect(@quiz.questions.size).to eq 7
-
-   
   end
 
   # def add_questions_with_least_answers num and get_questions_with_least_answers
   it "gets the questions with the least answers" do
     @quiz.save
-    15.times do 
-      create(:question)
-    end
-    100.times do 
-      create(:answer)
-    end
-    # make answers, distribute them randomly
+
+    create_x_many_objects(15, 'question')
+    create_x_many_objects(100, 'answer')
+
     @quiz.add_questions_with_least_answers 7
-    num_answers = []
 
-    Question.all.each do |q|
-      num_answers << q.answers.size
-    end
-    binding.pry
-    num_answers.sort!
-    num_answers = num_answers[0, 7]
+    # Get an array of the 7 smallest number of answers a question has, ordered smallest to biggest.
+    num_answers = get_num_of_dependants_for_all("Question", 'answers')[0, 7]
 
-    x = []
-    @quiz.questions.each do |q|
-      x << q.answers.size
-    end
-    x.sort!
+    x = get_num_of_dependants_for_array(@quiz.questions, 'answers')
     expect(num_answers).to eq x
   end
 
