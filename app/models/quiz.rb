@@ -33,7 +33,7 @@ class Quiz < ActiveRecord::Base
       used_question_ids.each do |id|
         counts[id] += 1
       end
-      counts = shuffle_hash counts
+      counts = Quiz::shuffle_hash counts
 
       num_left = num - least_used_ids.size
       values_sorted = counts.values.sort
@@ -98,28 +98,19 @@ class Quiz < ActiveRecord::Base
     return results
   end
 
-  def shuffle_hash hashy
+  def self.shuffle_hash hashy
     Hash[hashy.to_a.sample(hashy.length)]
   end
 
-  # what does this do???? it returns a questions text??
-  def get_previous_answers
-    @answers = []
-    self.questions.each_with_index do |question, index|
-      x = Answer.where(user_id: user.id, quiz_id: self.id, question_id: question.id)
-      if(x.length > 0)
-        @answers.push({index: index, text: question.text})
-      end
-    end
-    return @answers
-  end
-
-
-  # def test_set_times
-  #   questions = Question.all
-  #   questions.each do |q|
-  #     q.update(created_at: (Time.now - rand(1..100).days) )
+  # possibly for ajax
+  # def ?????????
+  #   @answers = []
+  #   self.questions.each_with_index do |question, index|
+  #     x = Answer.where(user_id: user.id, quiz_id: self.id, question_id: question.id)
+  #     if(x.length > 0)
+  #       @answers.push({index: index, text: question.text})
+  #     end
   #   end
+  #   return @answers
   # end
-
 end

@@ -229,10 +229,19 @@ describe Quiz do
 
 
   # def shuffle_hash hashy
-  it "puts a hash into a random order"
+  it "puts a hash into a random order" do
 
-  # def get_previous_answers
-  it "returns previously submitted answers in a custom object"
-  # {index: index, text: question.text}
+    hashy = { "a": 'cat', "b": 'dog', "c": 'pidgeon', "d": 'monkey', "e": 'tortoise'}
 
+    result = false
+    5.times do
+      if hashy.first == Quiz::shuffle_hash(hashy).first
+        next
+      else
+        result = true
+        break
+      end
+    end
+    expect(result).to be true 
+  end
 end

@@ -38,8 +38,6 @@ class QuizController < ApplicationController
   end
 
   def show
-    # @answers = @quiz.get_previous_answers
-
     if current_user
       @notes = Note.where(user_id: current_user.id)
 
