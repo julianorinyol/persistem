@@ -9,14 +9,6 @@ Then(/^I see a list of my notebooks$/) do
     expect(page).to have_content notebook.title 
   end
 end
-
-Given(/^I have (\d+) "(.*?)"$/) do |num, class_name|
-    num.to_i.times do 
-      create(class_name.singularize.downcase.to_sym)
-    end
-end
-
-
 Then(/^I see a list of my Quizzes$/) do
   expect(page).to have_css(".clickable-tr[data-link='/quiz/1']")
   expect(page).to have_css(".clickable-tr[data-link='/quiz/2']")

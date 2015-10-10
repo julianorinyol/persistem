@@ -9,6 +9,11 @@ Given(/^I visit the home page$/) do
   visit root_path
 end
 
+Given(/^I have (\d+) "(.*?)"$/) do |num, class_name|
+    num.to_i.times do 
+      create(class_name.singularize.downcase.to_sym)
+    end
+end
 
 # good for one field forms only....
 When(/^I fill in the "(.*?)" with "(.*?)" and click submit$/) do |form_name, text|

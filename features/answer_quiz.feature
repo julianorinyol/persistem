@@ -4,7 +4,10 @@ Feature: Take A Quiz
   I want to answer the questions on a quiz
 
   Scenario: I have generated a quiz, and am entering answers
-    Given I'm logged in
-    When I enter the answer for the first question
-    Then A new answer is created in the database
-    And I can see the answer when i refresh the page
+    Given I log in 
+    And I have 10 "questions"
+    When I generate a quiz 
+    And I enter "YOYOYO blablaba" as the answer for the first question
+    And I click somewhere else to blur the element
+    And I refresh the page
+    Then I can see "YOYOYO blablaba" on the page
