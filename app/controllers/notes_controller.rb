@@ -88,7 +88,7 @@
 
       while @notes.size < totalNoteNum
         evernotes = @note_store.findNotes(note_filter, (@notes.size || 0 ) , 1000)
-        addNotesToDb(evernotes.notes)
+        add_notes_to_db(evernotes.notes)
         @notes = Note.where(user_id: current_user.id)
       end
     

@@ -123,27 +123,28 @@ describe Notebook do
   end
 
   # def self.get_count_of_notes_by_notebook note_store
-  describe ".get_count_of_notes_by_notebook" do
-    it "it returns the amount of notes in each notebook**in what format????" do
-      user = create(:user, email: "persistemsample@gmail.com", evernote_auth: ENV["TEST_AUTH_TOKEN"])
-      notebook = create(:notebook, guid: "93658a6c-ef7b-4511-8890-b767ea5b9ca9", user: user)
-      notebook2 = create(:notebook, guid: "ca669dca-b708-46fe-a034-41d00535051e", user: user)
+# this tests
+  # describe ".get_count_of_notes_by_notebook" do
+  #   it "it returns the amount of notes in each notebook**in what format????" do
+  #     user = create(:user, email: "persistemsample@gmail.com", evernote_auth: ENV["TEST_AUTH_TOKEN"])
+  #     notebook = create(:notebook, guid: "93658a6c-ef7b-4511-8890-b767ea5b9ca9", user: user)
+  #     notebook2 = create(:notebook, guid: "ca669dca-b708-46fe-a034-41d00535051e", user: user)
 
-      note = create(:note, user: user, content: "<div>this should get updated by the function!</div>", guid: "77526061-74e7-4cfb-b5f4-8c751edc75d2", notebook: notebook, notebook_guid: "93658a6c-ef7b-4511-8890-b767ea5b9ca9")
-      note = create(:note, user: user, content: "<div>this should get updated by the function!</div>", guid: "ef2b15f4-998e-4dce-81cc-d361d8f4c4ba", notebook: notebook2, notebook_guid: "ca669dca-b708-46fe-a034-41d00535051e")
+  #     note = create(:note, user: user, content: "<div>this should get updated by the function!</div>", guid: "77526061-74e7-4cfb-b5f4-8c751edc75d2", notebook: notebook, notebook_guid: "93658a6c-ef7b-4511-8890-b767ea5b9ca9")
+  #     note = create(:note, user: user, content: "<div>this should get updated by the function!</div>", guid: "ef2b15f4-998e-4dce-81cc-d361d8f4c4ba", notebook: notebook2, notebook_guid: "ca669dca-b708-46fe-a034-41d00535051e")
 
-      token = user.evernote_auth
-      client = EvernoteOAuth::Client.new(token: token)
+  #     token = user.evernote_auth
+  #     client = EvernoteOAuth::Client.new(token: token)
       
-      note_store = client.note_store
+  #     note_store = client.note_store
 
-      evernote_notebook_count = Notebook::get_count_of_notes_by_notebook note_store
-      counts = evernote_notebook_count.notebookCounts
-      user.notebooks.each do |nb|
-        expect(counts[nb.guid]).to eq nb.notes.size
-      end
-    end
-  end
+  #     evernote_notebook_count = Notebook::get_count_of_notes_by_notebook note_store
+  #     counts = evernote_notebook_count.notebookCounts
+  #     user.notebooks.each do |nb|
+  #       expect(counts[nb.guid]).to eq nb.notes.size
+  #     end
+  #   end
+  # end
 
   it "doesn't expose any notebooks that don't belong to the current user "
 
