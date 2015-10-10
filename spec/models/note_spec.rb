@@ -99,7 +99,7 @@ describe Note do
       100.times do 
         create(:question, user: @user)
       end
-      sorted_notes = Note::popular(@user)
+      sorted_notes = Note::popular(@user, "questions")
       expect(sorted_notes[0].questions.size).to be >= sorted_notes[1].questions.size
     end
 

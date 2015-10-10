@@ -59,11 +59,12 @@ describe Question do
     100.times do
       create(:answer)
     end
-    sorted_questions = Question::popular User.first
+    sorted_questions = Question::popular(User.first, "answers")
+
     sorted_questions.each_with_index do |question, index|
-      expect(question.answers.size).to be <= sorted_questions[index+1].answers.size unless index == sorted_questions.size - 1 
+      expect(question.answers.size).to be >= sorted_questions[index+1].answers.size unless index == sorted_questions.size - 1 
     end
-    expect(sorted_questions[0].answers.size).to be <= sorted_questions[1].answers.size 
+    expect(sorted_questions[0].answers.size).to be >= sorted_questions[1].answers.size 
   end
   # def self.popular current_user
   #   questions = Question.where(user_id: current_user.id).includes(:answers)
