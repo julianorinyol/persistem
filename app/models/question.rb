@@ -1,4 +1,6 @@
 class Question < ActiveRecord::Base
+  include SharedMethods
+
   belongs_to :note
   has_many :answers
   belongs_to :user
@@ -17,15 +19,10 @@ class Question < ActiveRecord::Base
 
   def self.popular current_user
     questions = Question.where(user_id: current_user.id)
-
-    sorted = questions.sort_by do |question|
-      question.answers.size
-    end
+    sort_by_number_of_dependants(questions, "answers")
   end
 
   def self.sort_by_popularity questions
-    sorted = questions.sort_by do |question|
-      question.answers.size
-    end
+    sort_by_number_of_dependants(questions, "answers")
   end
 end

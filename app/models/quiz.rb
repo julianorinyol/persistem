@@ -51,7 +51,6 @@ class Quiz < ActiveRecord::Base
       results.reverse!
     end
     correct_num = []
-binding.pry
     results.each do|r|
       if correct_num.size < num_questions
         correct_num << r
