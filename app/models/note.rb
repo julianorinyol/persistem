@@ -27,19 +27,15 @@ class Note < ActiveRecord::Base
     xml_doc.css("en-note").children.to_s
   end
 
-  #A Notes popularity is determined by how many questions there are in the database for it. The function should return all the users notes, sorted by how many questions they have. 
+  # returns the notes with the most questions
   def self.popular current_user
-    notes = Note.where(user_id: current_user.id).includes(:questions)
+    notes = Note.where(user_id: current_user.id)
 
-    counts = {}
-    notes.each do |note|
-      counts[note.id] = { note: note, amount: note.questions.size }
+    sorted = notes.sort_by do |note|
+      note.questions.size
     end
-    counts_sorted_by_amount = counts.values.sort_by do |count| count[:amount] end
-    counts_sorted_by_amount.reverse!
-    most_popular_notes = []
-    counts_sorted_by_amount.each do |custom_obj| most_popular_notes << custom_obj[:note] end
-    return most_popular_notes
+
+    sorted.reverse
   end
   
 end

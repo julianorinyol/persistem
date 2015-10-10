@@ -134,7 +134,7 @@ describe Quiz do
     end
   end
 
-  it "creates a custom quiz selecting more popular questions" do
+  it "creates a custom quiz selecting  the most popular questions" do
     @quiz.save
     # create some notebooks
     create_x_many_objects(5, 'notebook')
@@ -145,8 +145,9 @@ describe Quiz do
 
     params = { time_ago: nil, popular: "popular", notebooks: nil }
     @quiz.custom(7, params)
+
     num_of_answers_for_each_question = get_num_of_dependants_for_all("question","answers").reverse[0,7]
-    num_answers_quizzes_questions = get_num_of_dependants_for_array(@quiz.questions, 'answers')
+    num_answers_quizzes_questions = get_num_of_dependants_for_array(@quiz.questions, 'answers').reverse
     expect(num_answers_quizzes_questions).to eq num_of_answers_for_each_question
   end
   # num_answers_for_all_questions = get_num_of_dependants_for_all("Question", 'answers')[0, 7]
@@ -183,8 +184,6 @@ describe Quiz do
 
 
   it "selects questions from this year the first notebook only in order of least popular" do
-
-
     user = User.first
     2.times do
       create(:notebook)
@@ -210,7 +209,6 @@ describe Quiz do
     notebook_param = Notebook.first.id.to_s
     params = { time_ago: "this_year", popular: "unpopular", notebooks: notebook_param }
     @quiz.custom(7, params)
-
     # verify that they were the least popular of the subset
     this_year_questions_from_this_notebook = Note.first.questions.where("created_at >= :start_date", {start_date: Time.now - 1.year})
     nums_of_answers_for_questions_this_year_from_this_notebook = get_num_of_dependants_for_array(this_year_questions_from_this_notebook, "answers")[0,7]

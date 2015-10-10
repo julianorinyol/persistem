@@ -15,31 +15,17 @@ class Question < ActiveRecord::Base
   scope :this_month, -> do where("created_at BETWEEN ? AND ?", (Time.zone.now - 30.days).beginning_of_day, Time.zone.now.end_of_day) end
   scope :this_year,  -> do where("created_at BETWEEN ? AND ?", (Time.zone.now - 1.year).beginning_of_day, Time.zone.now.end_of_day) end
 
-  # returns all the users questions in order from LEAST to MOST popular (in terms of amount of associated questions)
   def self.popular current_user
-    questions = Question.where(user_id: current_user.id).includes(:answers)
+    questions = Question.where(user_id: current_user.id)
 
-    counts = Hash.new 0
-
-    questions.each do |question|
-      counts[question.id] = { question: question, amount: question.answers.size }
+    sorted = questions.sort_by do |question|
+      question.answers.size
     end
-    sorted_by_num_answers = counts.values.sort_by do |obj| obj[:amount] end
-    result = []
-    sorted_by_num_answers.each do |custom_obj| result << custom_obj[:question] end
-    return result
   end
 
-  # returns the provided question set in order LEAST to MOST popular (in terms of amount of associated questions)
   def self.sort_by_popularity questions
-    counts = Hash.new 0
-
-    questions.each do |question|
-      counts[question.id] = { question: question, amount: question.answers.size }
+    sorted = questions.sort_by do |question|
+      question.answers.size
     end
-    counts_sorted_by_num_answers = counts.values.sort_by do |obj| obj[:amount] end
-    result = []
-    counts_sorted_by_num_answers.each do |custom_obj| result << custom_obj[:question] end
-    return result
   end
 end
