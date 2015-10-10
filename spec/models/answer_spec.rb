@@ -21,7 +21,6 @@ describe Answer do
    it { is_expected.to validate_presence_of :user_id }
    it { is_expected.to validate_presence_of :question_id }
 
-
   # it "is valid with an question_id, text, user_id" do
   #   expect(@answer).to be_valid
   # end

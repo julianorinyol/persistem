@@ -12,6 +12,7 @@ class Quiz < ActiveRecord::Base
   end
 
   def add_questions_with_least_answers num
+    binding.pry
     self.questions << get_questions_with_least_answers(num)
   end
 
@@ -34,24 +35,19 @@ class Quiz < ActiveRecord::Base
       questions = Question.joins(:note).where(user_id: user.id)
     end
     
-    # notebooks is an array of strings
     if params[:notebooks] && params[:notebooks].length > 0 
-        #  it works like Question.joins(:note).where('notebook_id = (1,2)')
-      # Question.joins(:note).where('notebook_id = ?', params[:notebooks])
-      
       notebook_ids = params[:notebooks].split(',').map do |id|
         id.to_i
       end
-      results = filter_out_questions_not_in_notebook_array(questions, notebook_ids)
-    else 
-      results = questions
+      questions = filter_out_questions_not_in_notebook_array(questions, notebook_ids)
     end
-    results = Question::sort_by_popularity(results)
+    questions = sort_by_number_of_dependants(questions, "answers")
+     # Question::sort_by_popularity(questions)
     if params[:popular] && params[:popular] == 'popular'
-      results.reverse!
+      questions.reverse!
     end
     correct_num = []
-    results.each do|r|
+    questions.each do|r|
       if correct_num.size < num_questions
         correct_num << r
       end

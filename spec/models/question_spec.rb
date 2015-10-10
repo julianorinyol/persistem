@@ -33,16 +33,6 @@ describe Question do
   it { is_expected.to have_many(:answers) }
   it { is_expected.to have_and_belong_to_many(:quizzes) }
 
-
-
-  # belongs_to :note
-  # has_many :answers
-  # belongs_to :user
-  # # has_many :questions_quiz
-  # has_and_belongs_to_many :quizzes
-  # delegate :notebook, :to => :note
-  # # has_many :quizzes, through: :questions_quiz
-
   # *********************************Scopes************************************************************** #
   # scope :today
   # scope :this_week
@@ -66,19 +56,6 @@ describe Question do
     end
     expect(sorted_questions[0].answers.size).to be >= sorted_questions[1].answers.size 
   end
-  # def self.popular current_user
-  #   questions = Question.where(user_id: current_user.id).includes(:answers)
-
-  #   counts = Hash.new 0
-
-  #   questions.each do |q|
-  #     counts[q.id] = { question: q, amount: q.answers.size }
-  #   end
-  #   mapped = counts.values.sort_by do |obj| obj['amount'] end
-  #   arr = []
-  #   mapped.each do |custom_obj| arr << custom_obj[:question] end
-  #   return arr
-  # end
 
   # def self.sort_by_popularity questions
   it "sorts an array of questions by their popularity returning in orded the least popular first" do 
@@ -88,21 +65,9 @@ describe Question do
     100.times do
       create(:answer)
     end
-    sorted_questions = Question::sort_by_popularity Question.all
+    sorted_questions = Question::sort_by_number_of_dependants( Question.all, "answers" )
     expect(sorted_questions.first.answers.size <= sorted_questions.last.answers.size).to be true 
   end
-  # def self.sort_by_popularity questions
-  #   counts = Hash.new 0
 
-  #   questions.each do |q|
-  #     counts[q.id] = { question: q, amount: q.answers.size }
-  #   end
-  #   mapped = counts.values.sort_by do |obj| obj['amount'] end
-  #   arr = []
-  #   mapped.each do |custom_obj| arr << custom_obj[:question] end
-  #   return arr
-  # end
-
-
-    it "doesn't expose any questions that don't belong to the current user"
+  it "doesn't expose any questions that don't belong to the current user"
 end

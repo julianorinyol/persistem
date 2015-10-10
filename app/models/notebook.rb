@@ -20,5 +20,4 @@ class Notebook < ActiveRecord::Base
     note_filter = Evernote::EDAM::NoteStore::NoteFilter.new
     return note_store.findNoteCounts(note_filter, false)
   end
-
 end

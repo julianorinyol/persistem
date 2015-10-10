@@ -12,18 +12,24 @@ module SharedMethods
     sorted = arr.sort_by do |x| 
       x.send(child_class).size
     end
-    sorted
   end
   module ClassMethods
     def sort_by_number_of_dependants arr, child_class
       sorted = arr.sort_by do |x| 
       x.send(child_class).size
       end
-      sorted
     end
     def popular current_user, child_class
       arr = self.where(user_id: current_user.id)
       sort_by_number_of_dependants(arr, child_class).reverse
+    end
+  end
+
+  class ::Array
+    def sort_by_number_of child_class
+      sorted = self.sort_by do |x|
+        x.send(child_class).size
+      end
     end
   end
 end
