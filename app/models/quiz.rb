@@ -66,8 +66,4 @@ class Quiz < ActiveRecord::Base
     end
     results
   end
-
-  def self.shuffle_hash hashy
-    Hash[hashy.to_a.sample(hashy.length)]
-  end
 end
