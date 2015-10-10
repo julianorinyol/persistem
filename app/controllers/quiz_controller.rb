@@ -27,7 +27,6 @@ class QuizController < ApplicationController
   def new_least_answered
     @quiz = Quiz.create(user_id: current_user.id)
     @quiz.get_questions_with_least_answers 7
-    binding.pry
     redirect_to quiz_path(id: @quiz.id)
   end
 
