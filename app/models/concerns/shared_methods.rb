@@ -23,6 +23,10 @@ module SharedMethods
       arr = self.where(user_id: current_user.id)
       sort_by_number_of_dependants(arr, child_class).reverse
     end
+    
+    def shuffle_hash hashy
+      Hash[hashy.to_a.sample(hashy.length)]
+    end
   end
 
   class ::Array
