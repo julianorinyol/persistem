@@ -46,7 +46,7 @@ Then(/^I see "(.*?)"$/) do |text|
 end
 
 When(/^I click "(.*?)"$/) do |button_text|
-  exect(page).to have_content(button_text)
+  expect(page).to have_content(button_text)
   click_on(button_text)
 end
 
