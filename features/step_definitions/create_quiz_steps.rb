@@ -5,10 +5,9 @@ Then(/^i see a random set of questions$/) do
   expect(find_all(".quiz-answer-submit-text").size).to eq 7
 
   quiz = Quiz.find(current_path[-1])
-  # all_questions = sort_by_number_of_dependants(Question.all, "answers").pluck(:id)
-  # quiz_questions = quiz.questions.map! {|q| q.id }
-  # expect(all_questions[0,7]).not_to eq quiz_questions
+
   all_smaller = true
+
   questions = quiz.questions
   questions.each_with_index do |q,i|
     break if i == questions.size - 1
@@ -16,4 +15,17 @@ Then(/^i see a random set of questions$/) do
   end
   expect(all_smaller).to be false
   # TODO   the test is right, but code isn't implimented...  it's not doing random.. its ordered..
+end
+
+
+Then(/^I should see the (\d+) questions that have the least amount of answers out of all of my questions\.$/) do |num|
+  sleep 3
+  seven_questions_with_least_answers = Question.all.sort_by_number_of("answers")[0,7]
+  quiz = Quiz.find(current_path[-1])
+  expect(quiz.questions).to eq seven_questions_with_least_answers
+
+  questions = quiz.questions
+  questions.each_with_index do |q,i|
+    expect(q.answers.size).to be <= questions[i+1].answers.size unless i == questions.size - 1
+  end
 end

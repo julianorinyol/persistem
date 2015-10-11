@@ -12,8 +12,8 @@ Feature: Create Quiz
 
   Scenario: Quiz of least answered questions
     Given I log in 
-    And  I have 100 "questions"
-    And I have 1000 "answers"
+    And  I have 15 "questions"
+    And I have 100 "answers"
     When I click "Generate Quiz"
     And I click "Least Answered"
     Then I should see the 7 questions that have the least amount of answers out of all of my questions.
