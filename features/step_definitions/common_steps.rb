@@ -17,10 +17,10 @@ end
 
 # good for one field forms only....
 When(/^I fill in the "(.*?)" with "(.*?)" and click submit$/) do |form_name, text|
-  field_id = {answerform:"answer_text"}[form_name.gsub(/\s+/, "").to_sym]
+  field_id = {answerform:"answer_text", questionform: "question_text"}[form_name.gsub(/\s+/, "").to_sym]
   fill_in field_id, with: text
 
-  submit_id = {answerform:'create-answer-button'}[form_name.gsub(/\s+/, "").to_sym]
+  submit_id = {answerform:'create-answer-button', questionform: "create-question-button"}[form_name.gsub(/\s+/, "").to_sym]
   find_by_id(submit_id).click()
 end
 
@@ -39,6 +39,10 @@ Given(/^each "(.*?)" has (\d+) "(.*?)"$/) do |parent_class, quantity, child_clas
       create(child_class.to_sym, "#{id}": obj.id )
     end
   end
+end
+
+Then(/^I see "(.*?)"$/) do |text|
+  expect(page).to have_content text
 end
 
 When(/^I click "(.*?)"$/) do |button_text|

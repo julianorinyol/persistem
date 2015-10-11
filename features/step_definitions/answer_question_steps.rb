@@ -11,7 +11,6 @@ Given(/^I have (\d+) questions for each note$/) do |num|
   end
 end
 
-
 When(/^I click list questions$/) do
   find_by_id("list-questions-tab").click()
 end

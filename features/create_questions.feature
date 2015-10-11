@@ -1,15 +1,17 @@
 Feature: Create Questions
   In order to test myself on one of my notes
-  As an user
+  As a user
   I want to create a question for that note
 
   Scenario: See the question creation area
-    Given a User with Notes 
+    Given I log in 
     When  I click on a note
-    Then I should see a create question area
+    Then I see a create question area
 
   Scenario: Fill in the question creation form
-    Given a User with Notes, viewing a Note
-    When I type in a question and click submit
-    Then A new question should be in the database
+    Given I log in
+    When I click on a note 
+    And I fill in the "question form" with "Who is baker blue?" and click submit
+    And I click list questions
+    Then I see "Who is baker blue?"
 
