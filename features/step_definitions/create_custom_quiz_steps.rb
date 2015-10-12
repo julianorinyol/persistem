@@ -20,13 +20,28 @@ Given(/^I have a "(.*?)" titled "(.*?)"$/) do |model, title|
 end
 
 Given(/^I create (\d+) questions for the notebook: "(.*?)" with text "(.*?)"$/) do |num, notebook_title, question_text|
-  binding.pry
+  pending
+  # find_by_id("notebook-list-tab").click
+  # notebooks = find_all(".notebook-row")
+  # notebooks.each do |notebook| 
+  #   binding.pry
+  #   if notebook.text[0, (notebook.text.length - 2)] == notebook_title
+  #     the_one = notebook
+  #     break
+  #   end
+  # end
+  # the_one.click
+  # notes = find_all(".clickable-tr")
+  # notes.sample.click
+  # binding.pry
 end
 
 Given(/^I create (\d+) notes for each of the other notebooks$/) do |num|
   binding.pry
+  pending
 end
 
 Then(/^I should see (\d+) notes with the text "(.*?)"$/) do |arg1, arg2|
-  binding.pry  
+  binding.pry
+  pending  
 end
