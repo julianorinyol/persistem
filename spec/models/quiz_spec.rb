@@ -104,6 +104,33 @@ describe Quiz do
 
     it "doesn't expose other users notes, when creating custom quiz by date"
 
+
+    it "creates a custom quiz selecting only questions from ONE particular notebook, when there are only 3 notes for it" do
+      @quiz.save
+      create_x_many_objects(3, 'notebook')
+      notebooks = Notebook.all
+
+      note1 = create(:note, notebook_id: notebooks[0].id)
+      note2 = create(:note, notebook_id: notebooks[1].id)
+      note3 = create(:note, notebook_id: notebooks[2].id)
+
+      create(:question, note_id: note1.id)
+      create(:question, note_id: note1.id)
+      create(:question, note_id: note1.id)
+      create(:question, note_id: note2.id)
+      create(:question, note_id: note3.id)
+
+      notebook_param = "" + notebooks[0].id.to_s
+      params = { time_ago: nil, popular: "unpopular", notebooks: notebook_param }
+
+      @quiz.custom(7, params)
+      expect(@quiz.questions.size).to eq 3
+      @quiz.questions.each do |question|
+        expect(question.notebook.id).to eq notebooks[0].id
+      end
+
+    end
+
     it "creates a custom quiz selecting only questions from particular notebooks" do
       @quiz.save
       # create some notebooks
@@ -115,7 +142,6 @@ describe Quiz do
       notebook_param = "" + notebook_ids[0].to_s + ", " + notebook_ids[1].to_s
       params = { time_ago: nil, popular: "unpopular", notebooks: notebook_param }
       @quiz.custom(7, params)
-      # expect(@quiz.questions.size).to eq ???????
       @quiz.questions.each do |question|
         expect(notebook_ids.include?(question.notebook.id)).to be true
       end

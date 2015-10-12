@@ -38,7 +38,8 @@ function displayNotebooks(notes, notebooks) {
     tr.appendTo($('#private-notes-list tbody'));
 
     $("#notebook" + i).on('click',function(){
-      var id = $(this).attr('id')[$(this).attr('id').length - 1]; 
+      // use slice to get ALL digits, in case its double or triple
+      var id = $(this).attr('id').slice(8); 
       displayNotesForNotebook(myNotes, notebooks[id]);
     })
   }

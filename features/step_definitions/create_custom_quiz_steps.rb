@@ -3,6 +3,7 @@ When(/^I select a notebook titled "(.*?)"$/) do |title|
 end
 
 Then(/^all of the questions should be from the notebook "(.*?)", even though other questions exist$/) do |title|
+  binding.pry
   questions = find_all("#quiz-show-container p")
   question_texts = questions.map do |q| q.text  end
   notebook = Notebook.find_by_title(title)

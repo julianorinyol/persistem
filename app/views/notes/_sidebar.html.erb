@@ -40,6 +40,7 @@
 var notebooks = <%= raw @notebooks.to_json %>;
 var myNotes = <%= raw @notes.to_json %>;
 var hasBeenInitialSynced = <%= raw @synced %>;
+var currentEnvironment = <%=raw Rails.env.to_json %>
 
 $('#notebook-list-tab, #note-list-tab, #quiz-tab').on('click', function(){
   $('#notelist-tabs li').removeClass();
@@ -123,7 +124,9 @@ $('#generate-quiz-btn').on('click', function() {
 if(!hasBeenInitialSynced) {
   initialSync();
 } else {
-  normalSync();
+  // if(currentEnvironment != "test") {
+    normalSync();
+  // } 
 }
 setCorrectTabActive();
 setUpTableRowBindings();
