@@ -38,7 +38,7 @@ function displayNotebooks(notes, notebooks) {
     tr.appendTo($('#private-notes-list tbody'));
 
     $("#notebook" + i).on('click',function(){
-      var id = $(this).attr('id').slice(3, $(this).attr('id').length + 1); 
+      var id = $(this).attr('id')[$(this).attr('id').length - 1]; 
       displayNotesForNotebook(myNotes, notebooks[id]);
     })
   }
