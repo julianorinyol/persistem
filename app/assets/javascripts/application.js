@@ -33,20 +33,20 @@ function displayNotes(notes, notebooks) {
 function displayNotebooks(notes, notebooks) {
   for(var i = 0; i < notebooks.length; i++) {
     notebook = notebooks[i];
-    var trInnards = generateRow([notebook.title, getNumberOfNotesInNotebook(notes,notebook)], ['class', 'bla-class'], ['id','bla'+i], ["data-link", "''"]);
+    var trInnards = generateRow([notebook.title, getNumberOfNotesInNotebook(notes,notebook)], ['class', 'notebook-row'], ['id','notebook'+i], ["data-link", "''"]);
     tr = $(trInnards);
     tr.appendTo($('#private-notes-list tbody'));
 
-    $("#bla" + i).on('click',function(){
+    $("#notebook" + i).on('click',function(){
       var id = $(this).attr('id').slice(3, $(this).attr('id').length + 1); 
       displayNotesForNotebook(myNotes, notebooks[id]);
     })
   }
 
-  $(".bla-class").on('mouseenter', function() {
+  $(".notebook-row").on('mouseenter', function() {
     $(this).css({"background":"purple", 'color':'white'});
   })
-  $(".bla-class").on('mouseleave', function() {
+  $(".notebook-row").on('mouseleave', function() {
     $(this).css({"background":"white",'color':'black'});
   })
 } 

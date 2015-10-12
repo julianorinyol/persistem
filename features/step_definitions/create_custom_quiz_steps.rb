@@ -12,12 +12,21 @@ Then(/^all of the questions should be from the notebook "(.*?)", even though oth
   end
 end
 
-# old version... How can this work, without querying db
-  # Given I log in 
-  #   And I have 3 "notebooks" 
-  #   And I have 6 "notes"
-  #   And I have 30 "questions"
-  #   When I click "Generate Quiz"
-  #   And I select a notebook 
-  #   And I click button "Create Quiz"
-  #   Then all of the questions should be from that notebook, even though other questions exist
+Given(/^I have a "(.*?)" titled "(.*?)"$/) do |model, title|
+  find_by_id("notebook-list-tab").click
+  if !has_content?(title)
+    create(model.to_sym, title: title)
+  end
+end
+
+Given(/^I create (\d+) questions for the notebook: "(.*?)" with text "(.*?)"$/) do |num, notebook_title, question_text|
+  binding.pry
+end
+
+Given(/^I create (\d+) notes for each of the other notebooks$/) do |num|
+  binding.pry
+end
+
+Then(/^I should see (\d+) notes with the text "(.*?)"$/) do |arg1, arg2|
+  binding.pry  
+end
