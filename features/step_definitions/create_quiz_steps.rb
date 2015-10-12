@@ -1,7 +1,8 @@
 Then(/^i see a random set of questions$/) do
-  this_path = current_path
-  page.driver.browser.manage.window.resize_to(1024, 768)
-  visit this_path
+  # capybara & selenium can't seem to find elements that aren't currently shown in the minimized window, so we expand it.
+  full_screen
+
+  sleep 3
   expect(find_all(".quiz-answer-submit-text").size).to eq 7
 
   quiz = Quiz.find(current_path[-1])
