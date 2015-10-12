@@ -10,6 +10,17 @@ FactoryGirl.define do
     evernote_auth ENV["TEST_AUTH_TOKEN"]
     last_usn { 0 }
   end
+  
+  factory :empty_user, class: User do
+    firstname { Faker::Name.first_name } 
+    lastname { Faker::Name.last_name }
+    email { Faker::Internet.free_email("#{firstname} #{lastname}" ) }
+    password "password" 
+    password_confirmation "password"
+    evernote_auth ENV["TEST_EMPTY_ACCOUNT_AUTH"]
+    last_usn { 0 }
+  end
+
 
 
   factory :user do

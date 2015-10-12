@@ -5,6 +5,12 @@ Given(/^I log in$/) do
   expect(current_path).to eq "/notes"
 end
 
+Given(/^I log in as a user with empty evernote account$/) do
+  user = create(:empty_user, synced: false)
+  login_user user.email
+  expect(current_path).to eq "/notes"
+end
+
 Given(/^I visit the home page$/) do
   visit root_path
 end
@@ -55,6 +61,6 @@ When(/^I click button "(.*?)"$/) do |button_text|
   click_on(button_text)
 end
 
-Then(/^I see (\d+) notes$/) do |arg1|
-  pending # express the regexp above with the code you wish you had
-end
+# Then(/^I see (\d+) notes$/) do |arg1|
+#   pending # express the regexp above with the code you wish you had
+# end
