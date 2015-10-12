@@ -50,6 +50,11 @@ When(/^I click "(.*?)"$/) do |button_text|
   click_on(button_text)
 end
 
+When(/^I click button "(.*?)"$/) do |button_text|
+  expect(page).to have_button(button_text)
+  click_on(button_text)
+end
+
 Then(/^I see (\d+) notes$/) do |arg1|
   pending # express the regexp above with the code you wish you had
 end

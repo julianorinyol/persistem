@@ -7,6 +7,7 @@ module LoginHelpers
 
   def login_user(email, password = "password")
     visit new_session_path
+    full_screen
     fill_in "Email", with: email
     fill_in "Password", with: password
     click_button "Log In"
