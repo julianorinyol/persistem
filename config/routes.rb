@@ -16,7 +16,7 @@ Rails.application.routes.draw do
   get 'notes/sync/initial'=> 'notes#initial_sync'
   get 'notes/sync/evernote'=> 'notes#sync'
 
-  get 'notes/sync/content'=> 'notes#initial_sync_content'
+  get 'notes/sync/content'=> 'notes#sync_all_notes_content'
 
   get 'notebooks/list' => 'notebook#list_all'
 

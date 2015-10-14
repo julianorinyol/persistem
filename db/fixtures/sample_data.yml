@@ -1,0 +1,56 @@
+notebook:
+  title: This is the first notebook yo!
+  
+notebook:
+  title: This is the second notebook
+
+# note1:
+
+# note2:
+
+# note3:
+
+
+# note4:
+
+# question1:
+#   id: 1
+#   name: Ruby on Rails
+#   url: http://www.rubyonrails.org
+
+# question2:
+#   id: 2
+#   name: Google
+#   url: http://www.google.com
+
+
+  # create_table "notebooks", force: :cascade do |t|
+  #   t.string  "guid"
+  #   t.string  "title"
+  #   t.integer "user_id"
+  #   t.integer "update_sequence_number"
+  # end
+
+  # create_table "notes", force: :cascade do |t|
+  #   t.datetime "created_at",             null: false
+  #   t.datetime "updated_at",             null: false
+  #   t.string   "content"
+  #   t.integer  "user_id"
+  #   t.boolean  "public"
+  #   t.integer  "subject_id"
+  #   t.string   "title"
+  #   t.string   "guid"
+  #   t.string   "notebook_guid"
+  #   t.integer  "notebook_id"
+  #   t.integer  "update_sequence_number"
+  # end
+
+  # create_table "questions", force: :cascade do |t|
+  #   t.integer  "note_id"
+  #   t.string   "text"
+  #   t.integer  "subject_id"
+  #   t.integer  "user_id"
+  #   t.integer  "answer_id"
+  #   t.datetime "created_at", null: false
+  #   t.datetime "updated_at", null: false
+  # end

@@ -4,6 +4,7 @@ class LoginController < ApplicationController
   def callback
     session[:authtoken] = request.env['omniauth.auth']['credentials']['token']
     session[:dry_run] = true
+    binding.pry
     current_user.evernote_auth = request.env['omniauth.auth']['credentials']['token']
     current_user.save
     redirect_to root_path
