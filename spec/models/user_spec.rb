@@ -162,8 +162,3 @@ describe User do
   #   end
   # end
 end
-  # has_many :notes#, inverse_of: :user
-  # has_many :quizzes
-  # has_many :notebooks
-  # has_many :questions
-  # has_many :answers
