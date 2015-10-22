@@ -5,7 +5,7 @@
   <% @quiz.questions.each do |question| %>
 
     <!-- question text -->
-  <p id="question<%= question.id %>"data-questionid="<%= question.id %>"> <%= question.text %></p>
+  <p class="question-text" id="question<%= question.id %>"data-questionid="<%= question.id %>"> <%= question.text %></p>
   <!-- Answer entry area -->
   <textarea class='quiz-answer-submit-text' data-questionid="<%= question.id %>" content-editable='true'><% if(question.answers) %><% question.answers.each do |answer|%><% if(answer.quiz_id == @quiz.id) %><%=answer.text%><% end %><% end %><% end %></textarea>
   <% end %>

@@ -4,15 +4,9 @@ class QuizController < ApplicationController
   
   def index
     @quizzes = Quiz.where(user_id: current_user.id)
-
     if current_user
-      @notes = Note.where(user_id: current_user.id)
-
-      if @notes.length < 4 && current_user.evernote_auth
-        get_notes_from_evernote 10
-      end
-      @notes = Note.where(user_id: current_user.id)
-      @notebooks = Notebook.where(user_id: current_user.id)
+      @notes = current_user.notes
+      @notebooks = current_user.notebooks
       @synced = current_user.synced
     end 
   end
@@ -33,21 +27,16 @@ class QuizController < ApplicationController
   def new_custom
     @quiz = Quiz.create(user_id: current_user.id)
 
-      @quiz.custom 7, params[:quiz]
-      redirect_to quiz_path(id: @quiz.id)
+    @quiz.custom 7, params[:quiz]
+    redirect_to quiz_path(id: @quiz.id)
   end
 
   def show
     if current_user
-      @notes = Note.where(user_id: current_user.id)
-
-      if @notes.length < 4 && current_user.evernote_auth
-        get_notes_from_evernote 10
-      end
-      @notes = Note.where(user_id: current_user.id)
-      @notebooks = Notebook.where(user_id: current_user.id)
+      @notes = current_user.notes
+      @notebooks = current_user.notebooks
       @synced = current_user.synced
-    end
+    end 
   end
 
   def sync 

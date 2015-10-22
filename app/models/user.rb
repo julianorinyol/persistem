@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
   include SampleData
+
   has_secure_password
   has_many :notes#, inverse_of: :user
   has_many :quizzes
@@ -97,7 +98,7 @@ class User < ActiveRecord::Base
     iterator = 0
     set_note_store
     while (iterator < 5) 
-      if current_user.get_last_usn(@note_store) > last_usn
+      if get_last_usn(@note_store) > last_usn
         get_filtered_sync_chunk(@note_store)
       end
       iterator += 1
@@ -117,18 +118,18 @@ class User < ActiveRecord::Base
     sync_chunk_filter.includeNotes = true
     sync_chunk_filter.includeNotebooks = true
       
-    updated = note_store.getFilteredSyncChunk(current_user.last_usn, 5, sync_chunk_filter)
+    updated = note_store.getFilteredSyncChunk(last_usn, 5, sync_chunk_filter)
 
     handle_update(updated, note_store)
   end
 
   def handle_update updated, note_store 
     if updated.notes && updated.notes.size > 0
-      current_user.update_notes(updated.notes, note_store)
+      update_notes(updated.notes, note_store)
     end
 
     if updated.notebooks && updated.notebooks.size > 0
-      Notebook.updateNotebooks(updated.notebooks, current_user)    
+      Notebook.updateNotebooks(updated.notebooks, self)    
     end
   end
 

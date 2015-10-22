@@ -13,7 +13,7 @@
       # reset @notes and @notebooks after the query, in case of change..
       @notes = current_user.notes
       @notebooks = current_user.notebooks
-      current_user.create_sample_data if @notebooks.size < 1 || @notes.size < 5 
+      current_user.create_sample_data if @notes.size < 5 
     end
 
     @note = Note.new

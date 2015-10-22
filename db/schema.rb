@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150901231542) do
+ActiveRecord::Schema.define(version: 20151014045258) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,11 +41,12 @@ ActiveRecord::Schema.define(version: 20150901231542) do
     t.string  "title"
     t.integer "user_id"
     t.integer "update_sequence_number"
+    t.boolean "syncable",               default: true
   end
 
   create_table "notes", force: :cascade do |t|
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
     t.string   "content"
     t.integer  "user_id"
     t.boolean  "public"
@@ -55,6 +56,7 @@ ActiveRecord::Schema.define(version: 20150901231542) do
     t.string   "notebook_guid"
     t.integer  "notebook_id"
     t.integer  "update_sequence_number"
+    t.boolean  "syncable",               default: true
   end
 
   create_table "questions", force: :cascade do |t|
