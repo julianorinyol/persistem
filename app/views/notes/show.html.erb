@@ -15,9 +15,8 @@
         <ul id='question-list-tabs'class='nav nav-pills'><!---->
           <li role='presentation' class="question-tab-active"><a id='add-question-tab'>Write A Question For This Note</a></li>
           <li role='presentation'><a id='list-questions-tab'>All Questions for This Note</a></li>
-           <li role='presentation'><%= link_to "Delete Note", @note.destroy, id: "delete-note" %>
+           <li role='presentation'><%= link_to 'Delete Note', @note, method: :delete, data: { confirm: 'Are you sure?' } %>
            </li>
-        </ul>
         </ul>
         <div id='question-area'class=''>
           <div id='question-entry-form'>

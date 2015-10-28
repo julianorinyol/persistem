@@ -58,6 +58,16 @@
     render json: notes 
   end
 
+  # DELETE /notes/1
+  # DELETE /notes/1.json
+  def destroy
+    @note.destroy
+    respond_to do |format|
+      format.html { redirect_to notes_url, notice: 'Note was successfully deleted.' }
+      format.json { head :no_content }
+    end
+  end
+
   private
 
     # Use callbacks to share common setup or constraints between actions.

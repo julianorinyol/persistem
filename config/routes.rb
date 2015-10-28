@@ -12,7 +12,8 @@ Rails.application.routes.draw do
   post 'answers/createAsync' => 'answers#createViaAjax'
 
 
-  resources :notes, only: [:show, :index]
+  resources :notes, only: [:show, :index, :destroy]
+
   get 'notes/sync/initial'=> 'notes#initial_sync'
   get 'notes/sync/evernote'=> 'notes#sync'
 

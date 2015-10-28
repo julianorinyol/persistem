@@ -17,3 +17,5 @@ Feature: Delete note
     And I have a deleted note
     When I visit the deleted note's show page
     Then I am redirected to the main page
+
+  Scenario: log in and log out, to trigger a new sync and still can't see deleted notes
