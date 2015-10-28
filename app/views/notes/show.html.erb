@@ -1,4 +1,6 @@
 
+
+
   <%= render  'sidebar' %>
 
 
@@ -13,6 +15,9 @@
         <ul id='question-list-tabs'class='nav nav-pills'><!---->
           <li role='presentation' class="question-tab-active"><a id='add-question-tab'>Write A Question For This Note</a></li>
           <li role='presentation'><a id='list-questions-tab'>All Questions for This Note</a></li>
+           <li role='presentation'><%= link_to "Delete Note", @note.destroy, id: "delete-note" %>
+           </li>
+        </ul>
         </ul>
         <div id='question-area'class=''>
           <div id='question-entry-form'>
@@ -63,6 +68,14 @@ $('#add-question-tab').on('click', function(){
 $('#list-questions-tab').on('click', function(){
   displayQuestions(questions);
 })
+$('#delete-note').on('click', function(){
+  deleteNote();
+})
+
+function deleteNote() {
+  id = /notes\/(\d+)/g.exec(window.location.href)[1]
+
+}
 $('#back-btn').on('click', function(){
   displayQuestionForm();
   $('#question-list-tabs').css('display', 'block');
