@@ -52,8 +52,13 @@ class QuizController < ApplicationController
    private
     # Use callbacks to share common setup or constraints between actions.
     def set_quiz
-      @quiz = Quiz.find(params[:id])
+      the_quiz = Quiz.find(params[:id])
+      if the_quiz && the_quiz.user_id == current_user.id
+        @quiz =  the_question
+      end
+      rescue ActiveRecord::RecordNotFound
     end
+
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def quiz_params

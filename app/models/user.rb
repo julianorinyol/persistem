@@ -162,29 +162,20 @@ class User < ActiveRecord::Base
   def create_sample_data
     # load data file
 
-    notebook_titles = ["Notebook1","Notebook2"]
-    new_notebooks=[]
-    notebook_titles.each do |title|
-      new_notebooks << Notebook.create(title: title, user_id: id, guid: "123abc", syncable: false)
+    notebook_titles = ["Sample Notebook","Notebook2"]
+    new_notebooks =[]
+    notebook_titles.each_with_index do |title, index|
+      new_notebooks << Notebook.create(title: title, user_id: id, guid: "123abc" + index.to_s, syncable: false, update_sequence_number: 1)
     end
 
-    new_notes = [
-      {title:"n1", content: "c1", notebook_id: new_notebooks[0].id, notebook_guid: new_notebooks[0].guid, syncable: false, user_id: id},
-      {title:"n2", content: "c2", notebook_id: new_notebooks[0].id, notebook_guid: new_notebooks[0].guid, syncable: false, user_id: id},
-      {title:"n3", content: "c3", notebook_id: new_notebooks[1].id, notebook_guid: new_notebooks[1].guid, syncable: false, user_id: id}
+    notes_data = [
+      {title:"Sample Note", content: "Hi, Persistem is set up to sync with your evernote account, since we can't seem to find any notes in your evernote account, we've created a few sample notes, notebooks and questions for you to experiment with!", notebook_id: new_notebooks[0].id, notebook_guid: new_notebooks[0].guid, syncable: false, user_id: id, guid: 'ablazzzbla123', update_sequence_number: 1, public: false},
+      {title:"Sample Note2", content: "c2", notebook_id: new_notebooks[0].id, notebook_guid: new_notebooks[0].guid, syncable: false, user_id: id , guid: 'ablazzzbla123', update_sequence_number: 1, public: false},
+      {title:"Sample Note3", content: "c3", notebook_id: new_notebooks[1].id, notebook_guid: new_notebooks[1].guid, syncable: false, user_id: id, guid: 'ablablazzz123', update_sequence_number: 1, public: false}
     ]
-    new_notes_arr = []
-    new_notes.each do |n|
-      Note.create()
+    new_notes = []
+    notes_data.each do |n|
+      new_notes << Note.create(n)
     end
-
-
-
-
-    # Notebook.create()
-    # Notebook.create() 
-    # Note.create(user_id: id, title:  , guid: , notebook_id: , notebook_guid:  syncable: false )
-    # Question.create()
-
   end
 end

@@ -1,5 +1,5 @@
   class NotesController < ApplicationController
-  before_action :set_note, only: [:show, :edit, :update, :destroy]
+  before_action :set_note, only: [:show, :destroy]
   before_filter :restrict_access
   before_action :set_my_notes_and_notebooks, only: [:index, :show, :initial_sync]
   before_action :set_note_store, only: [:show ]
@@ -13,7 +13,7 @@
       # reset @notes and @notebooks after the query, in case of change..
       @notes = current_user.notes
       @notebooks = current_user.notebooks
-      current_user.create_sample_data if @notes.size < 5 
+      current_user.create_sample_data if @notes.size < 2 
     end
 
     @note = Note.new
@@ -32,14 +32,19 @@
   # GET /notes/1
   # GET /notes/1.json
   def show
-    if !@note.content
-      @note.get_content(@note_store, @note)
-    end
+    if @note
 
-    @question = Question.new
-    @questions = Question.where(note_id: params[:id].to_i, user_id: current_user.id )
-    @synced = current_user.synced
-    @answer = Answer.new
+      if !@note.content
+        @note.get_content(@note_store, @note)
+      end
+
+      @question = Question.new
+      @questions = Question.where(note_id: params[:id].to_i, user_id: current_user.id )
+      @synced = current_user.synced
+      @answer = Answer.new
+    else
+      redirect_to notes_path
+    end
   end
 
   def sync 
@@ -61,10 +66,14 @@
   # DELETE /notes/1
   # DELETE /notes/1.json
   def destroy
-    @note.destroy
-    respond_to do |format|
-      format.html { redirect_to notes_url, notice: 'Note was successfully deleted.' }
-      format.json { head :no_content }
+    if @note
+      @note.destroy
+      respond_to do |format|
+        format.html { redirect_to notes_url, notice: 'Note was successfully deleted.' }
+        format.json { head :no_content }
+      end
+    else
+      redirect_to notes_path
     end
   end
 
@@ -72,9 +81,11 @@
 
     # Use callbacks to share common setup or constraints between actions.
     def set_note
-        @note = Note.find(params[:id])
+        the_note = Note.find(params[:id])
+        if the_note && the_note.user_id == current_user.id
+          @note = the_note
+        end
         rescue ActiveRecord::RecordNotFound
-        redirect_to notes_path
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

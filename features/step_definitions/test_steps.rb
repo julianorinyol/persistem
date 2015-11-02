@@ -9,10 +9,10 @@ Given(/^an authenticated user$/) do
   # authorize u.email, "password"
 end
 
-When(/^I visit the home page$/) do
-  visit notes_path
-  expect(current_path).to eq "/notes"
-end
+# When(/^I visit the home page$/) do
+#   visit notes_path
+#   expect(current_path).to eq "/notes"
+# end
 
 Then(/^I should see my email$/) do
   pending # express the regexp above with the code you wish you had

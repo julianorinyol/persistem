@@ -5,7 +5,12 @@ require_relative "./test_helper_methods.rb"
 require_relative "../../app/models/concerns/shared_methods.rb"
 include SharedMethods
 
-Capybara.default_driver = :selenium
+require 'capybara/poltergeist'
+
+Capybara.default_driver = :poltergeist
+
+# Capybara.default_driver = :selenium
+
 # Capybara.default_max_wait_time = 20
  
 World(Capybara)

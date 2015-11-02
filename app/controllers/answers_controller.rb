@@ -15,6 +15,9 @@ class AnswersController < ApplicationController
   # GET /answers/1
   # GET /answers/1.json
   def show
+    if @answer.nil?
+      redirect_to notes_path
+    end
   end
 
   # # GET /answers/new
@@ -24,9 +27,13 @@ class AnswersController < ApplicationController
 
   # # GET /answers/1/edit
   def edit
-    @answers = Answer.where(public: true)
-    if current_user
-      @my_answers = Answer.where(user_id: current_user.id)
+    if @answer
+      @answers = Answer.where(public: true)
+      if current_user
+        @my_answers = Answer.where(user_id: current_user.id)
+      end
+    else
+      redirect_to notes_path
     end
   end
 
@@ -74,49 +81,48 @@ class AnswersController < ApplicationController
   # PATCH/PUT /answers/1
   # PATCH/PUT /answers/1.json
   def update
-    respond_to do |format|
-      if @answer.update(answer_params)
-        # format.html { redirect_to @answer, notice: 'Answer was successfully updated.' }
-        format.json { render :show, status: :ok, location: @answer }
-      else
-        # format.html { render :edit }
-        format.json { render json: @answer.errors, status: :unprocessable_entity }
+    if @answer
+      respond_to do |format|
+        if @answer.update(answer_params)
+          # format.html { redirect_to @answer, notice: 'Answer was successfully updated.' }
+          format.json { render :show, status: :ok, location: @answer }
+        else
+          # format.html { render :edit }
+          format.json { render json: @answer.errors, status: :unprocessable_entity }
+        end
       end
+    else
+      redirect_to notes_path
     end
   end
 
   # DELETE /answers/1
   # DELETE /answers/1.json
-  def destroy
-    @answer.destroy
-    respond_to do |format|
-      # format.html { redirect_to answers_url, notice: 'Answer was successfully destroyed.' }
-      format.json { head :no_content }
+  def destroy 
+    if @answer
+      @answer.destroy
+      respond_to do |format|
+        # format.html { redirect_to answers_url, notice: 'Answer was successfully destroyed.' }
+        format.json { head :no_content }
+      end
+    else
+      redirect_to notes_path
     end
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_answer
-      @answer = Answer.find(params[:id])
+      the_answer = Answer.find(params[:id])
+      if the_answer && the_answer.user_id == current_user.id
+        @answer = the_answer
+      end
+      rescue ActiveRecord::RecordNotFound
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def answer_params
       params[:answer]
       params.require(:answer).permit(:note_id, :question_id, :text, :subject_id, :user_id, :quiz_id)
-      
-      # params.permit(:answer, :note_id, :question_id, :text, :subject_id, :user_id, :quiz_id)
     end
-
 end
-
-=begin
-  create_table "answers", force: :cascade do |t|  
-    t.integer "note_id"
-    t.integer "subject_id"
-    t.integer "user_id"
-    t.integer "question_id"
-    t.string  "text"
-  end
-=end

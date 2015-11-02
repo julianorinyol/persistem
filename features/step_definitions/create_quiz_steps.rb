@@ -1,5 +1,6 @@
 Then(/^i see a random set of questions$/) do
   # capybara & selenium can't seem to find elements that aren't currently shown in the minimized window, so we expand it.
+  
   full_screen
 
   sleep 3

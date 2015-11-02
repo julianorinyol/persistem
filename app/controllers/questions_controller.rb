@@ -84,7 +84,11 @@ class QuestionsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_question
-      @question = Question.find(params[:id])
+      the_question = Question.find(params[:id])
+      if the_question && the_question.user_id == current_user.id
+        @question = the_question
+      end
+      rescue ActiveRecord::RecordNotFound
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
