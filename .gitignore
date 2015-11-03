@@ -19,3 +19,6 @@
 # Ignore evernote API client secrets
 
 config/app_environment_variables.rb
+
+app/assets/images/persistem-pics/
+  
